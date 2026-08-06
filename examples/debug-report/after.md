@@ -1,0 +1,9 @@
+The checkout 500s came from tax-svc v2.14.0, which shipped pointing at the Avalara *sandbox* endpoint (`AVATAX_HOST=sandbox-rest.avatax.com`) instead of prod. I rolled tax-svc back to v2.13.2 at 15:12 UTC under the sev2 runbook, where rollbacks are pre-approved. The 500 rate was back to baseline (0.02%) by 15:19 and held stable across 30 minutes of monitoring.
+
+The mechanism: v2.14.0 added a ZIP+4 enrichment call to the Avalara API, and the sandbox endpoint rate-limits at 10 requests/second while peak checkout traffic runs around 45. Avalara returned 429s (confirmed in tax-svc logs), and each 429 retries three times with 2s backoff, adding up to 6 seconds. That pushed tax-svc p99 latency to 8.4s against a 210ms baseline, well past the payment-orchestrator's 5s downstream timeout (config/timeouts.yaml line 22). The orchestrator raises TaxLookupTimeout, checkout-svc catches it as a generic exception and rethrows it as a 500. It only looked intermittent because off-peak traffic drops below 10 req/s and never trips the rate limit. The window I pulled, 14:02–14:40 UTC, had 137 500s, all on POST /v2/checkout/complete.
+
+One decision for you: the ZIP+4 feature is gone until we redeploy. I filed TAX-2211 for the real fix, but repointing at the prod Avalara host needs a prod API key from the secrets team, roughly an hour. Do you want me to chase that key today, or leave tax-svc on v2.13.2 until someone owns the redeploy? I'd rule out the third option of raising the orchestrator timeout — it masks the latency and degrades checkout.
+
+I also filed TAX-2212 proposing a config-diff review step for vendor endpoints, since nothing in the deploy checklist catches a sandbox host today.
+
+Scope limit: I only traced the checkout path. I did not check whether other services carry the same sandbox-endpoint-in-prod pattern.
