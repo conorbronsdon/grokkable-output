@@ -135,7 +135,7 @@ The framing draws on Geoffrey Litt's ["Understanding is the new bottleneck"](htt
 
 ## About
 
-Built by [Conor Bronsdon](https://conorbronsdon.com?utm_source=github&utm_medium=referral&utm_campaign=repo-readme&utm_content=grokkable-output) — host of [Chain of Thought](https://www.youtube.com/@ChainofThoughtPod?utm_source=github&utm_medium=referral&utm_campaign=repo-readme&utm_content=grokkable-output) · [GitHub](https://github.com/conorbronsdon) · [X](https://x.com/ConorBronsdon) · [LinkedIn](https://www.linkedin.com/in/conorbronsdon/)
+Built by [Conor Bronsdon](https://conorbronsdon.com/?utm_source=github&utm_medium=referral&utm_campaign=repo-readme&utm_content=grokkable-output) — host of [Chain of Thought](https://www.youtube.com/@ChainofThoughtPod?utm_source=github&utm_medium=referral&utm_campaign=repo-readme&utm_content=grokkable-output) · [GitHub](https://github.com/conorbronsdon) · [X](https://x.com/ConorBronsdon) · [LinkedIn](https://www.linkedin.com/in/conorbronsdon/)
 
 ---
 
