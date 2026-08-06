@@ -34,25 +34,25 @@ Models are rewarded for looking thorough; this skill makes them optimize for you
 
 ## Quick demo
 
-The same agent, same debugging notes, answering "ok what did you find?"
+An agent spent 40 minutes debugging production 500s. You stepped away, came back, and ask: **"ok what did you find?"** What you actually want to know: *is it fixed, and what caused it?*
 
-**Without the skill** — 371 words, four section headers, and the mechanism delivered as an arrow chain:
+**Without the skill**, that answer is distributed across a 371-word document you have to hunt through:
+
+> **Short version:** *[a bolded paragraph]* · **The causal chain** · **Why rollback and not something else** · **Follow-ups filed** · **Two things worth your judgment**
+
+— and the mechanism, when you find it, is a puzzle to decompile:
 
 > sandbox host → Avalara 429s → each 429 retried 3x with 2s backoff (up to +6s latency) → tax-svc p99 goes 210ms → 8.4s → blows past payment-orchestrator's 5s downstream timeout → `TaxLookupTimeout` → checkout-svc catches it as a generic `Exception` and rethrows as a 500.
 
-**With the skill** — 288 words, no headers, verdict in sentence one:
+**With the skill**, sentence one answers the question, and you can stop reading whenever you have enough:
 
-> The checkout 500s came from tax-svc v2.14.0, which shipped pointing at the Avalara *sandbox* endpoint instead of prod. I rolled tax-svc back to v2.13.2 at 15:12 UTC [...] The 500 rate was back to baseline (0.02%) by 15:19.
+> The checkout 500s came from tax-svc v2.14.0, which shipped pointing at the Avalara *sandbox* endpoint instead of prod. I rolled tax-svc back to v2.13.2 at 15:12 UTC under the sev2 runbook, where rollbacks are pre-approved. The 500 rate was back to baseline (0.02%) by 15:19 and held stable across 30 minutes of monitoring.
 
-What changed:
+The rest is the mechanism in plain sentences, the one decision the engineer needs to make — stated as an answerable question — and an unprompted scope-limit caveat ("I only traced the checkout path"). 288 words, no headers, nothing dropped that the reader needed: the cut is *selection*, not compression.
 
-- The verdict — root cause, already fixed — moves to sentence one
-- The arrow chain becomes sentences with the verbs in them
-- Four bold headers on a chat-length reply become short paragraphs
-- 371 words → 288, cut by dropping detail that doesn't change the reader's next move, not by compressing grammar
-- The reply ends with the one decision the engineer needs to make, stated as an answerable question
+The same discipline on a smaller question: ask "quick status?" mid-migration and the baseline returns a 273-word formatted document with three bold pseudo-headers; the skill returns a few short paragraphs opening with "48 of the 61 route handlers are migrated" and ending with the two decisions blocking progress.
 
-Both replies are factually correct. One of them you read once. Full unedited pairs, with the input notes they were written from, in [`examples/`](examples/).
+Both versions of every pair are factually correct. One of them you read once. Full unedited outputs, with the input notes they were written from, in [`examples/`](examples/).
 
 ## What it teaches the agent
 
