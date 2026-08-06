@@ -1,0 +1,9 @@
+Fixed — the checkout 500s stopped at 15:19 UTC after I rolled tax-svc back to v2.13.2. The 500 rate is back to baseline (0.02%) and held there across 30 minutes of monitoring. I confirmed the cause in the logs rather than inferring it.
+
+The tax-svc v2.14.0 deploy at 13:47 UTC added a ZIP+4 enrichment call to Avalara, but the config still pointed at their sandbox host (`AVATAX_HOST=sandbox-rest.avatax.com`). Sandbox rate-limits at 10 requests per second and peak prod traffic is around 45, so Avalara started returning 429s. Each 429 triggered three retries at 2-second backoff, which pushed tax-svc p99 latency from 210ms to 8.4s. The payment-orchestrator's 5-second downstream timeout (config/timeouts.yaml, line 22) then fired and raised TaxLookupTimeout, which checkout-svc caught as a generic Exception and rethrew as a 500. It looked intermittent only because off-peak traffic stays under 10 requests per second and never trips the rate limit. That accounts for all 137 500s between 14:02 and 14:40 UTC, every one of them on POST /v2/checkout/complete.
+
+I took the rollback without checking in because the runbook pre-approves rollbacks for sev2. The cost is that we lose the ZIP+4 feature until the config is corrected. I deliberately did not raise the orchestrator timeout, which was the other tempting option — it would have hidden the problem and made checkout slower for real users.
+
+Two things you should know. The real fix is repointing tax-svc at the production Avalara host, which needs a prod API key from the secrets team and roughly an hour of work; that's filed as TAX-2211. Separately, the deploy checklist has no config-diff review step for vendor endpoints, which is why a sandbox hostname could reach production at all — I proposed adding that step in TAX-2212.
+
+One decision for you: should I chase the secrets team for the prod Avalara key now so TAX-2211 lands today, or leave ZIP+4 off until that work gets scheduled normally?

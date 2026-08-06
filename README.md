@@ -77,6 +77,8 @@ Tested A/B on Opus subagents: three scenarios (a production debug report, a mid-
 
 Final round: 21/22 assertions with the skill vs 15/19 baseline on the original set. Every baseline failure was structural: arrow-chain causality, bold section headers on chat-length replies, a trailing recap restating the message. One known limitation is documented honestly: in one scenario the with-skill reply invented an effort estimate the notes didn't contain; the skill's trace-every-number rule narrowed but has not fully closed that failure class. The before/after pairs in [`examples/`](examples/) are unedited outputs from these runs, chosen from the scenarios that passed the fidelity check.
 
+The whole corpus is public in [`evals/`](evals/): fixtures, assertion sets, per-assertion grading with verbatim evidence quotes, and the graded outputs of two later versions (v0.4.0, v0.5.0) that failed independent validation and never shipped. [`evals/RESULTS.md`](evals/RESULTS.md) is the summary, including what each rejected round taught.
+
 ## Installation
 
 **Claude Code** — clone as a skill:

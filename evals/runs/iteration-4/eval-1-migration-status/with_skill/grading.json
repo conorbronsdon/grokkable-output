@@ -1,0 +1,85 @@
+{
+  "expectations": [
+    {
+      "text": "Opens with the overall state (48 of 61 migrated / on track with caveats) in the first sentence",
+      "passed": true,
+      "evidence": "Sentence 1: '48 of the 61 route handlers are migrated to Fastify, with 312 tests passing.' Sentence 2 gives the remainder: '9 are blocked on session handling and 4 (the file-upload routes) haven't started.' No preamble."
+    },
+    {
+      "text": "The session-renewal semantics question is explicitly surfaced as a decision needing the user's input, phrased answerably (renew-on-read vs renew-on-write / 30-min idle logout)",
+      "passed": true,
+      "evidence": "'One decision from you unblocks the 9: our Redis session store renews sessions on write under Express, but the Fastify session plugin renews on read. Is renewal-on-read acceptable for the 30-minute idle logout?' Labeled as a decision, contrasts both semantics, and closes with a yes/no answerable question."
+    },
+    {
+      "text": "Both pre-existing bugs (unawaited CSV write, Stripe signature-after-parse) are mentioned, not buried or dropped",
+      "passed": true,
+      "evidence": "Dedicated paragraph: 'routes/admin/export.js never awaits the CSV write, which silently truncates exports over 10MB, and routes/webhooks/stripe.js validates the Stripe signature after parsing the JSON body.' Both named with file paths, framed as 'neither caused by the migration' per fixture line 10."
+    },
+    {
+      "text": "The deadline risk (multipart streaming = 2-3 days vs buffering = 1 day) is stated",
+      "passed": true,
+      "evidence": "'The week deadline is tight — the file-upload rewrite is roughly 1 day if we buffer, 2-3 days if we stream.' Matches fixture line 13 exactly."
+    },
+    {
+      "text": "Reply is proportionate to 'quick status?': no headers or at most one, under ~250 words",
+      "passed": true,
+      "evidence": "148 words total, zero markdown headers (grep -c '^#' = 0), zero bold labels. Well inside the ~250 ceiling and a 24% reduction from iteration-3's 194 words."
+    },
+    {
+      "text": "No telegraphic fragment piles (e.g. 'done: 48; blocked: 9; pending: 4' as the whole answer) — complete sentences carry the status",
+      "passed": true,
+      "evidence": "Every one of the 9 sentences is complete and finite-verbed. No colon-lists, no bullets, no semicolon fragment piles. The counts are embedded in prose: '9 are blocked on session handling and 4 (the file-upload routes) haven't started.'"
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": true,
+      "evidence": "All sourced: '48 of the 61' and '312 tests passing' (fixture L6-7), '9 ... blocked' / '4 ... haven't started' (L8-9), renew-on-write vs renew-on-read and '3 of the 4 session tests' (L8), '30-minute idle logout' (L12), '10MB' CSV truncation and signature-after-parse (L10), '1 day if we buffer, 2-3 days if we stream' (L13). Arithmetic reconciles: 48+9+4=61. No unsourced effort estimate — the v0.3 defect class is absent. Open question kept open, with the fixture's hedge preserved: 'I haven't determined whether that second one is actually exploitable' (fixture L10: 'probably benign but sketchy'). The synthetic perf number (L11, '~2.1x req/s') is correctly omitted rather than reported as a result."
+    },
+    {
+      "text": "[added iter-4] Paragraph discipline: no dense block — text breaks at thought boundaries into paragraphs of roughly 2-4 sentences; no single paragraph over ~90 words",
+      "passed": true,
+      "evidence": "Four paragraphs at 27w/2sent, 53w/3sent, 43w/2sent, 25w/2sent. Max paragraph 53 words — 41% under the ~90-word ceiling, and every paragraph sits in the 2-4 sentence band. Improvement over iteration-3 (max 76w/5sent, which breached the sentence band). Breaks land on genuine thought boundaries: status, decision, bugs, deadline."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_tokens": 37074,
+    "total_duration_seconds": 25.8
+  },
+  "claims": [
+    {
+      "claim": "48 migrated + 9 blocked + 4 not started accounts for all 61 handlers",
+      "type": "factual",
+      "verified": true,
+      "evidence": "48+9+4=61, matching fixture line 6 ('61 route handlers total')."
+    },
+    {
+      "claim": "The adapter shim passes 3 of 4 session tests, with the renewal difference as the sole failure",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture line 8: 'passes 3 of 4 session tests — failing test is session-touch renewal semantics'."
+    },
+    {
+      "claim": "Stripe signature-after-parse exploitability is undetermined",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Correctly preserves the fixture's uncertainty rather than resolving it in either direction."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No assertion covers whether the buffering-vs-streaming CHOICE is put to the user. Iteration-3 asked it outright ('That choice is what decides whether the week holds — which do you want?'); iteration-4 states the tradeoff and then closes with 'Want the full breakdown?', which asks about verbosity, not the decision. Assertion 4 ('the deadline risk is stated') passes for both, so a real loss in decision-surfacing went uncaught. Consider an assertion that the multipart mode decision is requested, parallel to the session-renewal one."
+      },
+      {
+        "reason": "The ~250-word ceiling has no floor. Iteration-4 hit 148 words partly by dropping the connect-redis-is-Express-only cause of the block and the 'hold 9 routes on Express behind a proxy' fallback option. A brevity assertion with no completeness counterweight rewards dropping content; the fidelity assertion only checks that what IS said is true, never that decision-relevant options survived."
+      }
+    ],
+    "overall": "Cleanest of the three evals — 8/8. The assertion set is discriminating on accuracy and proportionality but blind to omission, which is where this output actually moved relative to iteration-3."
+  }
+}

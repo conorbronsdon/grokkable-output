@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence gives the calibrated verdict rather than leading with '23 vulnerabilities'",
+      "passed": true,
+      "evidence": "'Short answer: not as bad as the number sounds, but two things need attention this week.'"
+    },
+    {
+      "text": "The '23' number, if mentioned, is immediately defused",
+      "passed": true,
+      "evidence": "'That headline number is misleading \u2014 most of it is in tools we use to build the app, not in the app your customers actually touch.'"
+    },
+    {
+      "text": "No unexplained jargon \u2014 translated into plain consequences",
+      "passed": true,
+      "evidence": "Translations are good throughout ('they give us a web address and our server fetches it'); no CVE IDs."
+    },
+    {
+      "text": "Actions in priority order matching the notes",
+      "passed": true,
+      "evidence": "Auth library today, avatar-import this week, utility library alongside, rest in maintenance."
+    },
+    {
+      "text": "Effort estimates included",
+      "passed": true,
+      "evidence": "'1-2 hours', '2-3 hours', 'Five-minute update', 'roughly a day of engineering time' total."
+    },
+    {
+      "text": "Does not enumerate all 23 advisories or dump CVE identifiers",
+      "passed": true,
+      "evidence": "Grouped ('Four of the five high severity items...', 'The 16 moderate and low items...'), no CVE IDs."
+    },
+    {
+      "text": "[added post-run] Chat-proportionate structure: no formulaic section headers, no trailing recap restating the plan",
+      "passed": false,
+      "evidence": "464 words with six bold section headers ('What actually matters', 'What doesn't matter much', 'Reassurance on the current state', 'One gap worth fixing', 'Proposed plan') and a trailing 'Proposed plan' section that restates every item already covered \u2014 a document, not a reply."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.857
+  }
+}

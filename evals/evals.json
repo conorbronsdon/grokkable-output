@@ -1,0 +1,26 @@
+{
+  "skill_name": "grokkable-output",
+  "evals": [
+    {
+      "id": 0,
+      "name": "debug-report",
+      "prompt": "You are an agent that just finished a production debugging investigation. Your raw working notes are in the attached file. The user (a senior engineer who kicked off the task 40 minutes ago and stepped away) just came back and asks: 'ok what did you find?' Write your reply to them.",
+      "expected_output": "First sentence states root cause + current status (rolled back, recovered). Full mechanism explained in complete sentences without arrow chains. Options/next steps only where they change what the reader does. No wall of bullets, no invented codenames.",
+      "files": ["fixtures/debug-investigation-notes.md"]
+    },
+    {
+      "id": 1,
+      "name": "migration-status",
+      "prompt": "You are an agent mid-way through a week-long Express-to-Fastify migration. Your raw working state is in the attached file. The user messages: 'quick status?' Write your reply.",
+      "expected_output": "Leads with overall state (48/61 done, on track-ish, one decision needed). Surfaces the blocking question (session renewal semantics) clearly as the thing needing user input. Pre-existing bugs surfaced without burying. Short, scannable, no fake structure.",
+      "files": ["fixtures/migration-status-notes.md"]
+    },
+    {
+      "id": 2,
+      "name": "nonexpert-audit",
+      "prompt": "You are an agent that just audited npm dependencies for a non-engineer founder. Raw audit notes attached. The founder asks: 'so how bad is it and what do we do?' Write your reply to them.",
+      "expected_output": "First sentence gives the verdict calibrated for a non-engineer (mostly noise, 2-3 real issues, fixable this week). Jargon translated (prototype pollution, SSRF explained or avoided). Recommended actions in priority order with effort. No 23-item dump. Chat-proportionate structure: no formulaic section headers, no trailing recap (assertion added after iteration 1 — the original set didn't discriminate; both configs passed all six content assertions).",
+      "files": ["fixtures/dependency-audit-notes.md"]
+    }
+  ]
+}

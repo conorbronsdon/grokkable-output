@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence states the root cause and/or resolution \u2014 not background or method",
+      "passed": true,
+      "evidence": "Opens with bolded 'Short version: tax-svc v2.14.0 shipped with the Avalara sandbox host in config. I rolled tax-svc back...' \u2014 lede is first, though delivered as an entire bolded paragraph."
+    },
+    {
+      "text": "No arrow-chain shorthand used as prose",
+      "passed": false,
+      "evidence": "Core mechanism is a literal arrow chain: 'sandbox host \u2192 Avalara 429s \u2192 each 429 retried 3x with 2s backoff (up to +6s latency) \u2192 tax-svc p99 goes 210ms \u2192 8.4s \u2192 blows past payment-orchestrator's 5s downstream timeout \u2192 TaxLookupTimeout \u2192 ...rethrows as a 500.'"
+    },
+    {
+      "text": "States the rollback already happened and the service recovered, with evidence",
+      "passed": true,
+      "evidence": "'error rate back to 0.02% baseline by 15:19, stable over 30 minutes of monitoring since.'"
+    },
+    {
+      "text": "Mentions the outstanding follow-up (config fix / checklist gap)",
+      "passed": true,
+      "evidence": "'Follow-ups filed' section lists TAX-2211 and TAX-2212."
+    },
+    {
+      "text": "No headers on a reply this size, no trailing summary",
+      "passed": false,
+      "evidence": "Four bold section headers ('The causal chain', 'Why rollback and not something else', 'Follow-ups filed', 'Two things worth your judgment') on a 371-word chat reply, plus heavy bold throughout."
+    },
+    {
+      "text": "Intermittency explained in complete sentences",
+      "passed": true,
+      "evidence": "'That's why it was intermittent: off-peak traffic dips under 10 req/s, no 429s, no latency, no errors.' \u2014 fragment-y tail but the explanation itself is a sentence."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 2,
+    "total": 6,
+    "pass_rate": 0.667
+  }
+}

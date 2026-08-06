@@ -1,0 +1,93 @@
+{
+  "expectations": [
+    {
+      "text": "Opens with the overall state (48 of 61 migrated / on track with caveats) in the first sentence",
+      "passed": true,
+      "evidence": "'48 of the 61 routes are migrated to Fastify and passing their existing tests (312 passing under `npm test -- --grep routes`).' Sentence 2 completes the split: 'Nine are blocked on sessions, and the four file-upload routes haven't started.' 48+9+4=61 reconciles."
+    },
+    {
+      "text": "The session-renewal semantics question is explicitly surfaced as a decision needing the user's input, phrased answerably (renew-on-read vs renew-on-write / 30-min idle logout)",
+      "passed": true,
+      "evidence": "'One decision from you unblocks the nine: the Fastify session plugin renews a session on read, where Express renewed on write ... Is renewal-on-read acceptable for the 30-minute idle logout?' Closed question, both semantics named, and the consequence of 'no' is stated."
+    },
+    {
+      "text": "Both pre-existing bugs (unawaited CSV write, Stripe signature-after-parse) are mentioned, not buried or dropped",
+      "passed": true,
+      "evidence": "'`routes/admin/export.js` never awaits the CSV write (silent truncation above 10MB, reproduced), and `routes/webhooks/stripe.js` validates the signature after parsing the JSON body — I haven't determined whether that's actually exploitable.' Both named with file paths, in their own block, flagged as not migration-caused."
+    },
+    {
+      "text": "The deadline risk (multipart streaming = 2-3 days vs buffering = 1 day) is stated",
+      "passed": true,
+      "evidence": "'Deadline risk: the four upload routes are about 1 day if we buffer multipart, 2-3 days if we need streaming.' Both estimates present and correctly paired."
+    },
+    {
+      "text": "Reply is proportionate to 'quick status?': no headers or at most one, under ~250 words",
+      "passed": true,
+      "evidence": "155 words, 0 markdown headers, 4 paragraphs. Well under the 250-word ceiling (iter-3 was 193, iter-4 147)."
+    },
+    {
+      "text": "No telegraphic fragment piles (e.g. 'done: 48; blocked: 9; pending: 4' as the whole answer) — complete sentences carry the status",
+      "passed": true,
+      "evidence": "Every block is complete sentences. The two colon leads ('One decision from you unblocks the nine:', 'Deadline risk:') introduce full clauses rather than fragment lists."
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": true,
+      "evidence": "61 routes, 48 migrated, 312 passing, the exact `npm test -- --grep routes` command, 9 blocked, 4 not started, 3 of 4 session tests, >10MB truncation, 1 day buffering / 2-3 days streaming — all trace to fixture lines 6-13, and 48+9+4=61. Open question kept open at fixture strength: fixture says of the Stripe bug 'probably benign but sketchy'; reply says 'I haven't determined whether that's actually exploitable' — neither upgraded nor resolved. The synthetic 2.1x benchmark is omitted rather than repeated as a real number, which is the correct call. No estimate appears that is not in the notes."
+    },
+    {
+      "text": "[reworded iter-5] Block discipline: no visual block of any kind — paragraph OR list item — over ~90 words or ~4 sentences; text breaks at thought boundaries",
+      "passed": true,
+      "evidence": "Largest block is 60 words / 3 sentences (the session-decision paragraph); others are 34w/2s, 39w/1s, 24w/2s. Every block is one thought: status, session decision, pre-existing bugs, deadline risk. This is the cleanest block profile in the iteration-5 set and an improvement on iter-3's 76w/5s block."
+    },
+    {
+      "text": "[added iter-5] Content retention: the reply keeps the reader's decision question(s), the options being chosen between, and evidence tags (e.g. 'I reproduced it', 'confirmed in logs') — an offer of more depth never substitutes for a decision",
+      "passed": false,
+      "evidence": "Two of the three v0.4 losses are restored: the Express-proxy fallback option is back ('If not, I'll hold those nine routes on Express behind a proxy until we swap the store') and the reproduction tag is back ('silent truncation above 10MB, reproduced'). But the fixture's second explicit decision — line 9, 'need to decide buffering vs streaming', the choice the fixture says determines whether the week deadline holds (line 13) — is still not asked. The reply states the two estimates as a risk and then closes with 'Want the full breakdown?', an offer of depth in the exact slot where a decision question belongs. This is the same substitution as iter-4 (identical closing line) and a regression from iter-3, which asked 'That choice is what decides whether the week holds — which do you want?'. This is the precise failure mode the v0.5.0 rule was written to prevent."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 1,
+    "total": 9,
+    "pass_rate": 0.89
+  },
+  "timing": {
+    "total_tokens": 37413,
+    "total_duration_seconds": 25.8
+  },
+  "claims": [
+    {
+      "claim": "48 of 61 routes migrated with 312 tests passing",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture lines 6-7 exactly; the reply reproduces the verification command as well."
+    },
+    {
+      "claim": "The redis adapter shim passes 3 of the 4 session tests",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture line 8: 'wrote one, 40 lines, passes 3 of 4 session tests'. The 40-line detail is dropped, which is compression not distortion."
+    },
+    {
+      "claim": "The CSV truncation bug was reproduced",
+      "type": "process",
+      "verified": true,
+      "evidence": "Fixture line 10: 'repros with >10MB'."
+    },
+    {
+      "claim": "Upload routes are 'about 1 day if we buffer multipart, 2-3 days if we need streaming'",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture line 13: 'buffering mode is 1 day, streaming is 2-3 days'. Note the fixture's separate 'est 3-4h' for the multer→@fastify/multipart rewrite (line 9) is dropped, not misreported."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No assertion requires the buffering-vs-streaming choice to be posed as a question, only that the day estimates be 'stated' (assertion 4). That lets the output state the risk, offer a breakdown, and pass 4 while failing the reader. Consider an assertion mirroring the session-decision one: 'the buffering-vs-streaming choice is surfaced as a decision needing the user's input.'"
+      }
+    ],
+    "overall": "Assertion 4 and the retention assertion partially overlap but pull in opposite directions; splitting the buffering decision into its own assertion would make the eval discriminating on the exact failure that recurred across iter-4 and iter-5."
+  }
+}

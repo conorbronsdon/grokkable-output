@@ -1,0 +1,87 @@
+{
+  "expectations": [
+    {
+      "text": "Opens with the overall state (48 of 61 migrated / on track with caveats) in the first sentence",
+      "passed": true,
+      "evidence": "Sentence 1: '48 of the 61 route handlers are on Fastify with 312 tests passing.' Sentence 2 supplies the caveat: 'The remaining 13 are both waiting on decisions from you, and the week deadline is tight.' State first, no preamble."
+    },
+    {
+      "text": "The session-renewal semantics question is explicitly surfaced as a decision needing the user's input, phrased answerably (renew-on-read vs renew-on-write / 30-min idle logout)",
+      "passed": true,
+      "evidence": "'the failure is renewal semantics, because the Fastify plugin renews a session on read while Express renewed on write. Is a 30-minute idle logout that renews on read acceptable? If not, I'll keep those nine on Express behind a proxy until we swap the store.' Direct yes/no question, both semantics named, and the consequence of each answer is stated."
+    },
+    {
+      "text": "Both pre-existing bugs (unawaited CSV write, Stripe signature-after-parse) are mentioned, not buried or dropped",
+      "passed": true,
+      "evidence": "Final paragraph, given its own space and explicitly labelled as not migration-caused: 'routes/admin/export.js never awaits the CSV write, so exports over 10MB truncate silently (I reproduced it). And routes/webhooks/stripe.js validates the Stripe signature after parsing the JSON body; I haven't worked out whether that's actually exploitable.'"
+    },
+    {
+      "text": "The deadline risk (multipart streaming = 2-3 days vs buffering = 1 day) is stated",
+      "passed": true,
+      "evidence": "'roughly a day if we buffer uploads, two to three days if we stream them. That choice is what decides whether the week holds — which do you want?' Both figures present and explicitly connected to the week deadline (fixture L13)."
+    },
+    {
+      "text": "Reply is proportionate to 'quick status?': no headers or at most one, under ~250 words",
+      "passed": true,
+      "evidence": "193 words (wc -w), 1182 chars, well under the ~250 ceiling — held strictly, no rounding needed. Zero markdown headers (grep '^#' = 0) and zero bold pseudo-headers (grep '^\\*\\*' = 0). Four short paragraphs. v0.2's run failed this at 328 words; v0.3 cuts 135 words (41%)."
+    },
+    {
+      "text": "No telegraphic fragment piles (e.g. 'done: 48; blocked: 9; pending: 4' as the whole answer) — complete sentences carry the status",
+      "passed": true,
+      "evidence": "No colon-list or semicolon-pile constructions anywhere. Every count appears inside a full sentence carrying its own meaning: '48 of the 61 route handlers are on Fastify with 312 tests passing', 'Nine routes are blocked on sessions', 'The four file-upload routes haven't started.'"
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": true,
+      "evidence": "All claims sourced: 61 total / 48 migrated / 312 passing (fixture L6-7); 61 - 48 = 13 remaining, split 9 blocked + 4 not started = 13, arithmetic reconciles (L8-9); connect-redis v6 Express-only, 40-line adapter, 3 of 4 session tests passing, renew-on-read vs renew-on-write (L8); 30-minute idle logout question (L12); Express-behind-proxy fallback (L8); multer -> @fastify/multipart rewrite (L9); 1 day buffering vs 2-3 days streaming (L13); export.js unawaited CSV write, >10MB repro (L10); stripe.js signature-after-parse (L10). CRITICAL CHECK — open question kept open: v0.2 fabricated a mechanism here ('so a request that makes the parse throw skips signature validation. My best guess is that it's benign because the parse error path returns early'). v0.3 replaces it with 'I haven't worked out whether that's actually exploitable', which matches the fixture's 'probably benign but sketchy' without inventing the reason. v0.2 also invented 'an idle user with a page polling in the background would never get logged out'; v0.3 states only the renew-on-read/renew-on-write difference from the notes. No invented estimate found. Note: the reply omits the fixture's 'est 3-4h' for the multer rewrite in favour of L13's day-scale figures — the fixture is internally inconsistent on this point and the reply used the figures the deadline-risk assertion asks for; omission, not fabrication."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_chars": 1182,
+    "output_words": 193,
+    "total_tokens": 36417
+  },
+  "timing": {
+    "executor_duration_seconds": 24.0,
+    "total_duration_seconds": 24.0
+  },
+  "claims": [
+    {
+      "claim": "The remaining 13 routes are both waiting on decisions from you",
+      "type": "factual",
+      "verified": true,
+      "evidence": "9 blocked routes need the session-touch answer (fixture L12 'need user input'); 4 upload routes need the buffering-vs-streaming decision (L9 'need to decide buffering vs streaming'). Both groups genuinely gated on user input."
+    },
+    {
+      "claim": "I haven't worked out whether the Stripe signature-after-parse issue is exploitable",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Fixture L10 leaves it open: 'validation bypass if parse throws first? probably benign but sketchy'. The reply preserves the uncertainty instead of resolving it, correcting v0.2's fabricated resolution."
+    },
+    {
+      "claim": "312 tests passing on the migrated routes",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture L7: 'npm test -- --grep routes → 312 passing'."
+    }
+  ],
+  "regression_checks_v0_2": {
+    "invented_facts": "none found — both v0.2 fabrications (background-polling logout scenario, parse-error-path reasoning) are gone",
+    "caveats_retained": "yes — Stripe parse-path question explicitly left open; both pre-existing bugs kept and flagged as not migration-caused",
+    "word_count": "193 (v0.2: 328) — clears the ~250 ceiling that v0.2 failed"
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The 2.1x perf benchmark (fixture L11) was dropped entirely. That is probably the right editorial call for 'quick status?', but no assertion covers what may be safely omitted, so an output that dropped a pre-existing bug and an output that dropped a synthetic benchmark are scored identically on omission. A 'nothing decision-relevant is omitted' assertion would make the selection pressure measurable rather than inferred."
+      }
+    ],
+    "overall": "Strong assertion set. The ~250 ceiling is the most discriminating item here — it caught v0.2 and is cleanly passed by v0.3 with 57 words of margin."
+  }
+}

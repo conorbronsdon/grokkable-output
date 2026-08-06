@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Opens with the overall state in the first sentence",
+      "passed": true,
+      "evidence": "'48 of the 61 Express route handlers are migrated to Fastify and passing their existing tests \u2014 312 green...'"
+    },
+    {
+      "text": "Session-renewal decision explicitly surfaced as needing user input, phrased answerably",
+      "passed": true,
+      "evidence": "'the question for you is whether renewal-on-read is acceptable for our 30-minute idle logout \u2014 a user who only reads stays logged in indefinitely. If that's fine, I finish these nine tomorrow. If it isn't, I hold them on Express behind a proxy...'"
+    },
+    {
+      "text": "Both pre-existing bugs mentioned, not buried",
+      "passed": true,
+      "evidence": "Dedicated paragraph: unawaited CSV write ('large exports truncate silently \u2014 I reproduced it above 10MB') and Stripe signature-after-parse, with honest uncertainty ('I haven't proven there's no bypass')."
+    },
+    {
+      "text": "Deadline risk (streaming vs buffering) stated",
+      "passed": true,
+      "evidence": "'Buffering uploads is roughly a day of work; true streaming is two to three days, and that's the thing that makes the week deadline tight.'"
+    },
+    {
+      "text": "Proportionate to 'quick status?': no headers or at most one, under ~250 words",
+      "passed": true,
+      "evidence": "No headers, no bold, plain prose. 279 words \u2014 marginally over the ~250 target but within the tilde; graded pass with the overage noted."
+    },
+    {
+      "text": "No telegraphic fragment piles \u2014 complete sentences carry the status",
+      "passed": true,
+      "evidence": "Every status item is a full sentence; counts are embedded in prose."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence states the root cause and/or that the issue is resolved (rollback done, 500s recovered) — not background or method",
+      "passed": true,
+      "evidence": "Sentence 1: 'The checkout 500s came from tax-svc v2.14.0, which shipped pointing at the Avalara *sandbox* endpoint (`AVATAX_HOST=sandbox-rest.avatax.com`) instead of prod.' Root cause named in the first clause; no method or background preamble. Resolution follows in sentence 2."
+    },
+    {
+      "text": "No arrow-chain shorthand used as prose (no 'A → B → C' causality chains outside code)",
+      "passed": true,
+      "evidence": "grep for '→' and '->' returns 0 matches. The fixture's chain (line 13: 'sandbox host config error → rate limiting → retries → latency > 5s timeout → 500s') is rendered as prose: 'Avalara returned 429s ... each 429 retries three times with 2s backoff, adding up to 6 seconds. That pushed tax-svc p99 latency to 8.4s ... well past the payment-orchestrator's 5s downstream timeout ... rethrows it as a 500.'"
+    },
+    {
+      "text": "States the rollback already happened and the service recovered, with the recovery evidence (0.02% baseline or 15:19 timing)",
+      "passed": true,
+      "evidence": "'I rolled tax-svc back to v2.13.2 at 15:12 UTC under the sev2 runbook, where rollbacks are pre-approved. The 500 rate was back to baseline (0.02%) by 15:19 and held stable across 30 minutes of monitoring.' Both the 0.02% baseline and the 15:19 timing are present, matching fixture lines 16-17."
+    },
+    {
+      "text": "Mentions the outstanding follow-up (sandbox-config fix / TAX-2211 or the deploy-checklist gap)",
+      "passed": true,
+      "evidence": "Both are present: 'I filed TAX-2211 for the real fix, but repointing at the prod Avalara host needs a prod API key from the secrets team, roughly an hour' and 'I also filed TAX-2212 proposing a config-diff review step for vendor endpoints, since nothing in the deploy checklist catches a sandbox host today.'"
+    },
+    {
+      "text": "No headers on a reply this size, and no trailing summary restating the message",
+      "passed": true,
+      "evidence": "grep '^#' returns 0; no bold pseudo-headers (grep '^\\*\\*' returns 0). Four body paragraphs plus a one-line scope caveat. The closing line ('Scope limit: I only traced the checkout path. I did not check whether other services carry the same sandbox-endpoint-in-prod pattern.') introduces a new limit-of-verification fact rather than restating anything above it, so it is not a trailing recap."
+    },
+    {
+      "text": "The intermittency is explained (traffic below 10 req/s off-peak avoids rate limiting) in complete sentences",
+      "passed": true,
+      "evidence": "'It only looked intermittent because off-peak traffic drops below 10 req/s and never trips the rate limit.' Complete sentence, matches fixture line 14, and the 10 req/s threshold is tied back to the sandbox rate limit stated earlier in the same paragraph."
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": true,
+      "evidence": "Line-by-line trace, all 16 checkable claims sourced: v2.14.0 + AVATAX_HOST sandbox (fixture L10); rollback to v2.13.2 at 15:12 + sev2 pre-approval (L16); 0.02% by 15:19, 30 min stable (L17); ZIP+4 enrichment (L10); 10 req/s limit vs ~45 req/s peak (L11); 429s confirmed in tax-svc logs, retry x3 at 2s backoff = up to 6s (L12, arithmetic 2s x 3 = 6s reconciles); p99 8.4s vs 210ms baseline (L7); 5s orchestrator timeout at config/timeouts.yaml line 22 (L8); TaxLookupTimeout -> generic Exception -> 500 (L8); off-peak intermittency (L14); 137 500s 14:02-14:40 UTC on POST /v2/checkout/complete (L5); ZIP+4 lost on rollback (L15 option a); prod API key from secrets team 'roughly an hour' = fixture '~1h' (L15 option b); raising the timeout ruled out as masking + hurting checkout (L15 option c); TAX-2211 config fix and TAX-2212 checklist proposal (L18). No invented estimate found. The one caveat not literally in the notes ('I only traced the checkout path. I did not check whether other services carry the same sandbox-endpoint-in-prod pattern') is an accurate negative claim about the investigation's scope, not a fabricated fact. Minor slippage noted but not disqualifying: fixture says 'prod traffic is ~45 req/s at peak' while the reply narrows this to 'peak checkout traffic runs around 45' — same number, slightly narrower referent."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_chars": 1835,
+    "output_words": 288,
+    "total_tokens": 37478
+  },
+  "timing": {
+    "executor_duration_seconds": 33.1,
+    "total_duration_seconds": 33.1
+  },
+  "claims": [
+    {
+      "claim": "Each 429 retries three times with 2s backoff, adding up to 6 seconds",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture L12: 'each 429 triggers retry with 2s backoff x3 = up to 6s added latency'. Arithmetic reconciles."
+    },
+    {
+      "claim": "I only traced the checkout path; did not check other services for the same pattern",
+      "type": "process",
+      "verified": true,
+      "evidence": "Fixture shows tracing only of req 8f3a91 through checkout-svc -> payment-orchestrator -> tax-svc. No other-service audit appears in the notes, so the disclaimer is accurate."
+    },
+    {
+      "claim": "Repointing at the prod Avalara host takes roughly an hour",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture L15 option (b): 'needs prod API key from secrets team, ~1h'."
+    }
+  ],
+  "regression_checks_v0_2": {
+    "invented_facts": "none found",
+    "caveats_retained": "yes — adds an explicit scope limit ('did not check whether other services carry the same sandbox-endpoint-in-prod pattern') that v0.2's run did not have",
+    "word_count": "288 (v0.2: 315)"
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "No headers on a reply this size, and no trailing summary restating the message",
+        "reason": "This assertion carries the whole proportionality load for eval-0 but has no length ceiling, unlike eval-1's '~250 words'. A 500-word header-free wall of prose would pass. Consider adding an explicit ceiling so eval-0 measures size, not just formatting."
+      }
+    ],
+    "overall": "Assertions are discriminating and the new fidelity assertion did real work here — I had to check 16 separate claims against the fixture rather than skim. Only gap is the missing length bound."
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence states the root cause and/or that the issue is resolved (rollback done, 500s recovered) — not background or method",
+      "passed": true,
+      "evidence": "Sentence one: \"Fixed — the checkout 500s stopped at 15:19 UTC after I rolled tax-svc back to v2.13.2.\" Resolution and the action that produced it, no preamble, no method narration."
+    },
+    {
+      "text": "No arrow-chain shorthand used as prose (no 'A → B → C' causality chains outside code)",
+      "passed": true,
+      "evidence": "`grep -c '→'` returns 0 for the file. Causality is carried by verbs instead: \"Each 429 triggered three retries at 2-second backoff, which pushed tax-svc p99 latency from 210ms to 8.4s. The payment-orchestrator's 5-second downstream timeout ... then fired and raised TaxLookupTimeout, which checkout-svc caught as a generic Exception and rethrew as a 500.\""
+    },
+    {
+      "text": "States the rollback already happened and the service recovered, with the recovery evidence (0.02% baseline or 15:19 timing)",
+      "passed": true,
+      "evidence": "\"after I rolled tax-svc back to v2.13.2. The 500 rate is back to baseline (0.02%) and held there across 30 minutes of monitoring.\" Both the 0.02% figure and the 15:19 UTC timestamp are present."
+    },
+    {
+      "text": "Mentions the outstanding follow-up (sandbox-config fix / TAX-2211 or the deploy-checklist gap)",
+      "passed": true,
+      "evidence": "Both are present: \"The real fix is repointing tax-svc at the production Avalara host, which needs a prod API key from the secrets team and roughly an hour of work; that's filed as TAX-2211. Separately, the deploy checklist has no config-diff review step for vendor endpoints ... I proposed adding that step in TAX-2212.\""
+    },
+    {
+      "text": "No headers on a reply this size, and no trailing summary restating the message",
+      "passed": true,
+      "evidence": "Zero markdown headers (`grep -c '^#'` = 0) and no bold pseudo-headers; the reply is five plain paragraphs. The closing paragraph is a decision request, not a recap: \"One decision for you: should I chase the secrets team for the prod Avalara key now so TAX-2211 lands today, or leave ZIP+4 off until that work gets scheduled normally?\" The phrase \"Two things you should know.\" opens a paragraph as a lead-in sentence, not as a section header."
+    },
+    {
+      "text": "The intermittency is explained (traffic below 10 req/s off-peak avoids rate limiting) in complete sentences",
+      "passed": true,
+      "evidence": "\"It looked intermittent only because off-peak traffic stays under 10 requests per second and never trips the rate limit.\" Full sentence, subject and verb intact, the 10 req/s threshold named."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

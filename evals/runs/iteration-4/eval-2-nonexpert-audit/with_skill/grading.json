@@ -1,0 +1,106 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence gives the calibrated verdict (manageable; 2-3 real issues; mostly noise) rather than leading with '23 vulnerabilities'",
+      "passed": true,
+      "evidence": "Sentence 1: 'Much less bad than the headline number, but two things do need fixing this week.' Verdict first, count deferred to sentence 2. Matches fixture line 13's framing ('The scary \"23 vulnerabilities!\" number is mostly dev tooling noise')."
+    },
+    {
+      "text": "The headline '23' number, if mentioned, is immediately defused (mostly dev tooling, not customer-facing)",
+      "passed": true,
+      "evidence": "Defused in the same paragraph, one sentence after introduction: 'The other 20 are either in tools that only run on developers' laptops and never ship to customers, or in code that a real user request never reaches.'"
+    },
+    {
+      "text": "No unexplained jargon: 'prototype pollution', 'SSRF', 'algorithm confusion', 'transitive' are either absent or translated into plain consequences for a non-engineer",
+      "passed": true,
+      "evidence": "grep for all four terms returns zero hits. Each is translated: algorithm confusion becomes 'a known flaw in how it validates those tokens'; SSRF becomes 'can be tricked into fetching addresses it shouldn't — including internal ones inside our own network'; prototype pollution is dropped in favor of use-site framing. Noted but not failing: the output adds file paths ('`middleware/auth.ts`', '`server/webhooks.ts`') and the untranslated term 'pull requests', neither of which iteration-3 exposed to the founder — jargon creep outside the four enumerated terms."
+    },
+    {
+      "text": "Actions given in priority order matching the notes (auth-token library first/today, avatar-URL fetching fix this week, rest in routine maintenance)",
+      "passed": true,
+      "evidence": "Ordered list matches fixture line 14 exactly: jsonwebtoken ('I'd do this one today'), axios ('This week.'), lodash (hygiene), then 'The remaining 20 are routine. I'd roll them into a normal maintenance update rather than treating them as an incident.'"
+    },
+    {
+      "text": "Effort estimates included so the founder can plan (hours-scale, not left vague)",
+      "passed": true,
+      "evidence": "'Roughly 1–2 hours including tests' (fixture L9: 'Est 1-2h with tests'), 'Roughly 2–3 hours' (L10: 'Est 2-3h'), 'Five-minute upgrade' (L8: 'zero breaking changes, 5 min'). All three hours-scale and all three sourced."
+    },
+    {
+      "text": "Does not enumerate all 23 advisories or dump CVE identifiers on the founder",
+      "passed": true,
+      "evidence": "grep for 'CVE-' returns 0. Three items detailed, remainder aggregated as 'The remaining 20 are routine.'"
+    },
+    {
+      "text": "[added post-run] Chat-proportionate structure: no formulaic section headers, no trailing recap restating the plan",
+      "passed": true,
+      "evidence": "Zero markdown headers (grep -c '^#' = 0). Bold text appears only as inline lead-ins inside list items, not as section labels over prose blocks. Ends on two forward-looking questions ('do you want me to start on the login token fix today ... And should I set up automated dependency updates while I'm in there?'), not a recap."
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": false,
+      "evidence": "The v0.3 defect (unsourced effort estimate) IS fixed — iteration-3's 'Setting that up is under an hour' on Dependabot is gone, and all three surviving estimates trace to the fixture. But a new fidelity defect replaced it. Paragraph 1 claims 'Three of them actually touch your live app', then bullet 3 says of lodash: 'It never runs while a customer is using the app.' lodash is one of the three, so the output contradicts itself and misstates the fixture, which says lodash is 'only used server-side in a build script (scripts/gen-sitemap.js), not in request path. Real exposure: low.' The fixture's framing is 'overall: 3 things actually matter' (L13) — 'matter' is not 'touch your live app', and iteration-3 rendered it correctly as 'Three of them actually matter for your app'. This is a regression on an exposure claim, the exact category a non-engineer founder relies on the reply for. Two lesser unsourced items: 'That's the reason 23 of these piled up quietly' asserts a causal link the notes only imply (L15 lists the missing automation as a 'process gap', not as the cause), and 'small weekly pull requests' invents a cadence absent from the notes. Arithmetic does reconcile: 3 highlighted + 20 remaining = 23, and the 20 decompose correctly as 4 dev-only high + 11 moderate + 5 low. The log-search caveat is honestly kept open: 'That's reassuring, not proof — absence in logs isn't the same as confirmation nobody tried.'"
+    },
+    {
+      "text": "[added iter-4] Paragraph discipline: no dense block — text breaks at thought boundaries into paragraphs of roughly 2-4 sentences; no single paragraph over ~90 words",
+      "passed": false,
+      "evidence": "The jsonwebtoken bullet is 106 words across 6 sentences — over the ~90-word ceiling and 50% over the sentence band. The axios bullet is 90 words across 6 sentences: at the word ceiling, still over the sentence band. Together these two blocks are 43% of the reply's 458 words. Prose paragraphs comply (65w/4s, 34w/2s, 12w/1s, 20w/2s, 48w/3s, 34w/2s), so the rule reached the prose but not the list items — the densest blocks are exactly where it failed. Marginal REGRESSION vs iteration-3, whose max block was 104w/6sent."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 2,
+    "total": 9,
+    "pass_rate": 0.78
+  },
+  "timing": {
+    "total_tokens": 37814,
+    "total_duration_seconds": 40.1
+  },
+  "claims": [
+    {
+      "claim": "'Three of them actually touch your live app'",
+      "type": "factual",
+      "verified": false,
+      "evidence": "False for lodash, one of the three. Fixture line 8: 'not in request path. Real exposure: low.' The output's own bullet 3 contradicts it: 'It never runs while a customer is using the app.'"
+    },
+    {
+      "claim": "The missing Dependabot/Renovate config is 'the reason 23 of these piled up quietly'",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Fixture line 15 records the absence as 'one process gap' and draws no causal conclusion. Plausible inference, but stated to the founder as established fact."
+    },
+    {
+      "claim": "Enabling automated updates means fixes 'arrive as small weekly pull requests'",
+      "type": "factual",
+      "verified": false,
+      "evidence": "No cadence appears anywhere in the fixture. 'Weekly' is invented specificity — same shape as the v0.3 unsourced-estimate defect, applied to frequency rather than effort."
+    },
+    {
+      "claim": "The jsonwebtoken fix is 'a version upgrade plus a one-line change in three places'",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture line 9: 'bump to 9.0.2 ... need to pass {algorithms:[\\'HS256\\']} in 3 call sites.' Faithful plain-language rendering."
+    },
+    {
+      "claim": "30 days of error logs showed no evidence of exploitation",
+      "type": "process",
+      "verified": true,
+      "evidence": "Fixture line 12, and the reply preserves the epistemic limit rather than overclaiming."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "[added iter-4] Paragraph discipline: no dense block ...",
+        "reason": "The assertion says 'paragraph' but this output moved its dense content into bullets. Unless the assertion explicitly binds list items too, a skill can satisfy paragraph discipline by relabeling a 106-word paragraph as a 106-word bullet. Word the assertion in terms of visual blocks, not paragraphs."
+      },
+      {
+        "reason": "No assertion checks internal consistency. The 'three touch your live app' vs 'lodash never runs during a customer request' contradiction is a self-contained defect detectable without the fixture, and seven of nine assertions passed straight over it. A cheap, highly discriminating addition: 'no claim in the reply is contradicted by another claim in the same reply.'"
+      },
+      {
+        "reason": "Assertion 5 rewards including effort estimates but nothing penalizes inventing them — the fidelity assertion is the only guard, and it bundles estimates with causality, counts, and open questions into one pass/fail. Splitting 'all effort estimates trace to the notes' into its own assertion would let iterations track the v0.3 defect directly instead of inferring it from a compound verdict."
+      }
+    ],
+    "overall": "Assertion set is strong on translation and priority but has no internal-consistency check, and the paragraph-discipline wording is escapable via bullets. Both gaps were exercised by this run."
+  }
+}

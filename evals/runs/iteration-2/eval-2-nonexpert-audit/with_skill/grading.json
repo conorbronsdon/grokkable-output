@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence gives the calibrated verdict (manageable; 2-3 real issues; mostly noise) rather than leading with '23 vulnerabilities'",
+      "passed": true,
+      "evidence": "Sentence one: \"Less bad than the headline number, but two items need real work this week and one of them touches login.\" Verdict, scope, and the stakes-carrying detail, with the count deferred to sentence two."
+    },
+    {
+      "text": "The headline '23' number, if mentioned, is immediately defused (mostly dev tooling, not customer-facing)",
+      "passed": true,
+      "evidence": "The very next sentence after \"The scan flagged 23 problems\" defuses it: \"Twenty of them are either in tools that only run on our own machines while we build the app (they never ship to customers) or are deep in the dependency tree where our code can't reach them. Three are worth acting on.\""
+    },
+    {
+      "text": "No unexplained jargon: 'prototype pollution', 'SSRF', 'algorithm confusion', 'transitive' are either absent or translated into plain consequences for a non-engineer",
+      "passed": true,
+      "evidence": "None of the four terms appears anywhere in the reply. Each is replaced by a consequence: SSRF becomes \"can be tricked into fetching internal addresses — our own machines — and returning what it finds\"; algorithm confusion becomes \"a known flaw in how it validates tokens\"; transitive becomes \"deep in the dependency tree where our code can't reach them.\" Library names are kept but always glossed first (\"The session-token library (jsonwebtoken)\", \"The HTTP library used for avatar imports (axios)\")."
+    },
+    {
+      "text": "Actions given in priority order matching the notes (auth-token library first/today, avatar-URL fetching fix this week, rest in routine maintenance)",
+      "passed": true,
+      "evidence": "\"Here are the three, in the order I'd do them:\" then 1. \"The session-token library (jsonwebtoken), today.\" 2. \"The HTTP library used for avatar imports (axios), this week.\" 3. \"lodash, whenever.\" followed by \"The remaining sixteen are routine version bumps I'd fold into normal maintenance.\" This matches the notes' \"recommended order: jsonwebtoken today (auth layer), axios this week (real exploit shape), everything else in a normal maintenance bump.\""
+    },
+    {
+      "text": "Effort estimates included so the founder can plan (hours-scale, not left vague)",
+      "passed": true,
+      "evidence": "\"Roughly 1-2 hours including tests\" (jsonwebtoken), \"Roughly 2-3 hours\" (axios), \"Five-minute upgrade\" (lodash), \"Setting it up is about an hour\" (Dependabot). The first three match the fixture notes exactly; the Dependabot hour is not in the notes (see the fabrication check in qualitative-review.md), but the assertion asks only that estimates be present and hours-scale, which they are."
+    },
+    {
+      "text": "Does not enumerate all 23 advisories or dump CVE identifiers on the founder",
+      "passed": true,
+      "evidence": "Zero CVE identifiers in the reply (the notes contain CVE-2020-8203, CVE-2022-23529, CVE-2021-3749; none appear). Only three items are itemized, plus one aggregate sentence about the remainder. No severity-tier breakdown table."
+    },
+    {
+      "text": "[added post-run] Chat-proportionate structure: no formulaic section headers, no trailing recap restating the plan",
+      "passed": true,
+      "evidence": "Zero markdown headers and zero bold pseudo-headers (the v0.1 reply used bold lead-ins like \"**Session tokens, today.**\"; this one does not). The only structure is a three-item numbered list, which is a genuinely parallel set. The closing is a question, not a recap: \"Two things I need from you: can I take 1-2 hours today for the session-token fix, and do you want the automated-updates tooling set up now or after the three fixes land?\" No 'Proposed plan' block of the kind the baseline produced."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  }
+}

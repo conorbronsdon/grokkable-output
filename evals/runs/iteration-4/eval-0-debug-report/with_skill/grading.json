@@ -1,0 +1,86 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence states the root cause and/or that the issue is resolved (rollback done, 500s recovered) — not background or method",
+      "passed": true,
+      "evidence": "Sentence 1: 'It's resolved: I rolled tax-svc back to v2.13.2 at 15:12 UTC, and the 500 rate was back to baseline (0.02%) by 15:19 and stable across 30 minutes of monitoring.' Resolution + rollback + recovery evidence all in the opener; root cause lands in sentence 2 ('a sandbox vendor endpoint left in the tax-svc v2.14.0 config'). No background or method preamble."
+    },
+    {
+      "text": "No arrow-chain shorthand used as prose (no 'A → B → C' causality chains outside code)",
+      "passed": true,
+      "evidence": "grep -c for '→' and '->' returns 0. Causality is carried in full sentences: 'The orchestrator raised TaxLookupTimeout, checkout-svc caught it as a generic exception and returned a 500.'"
+    },
+    {
+      "text": "States the rollback already happened and the service recovered, with the recovery evidence (0.02% baseline or 15:19 timing)",
+      "passed": true,
+      "evidence": "'rolled tax-svc back to v2.13.2 at 15:12 UTC, and the 500 rate was back to baseline (0.02%) by 15:19 and stable across 30 minutes of monitoring.' Both the 0.02% baseline and the 15:19 timing are present, matching fixture lines 16-17."
+    },
+    {
+      "text": "Mentions the outstanding follow-up (sandbox-config fix / TAX-2211 or the deploy-checklist gap)",
+      "passed": true,
+      "evidence": "Both are present. TAX-2211: 'requires a prod API key from the secrets team — about an hour of work, filed as TAX-2211.' Checklist gap: 'The deploy checklist has no config-diff review step for vendor endpoints ... I proposed adding one in TAX-2212.'"
+    },
+    {
+      "text": "No headers on a reply this size, and no trailing summary restating the message",
+      "passed": true,
+      "evidence": "grep -c '^#' returns 0; no bold section labels either. The reply ends on a forward-looking decision question ('Do you want me to chase the secrets team on the prod API key now, or is the rollback fine to sit for a few days?'), not a recap."
+    },
+    {
+      "text": "The intermittency is explained (traffic below 10 req/s off-peak avoids rate limiting) in complete sentences",
+      "passed": true,
+      "evidence": "'It looked intermittent only because off-peak traffic falls below 10 req/s and never hits the rate limit.' Complete sentence, matches fixture line 14."
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": true,
+      "evidence": "Line-by-line trace, all sourced: 'v2.13.2 at 15:12 UTC' (fixture L16), '0.02%' and '15:19' + '30 min' (L17), 'deployed at 13:47 UTC' (L9), 'AVATAX_HOST=sandbox-rest.avatax.com' (L10), 'rate-limits at 10 requests per second and prod checkout peaks around 45' (L11), 'three retries with 2s backoff, adding up to 6 seconds' (L12), 'p99 went to 8.4s against a 210ms baseline' (L7), '5s downstream timeout (config/timeouts.yaml line 22)' (L8), '137 500s, all on POST /v2/checkout/complete, between 14:02 and 14:40 UTC' (L5), 'about an hour of work' (L15 option b '~1h'), TAX-2211/TAX-2212 (L18), 'Rollbacks are pre-approved for sev2' (L16), timeout-raising rejected as 'it hides the failure and makes checkout slower for real users' (L15 option c 'masks problem, hurts checkout UX'). No unsourced effort estimate anywhere — the v0.3 defect class is absent here. Scope limit is honestly stated rather than invented: 'I did not check whether any other service has the same sandbox host sitting in its config, so I can't tell you this is the only instance.' Minor omission (not a fidelity error): iter-3's '(confirmed in tax-svc logs)' sourcing on the 429s is dropped."
+    },
+    {
+      "text": "[added iter-4] Paragraph discipline: no dense block — text breaks at thought boundaries into paragraphs of roughly 2-4 sentences; no single paragraph over ~90 words",
+      "passed": false,
+      "evidence": "Paragraph 2 ('The mechanism: ...') is 121 words across 7 sentences — 34% over the ~90-word ceiling and nearly double the 2-4 sentence band. It packs seven distinct thought boundaries into one block: config defect, rate limit vs traffic, retry math, p99 vs timeout, exception handling, intermittency, and blast radius. This is a REGRESSION against iteration-3, where the same paragraph was 116 words / 6 sentences. The other four paragraphs comply (56w/3s, 61w/3s, 60w/3s, 26w/1s), so the rule partially took hold but failed on the single densest block — exactly the case it was written for."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 1,
+    "total": 8,
+    "pass_rate": 0.88
+  },
+  "timing": {
+    "total_tokens": 37934,
+    "total_duration_seconds": 35.5
+  },
+  "claims": [
+    {
+      "claim": "Repointing config at the prod Avalara host is 'about an hour of work'",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture line 15: 'hotfix config to prod Avalara host (needs prod API key from secrets team, ~1h)'. Sourced, not invented."
+    },
+    {
+      "claim": "The deploy checklist gap 'is how a sandbox host reached prod unnoticed'",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture line 18 flags exactly this: 'deploy checklist gap: no config-diff review step for vendor endpoints'."
+    },
+    {
+      "claim": "No other service was checked for the same sandbox host",
+      "type": "process",
+      "verified": true,
+      "evidence": "Fixture contains no evidence of a cross-service config sweep; the negative claim is consistent with the notes and correctly framed as a scope limit."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "[added iter-4] Paragraph discipline: no dense block ...",
+        "reason": "The assertion sets two thresholds (2-4 sentences AND ~90 words) but doesn't say whether one violating paragraph out of five fails the whole assertion. I graded strictly (one dense block = fail), but the eval should state the aggregation rule so grades are reproducible."
+      },
+      {
+        "reason": "Total word count is unbounded for eval-0 while eval-1 has a ~250-word ceiling. Iteration-4 grew from 289 to 324 words (+12%) with no assertion catching it. If proportionality matters for 'quick status?', it plausibly matters for 'ok what did you find?' too — consider a ceiling here."
+      }
+    ],
+    "overall": "Assertions are discriminating. The new paragraph-discipline assertion earned its place immediately: it caught a real regression that every other assertion passed over."
+  }
+}

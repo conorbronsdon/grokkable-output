@@ -1,0 +1,103 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence gives the calibrated verdict (manageable; 2-3 real issues; mostly noise) rather than leading with '23 vulnerabilities'",
+      "passed": true,
+      "evidence": "Sentence 1: 'Less bad than the headline number, but two items are worth fixing this week.' Calibration first, count deferred to sentence 2. 'Two items this week' matches the fixture's recommended order (jsonwebtoken today, axios this week, lodash whenever), so the verdict is calibrated rather than merely softened."
+    },
+    {
+      "text": "The headline '23' number, if mentioned, is immediately defused (mostly dev tooling, not customer-facing)",
+      "passed": true,
+      "evidence": "'The scan flagged 23 issues. Three of them actually matter for your app; the other 20 are either in tools that only run on developer machines and never ship to customers, or in code a stranger can't reach.' Defusal is in the same sentence-pair as the number, in plain language, and the 3/20 split is correct."
+    },
+    {
+      "text": "No unexplained jargon: 'prototype pollution', 'SSRF', 'algorithm confusion', 'transitive' are either absent or translated into plain consequences for a non-engineer",
+      "passed": true,
+      "evidence": "grep for all four terms returns 0 matches. Each is translated: algorithm confusion -> 'a known flaw in how it decides which signing method to trust'; SSRF -> 'a crafted address point the fetch somewhere it shouldn't go, including internal systems not meant to be reachable from the internet'; prototype pollution -> 'It's a real flaw' plus the build-script exposure argument; transitive -> 'indirect dependencies outside the request path'. Package names (jsonwebtoken, axios, lodash) appear only as parenthetical tags behind plain-English labels ('The login-token library', 'The avatar-import feature')."
+    },
+    {
+      "text": "Actions given in priority order matching the notes (auth-token library first/today, avatar-URL fetching fix this week, rest in routine maintenance)",
+      "passed": true,
+      "evidence": "Numbered 1/2/3 with explicit timing in each label: '1. The login-token library (jsonwebtoken) — fix today', '2. The avatar-import feature (axios) — fix this week', '3. lodash — whenever.' Followed by 'Everything else ... belong in a normal maintenance update, not an emergency.' Exactly matches fixture L14."
+    },
+    {
+      "text": "Effort estimates included so the founder can plan (hours-scale, not left vague)",
+      "passed": true,
+      "evidence": "'Roughly 1–2 hours including tests' (jsonwebtoken), 'Roughly 2–3 hours' (axios), 'Five-minute upgrade, no breaking changes' (lodash). All three match the fixture's estimates exactly."
+    },
+    {
+      "text": "Does not enumerate all 23 advisories or dump CVE identifiers on the founder",
+      "passed": true,
+      "evidence": "grep 'CVE' returns 0 matches. Only three items are named individually; the remaining 20 are handled as one aggregate sentence ('11 moderate and 5 low, plus 4 of the 5 \"high\" ones'). No package list for the dev-tooling items (webpack-dev-server, nodemon, jest-environment-jsdom are all omitted)."
+    },
+    {
+      "text": "[added post-run] Chat-proportionate structure: no formulaic section headers, no trailing recap restating the plan",
+      "passed": true,
+      "evidence": "grep '^#' returns 0 markdown headers. The three bold strings are run-in emphasis at the start of a continuing paragraph ('**1. The login-token library (jsonwebtoken) — fix today.** This is the code that checks...'), not standalone header lines, and they carry content (name + timing) rather than acting as labels. The closing line is a forward-looking question ('do you want me to start on the login-token fix today, or batch all three into one block of work later this week?'), and the paragraph before it introduces new material (log search, Dependabot gap), so nothing restates the plan. Flagged for the record: at 437 words this is the longest of the three outputs and grew slightly against v0.2 (428), but this eval carries no length ceiling assertion, so it cannot fail on size here."
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": false,
+      "evidence": "FAILS on one invented estimate. The reply states: 'Setting that up is under an hour and prevents the next version of this conversation.' The fixture's only statement about this is L15: 'one process gap: no automated dependency updates (no dependabot/renovate config in repo)' — no effort estimate appears anywhere in the notes for Dependabot/Renovate setup. grep -i over the fixture for 'hour|min|est ' returns exactly three estimates, all attached to the three fixes (lodash 5 min, jsonwebtoken 1-2h, axios 2-3h), none to the process gap. This is the same fabrication class v0.3.0 was meant to close, and it is a carry-over: v0.2's run said 'Setting it up is about an hour' from the same absent source. Everything else in the reply does trace cleanly, and two v0.2 defects are genuinely fixed: (1) the arithmetic now reconciles — 'the other 20' and '11 moderate and 5 low, plus 4 of the 5 high ones' both equal 23 - 3, where v0.2 wrote 'The remaining sixteen' against a true value of 20; (2) v0.2's invented causal claim 'That's the reason 23 piled up quietly' is gone. Per the field spec ('no partial credit', 'burden of proof to pass is on the expectation'), one unsourced estimate fails the assertion as written."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 1,
+    "total": 8,
+    "pass_rate": 0.88
+  },
+  "execution_metrics": {
+    "output_chars": 2556,
+    "output_words": 437,
+    "total_tokens": 37758
+  },
+  "timing": {
+    "executor_duration_seconds": 47.7,
+    "total_duration_seconds": 47.7
+  },
+  "claims": [
+    {
+      "claim": "Setting up automated dependency updates is under an hour",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Not in the fixture. The notes give effort estimates for the three fixes only (5 min / 1-2h / 2-3h) and mention the Dependabot gap with no sizing. Invented estimate."
+    },
+    {
+      "claim": "23 issues, 3 that matter, the other 20 are dev tooling or unreachable",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture: 2 critical + 5 high + 11 moderate + 5 low = 23. The three that matter are jsonwebtoken, axios, lodash (L13). Remainder = 4 dev-only high + 11 moderate + 5 low = 20. Reconciles exactly, and the reply's later breakdown ('11 moderate and 5 low, plus 4 of the 5 high ones') restates the same 20 consistently."
+    },
+    {
+      "claim": "Searched 30 days of error logs and found nothing; that's reassuring, not proof",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Fixture L12: 'no evidence of active exploitation in logs (checked 30 days of error logs for pollution/SSRF signatures, nothing)'. The added qualifier 'reassuring, not proof, since it would only catch attempts that produced errors' correctly bounds what an error-log search can show — a limit-of-verification caveat, not a fabricated fact. v0.2's run reported the null result with no such bound."
+    },
+    {
+      "claim": "The jsonwebtoken flaw is probably not currently reachable but sits in the auth layer",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Fixture L9: 'Practical exploitability requires attacker-controlled key material which we don't expose, but this is the auth layer; treat as real.' Faithfully rendered including the hedge."
+    }
+  ],
+  "regression_checks_v0_2": {
+    "invented_facts": "ONE — 'Setting that up is under an hour' for Dependabot/Renovate setup, unsourced in the fixture and carried over from v0.2's identical claim",
+    "caveats_retained": "yes and improved — 'that's reassuring, not proof, since it would only catch attempts that produced errors' is new in v0.3; the exploitability hedge on jsonwebtoken is preserved",
+    "word_count": "437 (v0.2: 428) — the only output that grew"
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "[added post-run] Chat-proportionate structure: no formulaic section headers, no trailing recap restating the plan",
+        "reason": "This is the only proportionality assertion on the longest output in the suite, and it measures formatting only. eval-1 has an explicit '~250 words' ceiling that caught a real regression; eval-2 has nothing comparable, so a 437-word reply to a founder's two-clause question passes uncontested and the count drifted upward from v0.2 unnoticed. Add a word ceiling (~350 seems defensible for a three-item plan with translations)."
+      },
+      {
+        "assertion": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes",
+        "reason": "The assertion bundles four distinct properties (sourced numbers, sourced mechanisms, open questions kept open, arithmetic reconciles) into one pass/fail. This output fixed three of them and broke one, which collapses to a bare FAIL and loses the signal that v0.3 made real progress here. Splitting it into two or three assertions would make iteration-over-iteration movement visible instead of binary."
+      }
+    ],
+    "overall": "The fidelity assertion earned its place — it caught a fabrication that all seven other assertions passed over. Its bundling is the main weakness, along with the missing length ceiling on the suite's longest output."
+  }
+}

@@ -1,0 +1,9 @@
+It's resolved: I rolled tax-svc back to v2.13.2 at 15:12 UTC, and the 500 rate was back to baseline (0.02%) by 15:19 and stable across 30 minutes of monitoring. The cause was a sandbox vendor endpoint left in the tax-svc v2.14.0 config. Rollbacks are pre-approved for sev2 in the runbook, so I didn't wait for you.
+
+The mechanism: v2.14.0, deployed at 13:47 UTC, added a ZIP+4 enrichment call to the Avalara vendor API but shipped with `AVATAX_HOST=sandbox-rest.avatax.com`. That sandbox endpoint rate-limits at 10 requests per second and prod checkout peaks around 45, so Avalara returned 429s. Each 429 triggered three retries with 2s backoff, adding up to 6 seconds of latency. Tax-svc p99 went to 8.4s against a 210ms baseline, which blew past the payment-orchestrator's 5s downstream timeout (`config/timeouts.yaml` line 22). The orchestrator raised TaxLookupTimeout, checkout-svc caught it as a generic exception and returned a 500. It looked intermittent only because off-peak traffic falls below 10 req/s and never hits the rate limit. Total damage was 137 500s, all on POST /v2/checkout/complete, between 14:02 and 14:40 UTC.
+
+The rollback costs you the ZIP+4 feature. Getting it back means pointing the config at the production Avalara host, which requires a prod API key from the secrets team — about an hour of work, filed as TAX-2211. The other option I considered, raising the orchestrator timeout, I'd argue against: it hides the failure and makes checkout slower for real users.
+
+Two things beyond the incident itself. The deploy checklist has no config-diff review step for vendor endpoints, which is how a sandbox host reached prod unnoticed; I proposed adding one in TAX-2212. And I did not check whether any other service has the same sandbox host sitting in its config, so I can't tell you this is the only instance.
+
+Do you want me to chase the secrets team on the prod API key now, or is the rollback fine to sit for a few days?

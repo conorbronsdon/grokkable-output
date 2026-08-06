@@ -1,0 +1,98 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence states the root cause and/or that the issue is resolved (rollback done, 500s recovered) — not background or method",
+      "passed": true,
+      "evidence": "Opening: 'Found it and mitigated it: tax-svc v2.14.0 shipped with `AVATAX_HOST` still pointing at Avalara's sandbox endpoint, and the sandbox rate-limits at 10 req/s.' Root cause + mitigation in sentence 1; sentence 2 gives the rollback and recovery."
+    },
+    {
+      "text": "No arrow-chain shorthand used as prose (no 'A → B → C' causality chains outside code)",
+      "passed": true,
+      "evidence": "Zero occurrences of '→' or '->' in reply.md (scripted count = 0). The causal chain is carried in full sentences: 'so those calls timed out and raised TaxLookupTimeout, which checkout-svc catches as a generic Exception and rethrows as a 500.'"
+    },
+    {
+      "text": "States the rollback already happened and the service recovered, with the recovery evidence (0.02% baseline or 15:19 timing)",
+      "passed": true,
+      "evidence": "'I rolled tax-svc back to v2.13.2 at 15:12 UTC and the 500 rate is back to baseline.' plus 'Evidence for the fix working: 500 rate at 0.02% by 15:19 UTC, stable across 30 minutes of monitoring.' Both the 0.02% figure and the 15:19 timestamp are present and match the fixture."
+    },
+    {
+      "text": "Mentions the outstanding follow-up (sandbox-config fix / TAX-2211 or the deploy-checklist gap)",
+      "passed": true,
+      "evidence": "Both are present: 'The real fix (TAX-2211) is pointing `AVATAX_HOST` at the production Avalara host, which needs a prod API key from the secrets team' and 'The deploy checklist has no config-diff review step for vendor endpoints ... I proposed adding one in TAX-2212.'"
+    },
+    {
+      "text": "No headers on a reply this size, and no trailing summary restating the message",
+      "passed": true,
+      "evidence": "Zero markdown headers (scripted count of lines starting with '#' = 0). Final block is a new fact, not a recap: 'Scope limit: I only looked at tax-svc. I did not check whether other services carry the same sandbox endpoint in their configs.'"
+    },
+    {
+      "text": "The intermittency is explained (traffic below 10 req/s off-peak avoids rate limiting) in complete sentences",
+      "passed": true,
+      "evidence": "'It was intermittent only because off-peak traffic drops below 10 req/s and stops tripping the rate limit.' Complete sentence, matches fixture line 14."
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": false,
+      "evidence": "Numeric core is clean — 137 500s / 14:02-14:40 UTC / 13:47 deploy / 10 req/s / ~45 req/s / 2s backoff x3 / up to 6s / p99 8.4s vs 210ms / 5s timeout at config/timeouts.yaml line 22 / v2.13.2 at 15:12 / 0.02% by 15:19 / 30 min all trace exactly. Two unsupported additions: (1) 'And checkout-svc turning a known TaxLookupTimeout into an opaque 500 is its own bug — it cost time here' — the fixture states the exception-handling mechanism but nowhere says it cost investigation time; the impact claim is invented. (2) 'Scope limit: I only looked at tax-svc' contradicts the notes, which show the agent checked api-gateway logs, traced checkout-svc and payment-orchestrator, and pulled deploy history (fixture lines 5-9); iter-3's accurate phrasing was 'I only traced the checkout path'. Minor third item: fixture's '~1h' is the estimate for the config hotfix, rendered here as 'roughly an hour of their time' (the secrets team's), an attribution the notes do not make."
+    },
+    {
+      "text": "[reworded iter-5] Block discipline: no visual block of any kind — paragraph OR list item — over ~90 words or ~4 sentences; text breaks at thought boundaries",
+      "passed": false,
+      "evidence": "Block 2 ('The chain: ...') is 122 words and 6 sentences — 36% over the word bound and 50% over the sentence bound, the single largest block in the whole iteration-5 set. It packs deploy, rate limit, 429/retry math, p99, orchestrator timeout, exception rethrow, blast radius, and intermittency into one paragraph; at least three clean split points exist (after the 429 sentence, after the timeout sentence). Essentially unchanged from iter-4 (121w/7s) and iter-3 (116w/6s), so the v0.5.0 bounding rule did not fire here. All other blocks are compliant (max 61w/3s)."
+    },
+    {
+      "text": "[added iter-5] Content retention: the reply keeps the reader's decision question(s), the options being chosen between, and evidence tags (e.g. 'I reproduced it', 'confirmed in logs') — an offer of more depth never substitutes for a decision",
+      "passed": true,
+      "evidence": "Decision is asked directly with both branches: 'Do you want me to open that request, or does someone on your side own the secrets ask?' Evidence tags restored after the v0.4 loss: '(confirmed in tax-svc logs)' and 'Evidence for the fix working: ...'. Scope limit restored as its own block. No offer-of-depth substitution anywhere in this reply. Noted regression, not fatal to this assertion: the fixture's third option — raise the orchestrator timeout, explicitly rejected as masking the problem — is dropped, though both iter-3 ('I'd rule out the third option of raising the orchestrator timeout') and iter-4 ('The other option I considered ... I'd argue against') kept it."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 2,
+    "total": 9,
+    "pass_rate": 0.78
+  },
+  "timing": {
+    "total_tokens": 38118,
+    "total_duration_seconds": 36.4
+  },
+  "claims": [
+    {
+      "claim": "500 rate returned to 0.02% baseline by 15:19 UTC and held for 30 minutes",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture line 17: '500 rate back to baseline (0.02%) by 15:19 UTC, monitored 30 min, stable'"
+    },
+    {
+      "claim": "The prod API key from the secrets team is 'roughly an hour of their time'",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Fixture line 15 gives '~1h' as the estimate for hotfixing the config to the prod Avalara host, not as the secrets team's effort. Attribution shifted."
+    },
+    {
+      "claim": "The opaque 500 from checkout-svc 'cost time here'",
+      "type": "quality",
+      "verified": false,
+      "evidence": "No support in the fixture; the notes show a direct trace from req id 8f3a91 to tax-svc with no indication the generic exception slowed it."
+    },
+    {
+      "claim": "'I only looked at tax-svc'",
+      "type": "process",
+      "verified": false,
+      "evidence": "Fixture shows api-gateway log review, a three-service request trace, and deploy-history lookup. The intended claim (only tax-svc's config was audited) is recoverable from the following sentence, but as written the scope statement is false."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "[added iter-5] Content retention",
+        "reason": "The assertion names 'the options being chosen between' but nothing pins which options. Eval-0 dropped the fixture's rejected third option (raise orchestrator timeout) and still passes on the strength of the decision question. Consider naming the required options per eval, as the eval-1 assertion does for the Express-proxy fallback."
+      },
+      {
+        "assertion": "[reworded iter-5] Block discipline",
+        "reason": "'~90 words or ~4 sentences' has no stated tolerance. Eval-2's largest block is 94 words and eval-0's is 122; a grader must invent the cutoff. Specify a hard number (e.g. fail above 100 words or 5 sentences)."
+      }
+    ],
+    "overall": "Assertions 1-6 are now saturated — every iteration since iter-3 passes them. The discriminating power sits entirely in the three added assertions (fidelity, block discipline, retention)."
+  }
+}

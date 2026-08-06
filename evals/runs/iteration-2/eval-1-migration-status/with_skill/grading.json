@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Opens with the overall state (48 of 61 migrated / on track with caveats) in the first sentence",
+      "passed": true,
+      "evidence": "Sentence one: \"48 of the 61 route handlers are migrated and passing their existing tests — 312 tests green from `npm test -- --grep routes`.\" Sentence three carries the caveat: \"The week deadline still looks reachable, but only if the upload routes can use buffering rather than streaming.\""
+    },
+    {
+      "text": "The session-renewal semantics question is explicitly surfaced as a decision needing the user's input, phrased answerably (renew-on-read vs renew-on-write / 30-min idle logout)",
+      "passed": true,
+      "evidence": "\"One question needs your answer before I can finish the 9 blocked routes: is renewal-on-read acceptable for the 30-minute idle logout?\" The question is yes/no answerable and the consequence is spelled out: \"under Fastify an idle user with a page polling in the background would never get logged out.\""
+    },
+    {
+      "text": "Both pre-existing bugs (unawaited CSV write, Stripe signature-after-parse) are mentioned, not buried or dropped",
+      "passed": true,
+      "evidence": "Paragraph four names both: \"`routes/admin/export.js` never awaits the CSV write, so large exports truncate silently; I reproduced it with an export over 10MB. `routes/webhooks/stripe.js` validates the Stripe webhook signature after parsing the JSON body...\" It also flags them as not migration-caused and asks for a second set of eyes."
+    },
+    {
+      "text": "The deadline risk (multipart streaming = 2-3 days vs buffering = 1 day) is stated",
+      "passed": true,
+      "evidence": "\"Buffering is about a day and fits the week; streaming is 2-3 days and probably doesn't.\" Preceded by \"The 4 file-upload routes are the schedule risk.\""
+    },
+    {
+      "text": "Reply is proportionate to 'quick status?': no headers or at most one, under ~250 words",
+      "passed": false,
+      "evidence": "The structural half passes (0 markdown headers, 0 bold pseudo-headers, five paragraphs of prose), but the length half fails: `wc -w` = 328 words against a stated ceiling of ~250, 31% over. The tilde allows drift of a few percent, not a third. Contrast the v0.1 with-skill reply on the same eval at 279 words, which the skill author's own analyst-notes.md already called \"the marginal 279-word proportionality pass.\" v0.2.0 moved it further from the line, not closer."
+    },
+    {
+      "text": "No telegraphic fragment piles (e.g. 'done: 48; blocked: 9; pending: 4' as the whole answer) — complete sentences carry the status",
+      "passed": true,
+      "evidence": "Every status claim is a full sentence with a verb: \"The remaining 13 are 9 routes blocked on session handling and 4 file-upload routes I haven't started.\" No colon-delimited label piles, no dropped articles or copulas anywhere in the reply."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "total": 6,
+    "pass_rate": 0.83
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence states the root cause and/or resolution \u2014 not background or method",
+      "passed": true,
+      "evidence": "Opens: 'Found it and it's fixed: the checkout 500s came from a sandbox API endpoint left in the tax-svc v2.14.0 config.'"
+    },
+    {
+      "text": "No arrow-chain shorthand used as prose",
+      "passed": true,
+      "evidence": "Causality written as sentences: 'so tax-svc started getting 429s and retrying \u2014 three retries at 2s backoff... which pushed tax-svc p99 to 8.4s'. Zero '\u2192' characters."
+    },
+    {
+      "text": "States the rollback already happened and the service recovered, with evidence",
+      "passed": true,
+      "evidence": "'I rolled tax-svc back to v2.13.2 at 15:12 UTC... 500 rate has been at baseline 0.02% since 15:19, stable through 30 minutes of monitoring.'"
+    },
+    {
+      "text": "Mentions the outstanding follow-up (config fix / checklist gap)",
+      "passed": true,
+      "evidence": "'TAX-2211 tracks the real fix' and 'I filed TAX-2212 proposing one' (config-diff review step)."
+    },
+    {
+      "text": "No headers on a reply this size, no trailing summary",
+      "passed": true,
+      "evidence": "Four prose paragraphs, no headers, no bold, ends on a decision question rather than a recap."
+    },
+    {
+      "text": "Intermittency explained in complete sentences",
+      "passed": true,
+      "evidence": "'It only looked intermittent because off-peak traffic falls below 10 req/s and no 429s fire.'"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

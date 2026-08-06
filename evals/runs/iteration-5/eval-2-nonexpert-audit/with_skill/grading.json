@@ -1,0 +1,109 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence gives the calibrated verdict (manageable; 2-3 real issues; mostly noise) rather than leading with '23 vulnerabilities'",
+      "passed": true,
+      "evidence": "'Not as bad as the headline number, but two things need doing this week.' Verdict plus urgency before any count. The '23' appears only in sentence 2."
+    },
+    {
+      "text": "The headline '23' number, if mentioned, is immediately defused (mostly dev tooling, not customer-facing)",
+      "passed": true,
+      "evidence": "'The scanner flagged 23 vulnerabilities; 3 of them actually matter. The other 20 are either in tools that only run on our own machines while we build the app (never shipped to customers) or in code your app doesn't run.' Defused in the same breath, and 23-3=20 reconciles with the fixture's 4 dev-only highs + 11 moderate + 5 low."
+    },
+    {
+      "text": "No unexplained jargon: 'prototype pollution', 'SSRF', 'algorithm confusion', 'transitive' are either absent or translated into plain consequences for a non-engineer",
+      "passed": true,
+      "evidence": "None of the four terms appears. Translations: algorithm confusion → 'The flaw lets a specially crafted token get accepted under the wrong verification method'; SSRF → 'can be tricked into fetching an address the attacker chooses instead, including internal systems that shouldn't be reachable from the outside'; transitive → 'in code your app doesn't run'; prototype pollution → replaced by the exposure statement 'we only use it in a build script that generates the sitemap'."
+    },
+    {
+      "text": "Actions given in priority order matching the notes (auth-token library first/today, avatar-URL fetching fix this week, rest in routine maintenance)",
+      "passed": true,
+      "evidence": "Numbered in fixture order: '1. jsonwebtoken — today', '2. axios — this week', '3. lodash — 5 minutes', then 'Everything else rides along in a normal maintenance update.' Matches fixture line 14."
+    },
+    {
+      "text": "Effort estimates included so the founder can plan (hours-scale, not left vague)",
+      "passed": true,
+      "evidence": "Per item in the bold leads ('1-2 hours', '2-3 hours', '5 minutes') plus an aggregate: 'Total fix time for the three: roughly 3-5 hours of engineering' — which is the arithmetic sum of the components (1-2h + 2-3h + 5min), so the basis is visible to the reader."
+    },
+    {
+      "text": "Does not enumerate all 23 advisories or dump CVE identifiers on the founder",
+      "passed": true,
+      "evidence": "Three items covered, no CVE strings anywhere in the reply (CVE-2020-8203, CVE-2022-23529, CVE-2021-3749 all absent). The full list is offered, not delivered: 'Happy to send the full list of all 23 with CVE numbers if whoever does the work wants it.'"
+    },
+    {
+      "text": "[added post-run] Chat-proportionate structure: no formulaic section headers, no trailing recap restating the plan",
+      "passed": true,
+      "evidence": "Zero markdown headers. The bold leads are run-in labels — prose continues on the same line ('**1. jsonwebtoken — today, 1-2 hours.** This library checks that...') — not section headings. The closing block is a request for two decisions, not a recap: 'Two things I need from you: do I start the jsonwebtoken fix today, and do you want me to set up automated dependency updates while I'm in there?'"
+    },
+    {
+      "text": "[added iter-3] Fidelity: every number, estimate, and causal mechanism traces to the fixture notes — no invented estimates or reasons, open questions kept open, counts reconcile arithmetically",
+      "passed": false,
+      "evidence": "One invented estimate: 'One separate gap: we have no automated dependency updates configured (no Dependabot or Renovate in the repo) ... Setting one up is about an hour.' Fixture line 15 records the gap with no effort figure anywhere; the hour is fabricated, and it is precisely the class the v0.5.0 'basis-required time estimates' rule targets. (iter-4 avoided this by giving no number; iter-3 had the same invention as 'under an hour', so this is a regression against the immediately prior iteration.) Everything else traces: 23/2 critical/5 high/11 moderate/5 low collapse correctly to 3+20; 1-2h, 2-3h, 5 min match lines 8-10; the 3 call sites appear as 'three places in the code'; 'no evidence of active exploitation' is preserved with its hedge, 'That's reassuring, not proof'. Notably the v0.4 strength-upgrade failure is NOT repeated: the fixture's 'three actually matter' is rendered as '3 of them actually matter' rather than iter-4's stronger 'three ... touch your live app'. One minor strength drift remains: fixture says jsonwebtoken 'IS in the request path' / verifies session tokens in middleware/auth.ts, rendered as 'it sits in front of every request'."
+    },
+    {
+      "text": "[reworded iter-5] Block discipline: no visual block of any kind — paragraph OR list item — over ~90 words or ~4 sentences; text breaks at thought boundaries",
+      "passed": true,
+      "evidence": "Largest block is the jsonwebtoken item at 94 words total (5-word bold label + 89 words of body) and 4 body sentences — at the ~90/~4 bound, within tolerance. Next largest: axios 73w/4s, lodash 39w/3s, opener 65w/4s, remainder 7-47 words. Compare iter-4, where the same two items ran 105w/6s and 89w/6s, and iter-3 at 104w/6s and 91w/6s: the bounding rule visibly fired here, cutting the worst block by 11 words and 2 sentences and splitting the log-search finding out into its own 34-word block. Judged against a 10% tolerance on '~90 words' and a hard 4-sentence bound, no block exceeds."
+    },
+    {
+      "text": "[added iter-5] Content retention: the reply keeps the reader's decision question(s), the options being chosen between, and evidence tags (e.g. 'I reproduced it', 'confirmed in logs') — an offer of more depth never substitutes for a decision",
+      "passed": true,
+      "evidence": "Decisions asked explicitly and answerably: 'Two things I need from you: do I start the jsonwebtoken fix today, and do you want me to set up automated dependency updates while I'm in there?' Evidence tag with its own limits: 'I searched 30 days of error logs for traces of those two attacks and found none. That's reassuring, not proof — it was a signature search over one log source, not a full investigation.' The offer of depth ('Happy to send the full list of all 23 with CVE numbers') is additive and sits after the decisions, not in place of them."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  },
+  "timing": {
+    "total_tokens": 38579,
+    "total_duration_seconds": 41.8
+  },
+  "claims": [
+    {
+      "claim": "3 of 23 advisories actually matter; the other 20 are dev tooling or unreached code",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Fixture lines 10-13: 4 dev-only highs + 11 moderate + 5 low = 20 non-issues; jsonwebtoken, axios, lodash = 3."
+    },
+    {
+      "claim": "Total fix time for the three is roughly 3-5 hours",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Derived sum of fixture estimates (1-2h + 2-3h + 5min = 3h05m-5h05m). Not stated in the fixture but arithmetically entailed by it."
+    },
+    {
+      "claim": "Setting up automated dependency updates is about an hour",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Fixture line 15 states the gap only: 'no automated dependency updates (no dependabot/renovate config in repo)'. No effort estimate exists to trace to."
+    },
+    {
+      "claim": "jsonwebtoken 'sits in front of every request'",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Fixture line 9 says it 'verifies session tokens in middleware/auth.ts' and 'IS in the request path'. 'Every request' is slightly stronger than the source, though far milder than the iter-4 upgrade this rule was written against."
+    },
+    {
+      "claim": "No evidence of exploitation in 30 days of logs",
+      "type": "process",
+      "verified": true,
+      "evidence": "Fixture line 12, and the reply preserves the hedge and names the method's limits."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "[added iter-3] Fidelity",
+        "reason": "The Dependabot hour has now appeared in 2 of 3 iterations and slips past every other assertion — assertion 5 ('effort estimates included') actively rewards adding estimates. Consider an explicit assertion that no effort estimate appears which is absent from the notes."
+      },
+      {
+        "assertion": "[reworded iter-5] Block discipline",
+        "reason": "Word counts here depend on whether a bold run-in label counts toward its block. The jsonwebtoken item is 89 words excluding the label and 94 including it — one side of ~90, one side over. The assertion should say."
+      }
+    ],
+    "overall": "Assertions 1-7 have passed in every iteration since iter-3 and no longer discriminate. Fidelity is the only assertion doing work on this eval."
+  }
+}

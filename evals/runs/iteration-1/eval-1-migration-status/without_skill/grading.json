@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Opens with the overall state in the first sentence",
+      "passed": true,
+      "evidence": "'48 of 61 routes migrated and green (312 tests passing).'"
+    },
+    {
+      "text": "Session-renewal decision explicitly surfaced as needing user input, phrased answerably",
+      "passed": true,
+      "evidence": "'9 session routes \u2014 blocked, need your call.' with the renew-on-read vs write tradeoff spelled out and closer: 'The renewal-on-read answer is the thing actually holding me up.'"
+    },
+    {
+      "text": "Both pre-existing bugs mentioned, not buried",
+      "passed": true,
+      "evidence": "Bulleted pair: unawaited CSV write and Stripe signature ordering, both described."
+    },
+    {
+      "text": "Deadline risk (streaming vs buffering) stated",
+      "passed": true,
+      "evidence": "'Buffering mode is ~1 day, streaming is 2-3. This is the schedule risk: if we need streaming, the week deadline is tight.'"
+    },
+    {
+      "text": "Proportionate to 'quick status?': no headers or at most one, under ~250 words",
+      "passed": false,
+      "evidence": "273 words with three bold pseudo-headers ('9 session routes \u2014 blocked, need your call.', '4 file-upload routes \u2014 not started.', 'Two pre-existing bugs found along the way') sectioning a quick status into a document."
+    },
+    {
+      "text": "No telegraphic fragment piles \u2014 complete sentences carry the status",
+      "passed": true,
+      "evidence": "Prose within sections; counts embedded in sentences."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "total": 6,
+    "pass_rate": 0.833
+  }
+}

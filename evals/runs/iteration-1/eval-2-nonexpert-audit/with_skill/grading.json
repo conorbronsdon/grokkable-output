@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "First sentence gives the calibrated verdict rather than leading with '23 vulnerabilities'",
+      "passed": true,
+      "evidence": "'Much less bad than the number sounds, but two of them are real and one sits in our login system.'"
+    },
+    {
+      "text": "The '23' number, if mentioned, is immediately defused",
+      "passed": true,
+      "evidence": "'The scan reported 23 vulnerabilities; 20 of those are in tools that only run on our own machines during development, or in code an attacker has no way to reach.'"
+    },
+    {
+      "text": "No unexplained jargon \u2014 translated into plain consequences",
+      "passed": true,
+      "evidence": "SSRF rendered as 'can be tricked into fetching a different address... including addresses inside our own network'; algorithm confusion as 'a forged token can be accepted under the wrong verification method'. No CVE IDs, no 'prototype pollution', no 'transitive'."
+    },
+    {
+      "text": "Actions in priority order matching the notes",
+      "passed": true,
+      "evidence": "Numbered: '1. Session tokens, today. 2. Avatar imports, this week. 3. lodash, whenever.'"
+    },
+    {
+      "text": "Effort estimates included",
+      "passed": true,
+      "evidence": "'About 1-2 hours including tests', 'About 2-3 hours', 'five-minute upgrade'."
+    },
+    {
+      "text": "Does not enumerate all 23 advisories or dump CVE identifiers",
+      "passed": true,
+      "evidence": "'The remaining 20 are routine and can ride along with normal maintenance.' No CVE identifiers anywhere."
+    },
+    {
+      "text": "[added post-run] Chat-proportionate structure: no formulaic section headers, no trailing recap restating the plan",
+      "passed": true,
+      "evidence": "Prose with one numbered action list; ends on an answerable question ('do you want me to start the session-token fix today...') rather than a recap."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  }
+}
