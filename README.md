@@ -10,7 +10,25 @@
 
 </div>
 
-A portable skill ([SKILL.md](SKILL.md)) for Claude Code, Cursor, OpenClaw, Codex, and any agent that reads the [agentskills.io](https://agentskills.io) format. It changes how an agent writes its replies, reports, and status updates: the answer arrives in the first sentence, causality reads as sentences instead of `A → B → fails` chains, structure appears only when the content has that shape, and every number traces to something the agent observed.
+## TL;DR
+
+A portable skill ([SKILL.md](SKILL.md)) that changes how an agent writes replies, reports, and status updates. Install:
+
+```bash
+git clone https://github.com/conorbronsdon/grokkable-output ~/.claude/skills/grokkable-output
+```
+
+What it makes the agent do:
+
+- Answer in the first sentence, then layer detail — you can stop reading anywhere and be correctly informed
+- Write causality as sentences, not `A → B → fails` chains, invented codenames, or fragment piles
+- Shorten by dropping what you don't need, never by cutting caveats or compressing grammar
+- Use structure (bullets, headers, bold) only when the content has that shape — a quick status is a paragraph, not a document
+- Trace every number and claim to something it observed; keep open questions open
+
+Works with Claude Code, Cursor, OpenClaw, Codex, and anything reading the [agentskills.io](https://agentskills.io) format. Real before/after outputs in [`examples/`](examples/). Everything below is detail.
+
+---
 
 Models are rewarded for looking thorough; this skill makes them optimize for your parse time instead — a prompt-layer fix for an incentive problem.
 
