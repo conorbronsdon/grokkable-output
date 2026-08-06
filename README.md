@@ -34,6 +34,8 @@ Models are rewarded for looking thorough; this skill makes them optimize for you
 
 ## Quick demo
 
+![Terminal recording. After the question "ok what did you find?", the baseline reply scrolls past as a wall of bold headers and bullets, too fast to read. The grokkable-output reply types three sentences — what broke, what was done, how it was verified — and stops at "you can stop reading here."](docs/demo.gif)
+
 An agent spent 40 minutes debugging production 500s. You stepped away, came back, and ask: **"ok what did you find?"** What you actually want to know: *is it fixed, and what caused it?*
 
 **Without the skill**, that answer is distributed across a 371-word document you have to hunt through:

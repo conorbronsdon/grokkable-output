@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <rect width="1280" height="640" fill="#0d1117"/>
+
+  <!-- accent bar -->
+  <rect x="80" y="190" width="74" height="10" rx="5" fill="#3fb950"/>
+
+  <!-- title -->
+  <text x="80" y="285" font-family="Consolas, 'Courier New', monospace" font-size="64" font-weight="bold" fill="#e6edf3">grokkable-output</text>
+
+  <!-- description -->
+  <text x="80" y="350" font-family="Consolas, 'Courier New', monospace" font-size="28" fill="#8b949e">A skill that makes agent replies</text>
+  <text x="80" y="390" font-family="Consolas, 'Courier New', monospace" font-size="28" fill="#8b949e">parseable in one pass —</text>
+  <text x="80" y="430" font-family="Consolas, 'Courier New', monospace" font-size="28" fill="#8b949e">verdict first.</text>
+
+  <!-- footer -->
+  <text x="80" y="582" font-family="Consolas, 'Courier New', monospace" font-size="24" fill="#8b949e">Conor Bronsdon · Chain of Thought</text>
+
+  <!-- motif: a reply where the verdict is buried -->
+  <g>
+    <rect x="714" y="86"  width="316" height="7" rx="3.5" fill="#4d5566"/>
+    <rect x="714" y="136" width="268" height="7" rx="3.5" fill="#4d5566"/>
+    <rect x="714" y="186" width="298" height="7" rx="3.5" fill="#4d5566"/>
+    <rect x="714" y="236" width="211" height="7" rx="3.5" fill="#4d5566"/>
+    <rect x="714" y="286" width="246" height="7" rx="3.5" fill="#3fb950"/>
+    <rect x="714" y="336" width="288" height="7" rx="3.5" fill="#4d5566"/>
+  </g>
+
+  <!-- motif: buried verdict -> verdict on top -->
+  <g>
+    <rect x="714" y="498" width="70" height="54" rx="8" fill="none" stroke="#8b949e" stroke-width="3"/>
+    <rect x="726" y="510" width="46" height="5" rx="2.5" fill="#4d5566"/>
+    <rect x="726" y="522" width="38" height="5" rx="2.5" fill="#4d5566"/>
+    <rect x="726" y="534" width="42" height="5" rx="2.5" fill="#3fb950"/>
+
+    <path d="M 802 525 H 862 M 862 525 l -12 -8 M 862 525 l -12 8" stroke="#6e7681" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+    <rect x="884" y="498" width="70" height="54" rx="8" fill="none" stroke="#3fb950" stroke-width="3"/>
+    <rect x="896" y="510" width="46" height="5" rx="2.5" fill="#3fb950"/>
+    <rect x="896" y="522" width="38" height="5" rx="2.5" fill="#4d5566"/>
+    <rect x="896" y="534" width="30" height="5" rx="2.5" fill="#4d5566"/>
+  </g>
+</svg>
