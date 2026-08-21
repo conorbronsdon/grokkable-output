@@ -79,6 +79,11 @@ Final round: 21/22 assertions with the skill vs 15/19 baseline on the original s
 
 The whole corpus is public in [`evals/`](evals/): fixtures, assertion sets, per-assertion grading with verbatim evidence quotes, and the graded outputs of two later versions (v0.4.0, v0.5.0) that failed independent validation and never shipped. [`evals/RESULTS.md`](evals/RESULTS.md) is the summary, including what each rejected round taught.
 
+The next experiment is architectural rather than another rule stack: a conservative
+[post-hoc output linter](docs/output-linter.md) detects mechanical failures such as
+arrow chains, oversized blocks, depth offers, and estimates that need source review.
+It is a prototype; `SKILL.md` remains at the validated v0.3.1.
+
 ## Installation
 
 **Claude Code** — clone as a skill:
