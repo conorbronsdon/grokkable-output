@@ -10,6 +10,7 @@ unsourced without the writer's source notes.
 from __future__ import annotations
 
 import argparse
+import bisect
 import json
 import re
 import sys
@@ -23,6 +24,11 @@ ARROW_RE = re.compile(
     r"(?:->|→|⇒)"
     r"(?:(?![.!?](?:[\"')\]]+)?\s+|,\s+(?:while|whereas)\b)[^;|\n])*"
     r"(?:->|→|⇒)"
+)
+SEMICOLON_CHAIN_RE = re.compile(
+    r"(?:->|\u2192|\u21d2)\s*(?:[\w.-]+\s+)*(?P<bridge>[\w.-]+)\s*;\s*"
+    r"(?P=bridge)\b[^;|\n]*?(?:->|\u2192|\u21d2)",
+    re.IGNORECASE,
 )
 HEADING_RE = re.compile(
     r"(?m)^[ \t]{0,3}(?:#{1,6}\s+|\*\*[^*\n]{1,80}\*\*(?=\s|$))"
@@ -53,6 +59,12 @@ STRUCTURED_LINE_RE = re.compile(
     r"[ \t]{0,3}(?:#{1,6}\s+|(?:[-+*]|\d+[.)])\s+|>\s?).*"
     r"|[ \t]*\|.*\|[ \t]*"
     r")$"
+)
+LIST_LINE_RE = re.compile(
+    r"^[ \t]{0,3}(?:[-+*]|\d+[.)])\s+(?P<content>.*)$"
+)
+BLOCKQUOTE_INDENTED_CODE_RE = re.compile(
+    r"^(?:[ \t]{0,3}>[ \t]?)+(?: {4}|\t)"
 )
 HTML_CODE_RE = re.compile(
     r"(?is)<(?P<tag>pre|code)\b[^>]*>.*?</(?P=tag)\s*>"
@@ -86,10 +98,6 @@ def words(text: str) -> int:
     return len(WORD_RE.findall(text))
 
 
-def line_number(text: str, offset: int) -> int:
-    return text.count("\n", 0, offset) + 1
-
-
 def excerpt(text: str, limit: int = 140) -> str:
     return " ".join(text.split())[:limit]
 
@@ -97,13 +105,26 @@ def excerpt(text: str, limit: int = 140) -> str:
 def paragraphs(text: str) -> list[tuple[int, str]]:
     blocks: list[tuple[int, str]] = []
     for match in re.finditer(r"(?ms)(?:^|\n\s*\n)(.*?)(?=\n\s*\n|\Z)", text):
-        block = match.group(1).strip()
+        raw_block = match.group(1)
+        leading = len(raw_block) - len(raw_block.lstrip())
+        block = raw_block.strip()
         if not block:
             continue
         lines = [line for line in block.splitlines() if line.strip()]
         if lines and all(STRUCTURED_LINE_RE.match(line) for line in lines):
+            line_offset = match.start(1) + leading
+            for line in block.splitlines(keepends=True):
+                item = LIST_LINE_RE.match(line.rstrip("\r\n"))
+                if item and item.group("content").strip():
+                    content = item.group("content").strip()
+                    content_leading = len(item.group("content")) - len(item.group("content").lstrip())
+                    blocks.append((
+                        line_offset + item.start("content") + content_leading,
+                        content,
+                    ))
+                line_offset += len(line)
             continue
-        blocks.append((match.start(1), block))
+        blocks.append((match.start(1) + leading, block))
     return blocks
 
 
@@ -140,24 +161,40 @@ def mask_nonprose_markdown(text: str) -> str:
                 fence_length = 0
             offset += len(line)
             continue
-        if re.match(r"^(?: {4}|\t)", line):
+        if re.match(r"^(?: {4}|\t)", line) or BLOCKQUOTE_INDENTED_CODE_RE.match(line):
             mask_range(output, text, offset, offset + len(line))
         offset += len(line)
+
+    for match in HTML_CODE_RE.finditer(text):
+        mask_range(output, text, match.start(), match.end())
 
     # Markdown code spans pair delimiter runs of the same length. Pairing is
     # linear in the number of runs and covers multi-backtick spans without a
     # backtracking-heavy regular expression.
     pending_ticks: dict[int, tuple[int, int]] = {}
     for marker in re.finditer(r"`+", text):
+        backslashes = 0
+        index = marker.start() - 1
+        while index >= 0 and text[index] == "\\":
+            backslashes += 1
+            index -= 1
+        if backslashes % 2 or output[marker.start()] == " ":
+            continue
         length = len(marker.group())
-        opening = pending_ticks.pop(length, None)
+        opening = pending_ticks.get(length)
         if opening is None:
             pending_ticks[length] = (marker.start(), marker.end())
+        elif re.search(r"\n[ \t]*\n", text[opening[1]:marker.start()]) or any(
+            output[position] == " " and not text[position].isspace()
+            for position in range(opening[1], marker.start())
+        ):
+            # Inline code cannot cross a Markdown block boundary. A masked
+            # block between equal tick runs makes the later run a new opener.
+            pending_ticks[length] = (marker.start(), marker.end())
         else:
+            pending_ticks.pop(length)
             mask_range(output, text, opening[0], marker.end())
 
-    for match in HTML_CODE_RE.finditer(text):
-        mask_range(output, text, match.start(), match.end())
     for match in AUTOLINK_RE.finditer(text):
         mask_range(output, text, match.start(), match.end())
     for match in RAW_URL_RE.finditer(text):
@@ -196,8 +233,19 @@ def mask_nonprose_markdown(text: str) -> str:
 
 def is_observed_duration(text: str, start: int) -> bool:
     """Return whether the matched duration sits in an observed-result clause."""
-    sentence_start = max(text.rfind(".", 0, start), text.rfind("\n", 0, start)) + 1
-    return bool(OBSERVED_DURATION_RE.search(text[sentence_start:start]))
+    clause_start = max(
+        text.rfind(".", 0, start),
+        text.rfind("\n", 0, start),
+        text.rfind(";", 0, start),
+    ) + 1
+    prefix = text[clause_start:start]
+    if re.search(
+        r"\b(?:will|would|should|could)\s+(?:take|require|need|cost)\b",
+        prefix,
+        re.IGNORECASE,
+    ):
+        return False
+    return bool(OBSERVED_DURATION_RE.search(prefix))
 
 
 def configure_standard_streams() -> None:
@@ -211,10 +259,21 @@ def configure_standard_streams() -> None:
 def lint(text: str) -> list[Finding]:
     findings: list[Finding] = []
     prose = mask_nonprose_markdown(text)
+    line_starts = [0, *(match.end() for match in re.finditer("\n", text))]
+
+    def source_line(offset: int) -> int:
+        return bisect.bisect_right(line_starts, offset)
 
     for match in ARROW_RE.finditer(prose):
         findings.append(Finding(
-            "arrow-chain", "error", line_number(text, match.start()),
+            "arrow-chain", "error", source_line(match.start()),
+            "Rewrite the causal chain as sentences.",
+            excerpt(text[match.start():match.end()]),
+        ))
+
+    for match in SEMICOLON_CHAIN_RE.finditer(prose):
+        findings.append(Finding(
+            "arrow-chain", "error", source_line(match.start()),
             "Rewrite the causal chain as sentences.",
             excerpt(text[match.start():match.end()]),
         ))
@@ -224,7 +283,7 @@ def lint(text: str) -> list[Finding]:
     if len(heading_matches) >= 3 and word_count <= 500:
         first = heading_matches[2]
         findings.append(Finding(
-            "heading-density", "warning", line_number(text, first.start()),
+            "heading-density", "warning", source_line(first.start()),
             f"{len(heading_matches)} headings or pseudo-headings in {word_count} words; verify that the structure is real.",
             excerpt(text[first.start():first.end()]),
         ))
@@ -234,14 +293,14 @@ def lint(text: str) -> list[Finding]:
         sentence_count = len([s for s in SENTENCE_RE.split(paragraph) if s.strip()])
         if paragraph_words > 100 or sentence_count > 5:
             findings.append(Finding(
-                "oversized-block", "warning", line_number(text, offset),
+                "oversized-block", "warning", source_line(offset),
                 f"Paragraph has {paragraph_words} words and {sentence_count} sentences; split it without deleting content.",
                 excerpt(text[offset:offset + len(paragraph)]),
             ))
 
     for match in DEPTH_OFFER_RE.finditer(prose):
         findings.append(Finding(
-            "depth-offer", "warning", line_number(text, match.start()),
+            "depth-offer", "warning", source_line(match.start()),
             "A depth offer may be replacing the reader's decision or next action.",
             excerpt(text[match.start():match.end()]),
         ))
@@ -250,7 +309,7 @@ def lint(text: str) -> list[Finding]:
         if is_observed_duration(prose, match.start()):
             continue
         findings.append(Finding(
-            "effort-estimate", "review", line_number(text, match.start()),
+            "effort-estimate", "review", source_line(match.start()),
             "Confirm that this effort estimate is attributed to observed evidence or an identified owner.",
             excerpt(text[match.start():match.end()]),
         ))
@@ -259,7 +318,7 @@ def lint(text: str) -> list[Finding]:
     for match in TRAILING_RECAP_RE.finditer(prose):
         if match.start() >= final_quarter:
             findings.append(Finding(
-                "trailing-recap", "warning", line_number(text, match.start()),
+                "trailing-recap", "warning", source_line(match.start()),
                 "A trailing recap may restate a verdict that should already be at the top.",
                 excerpt(text[match.start():match.end()]),
             ))

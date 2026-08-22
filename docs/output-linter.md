@@ -30,9 +30,11 @@ The CLI reads and writes UTF-8 explicitly, including redirected stdin/stdout on
 Windows. Passing a file path avoids differences between PowerShell versions'
 native-pipeline encodings. Markdown code spans, fenced and indented code, HTML
 `code`/`pre` blocks, and link destinations are excluded from prose findings.
-Already-structured list, heading, blockquote, and table blocks are not treated
-as oversized prose paragraphs. Observed durations are kept distinct from
-prospective effort estimates.
+Already-structured heading, blockquote, and table blocks are not treated as
+oversized prose paragraphs. List items are measured individually, so a normal
+list stays clean while a single oversized item remains reviewable. Observed
+durations are kept distinct from prospective effort estimates at clause
+boundaries.
 
 Run the tests:
 

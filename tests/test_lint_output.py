@@ -70,6 +70,18 @@ class LintOutputTests(unittest.TestCase):
         self.assertEqual(1, len(findings))
         self.assertEqual("-> retries ->", findings[0].excerpt)
 
+    def test_escaped_or_masked_ticks_do_not_hide_later_prose(self) -> None:
+        cases = (
+            "A literal \\` marker. The host -> retries -> timeout. Then `ok`.",
+            "```text\none ` marker\n```\nThe host -> retries -> timeout. Then `ok`.",
+            "<code>one ` marker</code> The host -> retries -> timeout. Then `ok`.",
+            "An unmatched ` marker.\n\nThe host -> retries -> timeout. Then `ok`.",
+        )
+        for text in cases:
+            with self.subTest(text=text):
+                findings = [item for item in LINTER.lint(text) if item.rule == "arrow-chain"]
+                self.assertEqual(1, len(findings))
+
     def test_independent_same_line_mappings_do_not_form_a_chain(self) -> None:
         for text in (
             "Before -> after; source -> destination.",
@@ -78,6 +90,14 @@ class LintOutputTests(unittest.TestCase):
         ):
             with self.subTest(text=text):
                 self.assertNotIn("arrow-chain", self.rules(text))
+
+    def test_semicolon_causal_chain_with_shared_bridge_fires(self) -> None:
+        for text in (
+            "host -> 429; 429 -> retries",
+            "cache miss -> database query; query delay -> timeout",
+        ):
+            with self.subTest(text=text):
+                self.assertIn("arrow-chain", self.rules(text))
 
     def test_v05_depth_offer_fires(self) -> None:
         self.assertIn("depth-offer", self.rules("Want the full breakdown?"))
@@ -110,8 +130,15 @@ class LintOutputTests(unittest.TestCase):
                 self.assertNotIn("effort-estimate", self.rules(text))
 
     def test_prospective_estimate_with_observation_word_still_fires(self) -> None:
-        text = "The supported migration will take roughly two days."
-        self.assertIn("effort-estimate", self.rules(text))
+        cases = (
+            "The supported migration will take roughly two days.",
+            "Planning completed; migration will take about two days.",
+            "The dry run took one hour; production will take about two days.",
+            "The dry run took one hour and production will take about two days.",
+        )
+        for text in cases:
+            with self.subTest(text=text):
+                self.assertIn("effort-estimate", self.rules(text))
 
     def test_large_mechanism_block_fires(self) -> None:
         paragraph = " ".join(["The retry increased latency."] * 26)
@@ -127,6 +154,14 @@ class LintOutputTests(unittest.TestCase):
         for text in cases:
             with self.subTest(text=text):
                 self.assertNotIn("oversized-block", self.rules(text))
+
+    def test_oversized_list_item_still_fires(self) -> None:
+        text = "- " + "Sentence with enough words to be prose. " * 16
+        self.assertIn("oversized-block", self.rules(text))
+
+    def test_blockquoted_indented_code_does_not_fire(self) -> None:
+        text = ">     def f(x: A) -> B -> C"
+        self.assertNotIn("arrow-chain", self.rules(text))
 
     def test_later_oversized_block_reports_content_line(self) -> None:
         text = "First.\n\n" + "Sentence. " * 6
