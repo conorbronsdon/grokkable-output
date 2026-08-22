@@ -42,6 +42,43 @@ class LintOutputTests(unittest.TestCase):
         text = "Example:\n\n```python\ndef f(x: A) -> B -> C:\n    return x\n```\n"
         self.assertNotIn("arrow-chain", self.rules(text))
 
+    def test_arrow_chain_in_nonprose_markdown_does_not_fire(self) -> None:
+        cases = (
+            "Use `A -> B -> C` as the signature.",
+            "Use ``A ` literal -> B -> C`` as the signature.",
+            "See [flow](https://x.test/a->b->c).",
+            "See [flow](https://x.test/a_(b)->c->d).",
+            "See <https://x.test/a->b->c>.",
+            "[flow]: https://x.test/a->b->c",
+            "Example:\n\n    def f(x: A) -> B -> C\n",
+            "> ```text\n> A -> B -> C\n> ```",
+            "<pre>A -> B -> C</pre>",
+        )
+        for text in cases:
+            with self.subTest(text=text):
+                self.assertNotIn("arrow-chain", self.rules(text))
+
+    def test_unclosed_fence_masks_code_to_end_but_not_prior_prose(self) -> None:
+        text = "The host -> retries -> timeout.\n\n```text\ncode -> value -> value"
+        findings = [item for item in LINTER.lint(text) if item.rule == "arrow-chain"]
+        self.assertEqual(1, len(findings))
+        self.assertEqual(1, findings[0].line)
+
+    def test_prose_around_nonprose_markdown_still_fires(self) -> None:
+        text = "Use `A -> B -> C` as an example. The host -> retries -> timeout."
+        findings = [item for item in LINTER.lint(text) if item.rule == "arrow-chain"]
+        self.assertEqual(1, len(findings))
+        self.assertEqual("-> retries ->", findings[0].excerpt)
+
+    def test_independent_same_line_mappings_do_not_form_a_chain(self) -> None:
+        for text in (
+            "Before -> after; source -> destination.",
+            "| Before -> after | Source -> destination |",
+            "A -> B, while C -> D.",
+        ):
+            with self.subTest(text=text):
+                self.assertNotIn("arrow-chain", self.rules(text))
+
     def test_v05_depth_offer_fires(self) -> None:
         self.assertIn("depth-offer", self.rules("Want the full breakdown?"))
 
@@ -64,13 +101,32 @@ class LintOutputTests(unittest.TestCase):
         for text in (
             "Stable across 30 minutes of monitoring.",
             "Error rates stayed flat over 30 minutes of monitoring.",
+            "The migration completed in about an hour.",
+            "Backups are retained for up to 30 days.",
+            "Latency stayed flat across 30-60 minutes of monitoring.",
+            "Supported for 7-14 days after signup.",
         ):
             with self.subTest(text=text):
                 self.assertNotIn("effort-estimate", self.rules(text))
 
+    def test_prospective_estimate_with_observation_word_still_fires(self) -> None:
+        text = "The supported migration will take roughly two days."
+        self.assertIn("effort-estimate", self.rules(text))
+
     def test_large_mechanism_block_fires(self) -> None:
         paragraph = " ".join(["The retry increased latency."] * 26)
         self.assertIn("oversized-block", self.rules(paragraph))
+
+    def test_existing_markdown_structure_is_not_an_oversized_paragraph(self) -> None:
+        cases = (
+            "\n".join(f"- Item {index}." for index in range(6)),
+            "\n".join(f"{index}. Step {index}." for index in range(1, 7)),
+            "\n".join(f"# Heading {index}" for index in range(1, 7)),
+            "| A | B |\n|---|---|\n" + "\n".join(f"| {index}. | value. |" for index in range(6)),
+        )
+        for text in cases:
+            with self.subTest(text=text):
+                self.assertNotIn("oversized-block", self.rules(text))
 
     def test_later_oversized_block_reports_content_line(self) -> None:
         text = "First.\n\n" + "Sentence. " * 6
@@ -87,6 +143,13 @@ class LintOutputTests(unittest.TestCase):
         )
         finding = next(item for item in LINTER.lint(text) if item.rule == "heading-density")
         self.assertEqual(5, finding.line)
+
+    def test_heading_density_cutoff_and_early_recap_do_not_fire(self) -> None:
+        long_text = "# One\n\n# Two\n\n# Three\n\n" + "word " * 501
+        self.assertNotIn("heading-density", self.rules(long_text))
+
+        early_recap = "Summary: the fix worked.\n\n" + "Evidence sentence. " * 30
+        self.assertNotIn("trailing-recap", self.rules(early_recap))
 
     def test_published_pseudo_heading_failure_is_detected(self) -> None:
         corpus_reply = ROOT / "evals" / "runs" / "iteration-1" / "eval-1-migration-status" / "without_skill" / "reply.md"
@@ -132,6 +195,32 @@ class LintOutputTests(unittest.TestCase):
             self.assertEqual(b"", structured.stderr)
             payload = json.loads(structured.stdout.decode("utf-8"))
             self.assertEqual("arrow-chain", payload[0]["rule"])
+
+    def test_cli_fail_on_thresholds_are_ordered(self) -> None:
+        cases = {
+            "review": "Setting one up is about an hour.",
+            "warning": "Want the full breakdown?",
+            "error": "host -> retries -> timeout",
+        }
+        expected = {
+            "never": {"review": 0, "warning": 0, "error": 0},
+            "error": {"review": 0, "warning": 0, "error": 1},
+            "warning": {"review": 0, "warning": 1, "error": 1},
+            "review": {"review": 1, "warning": 1, "error": 1},
+        }
+        for threshold, outcomes in expected.items():
+            for finding_type, returncode in outcomes.items():
+                with self.subTest(threshold=threshold, finding_type=finding_type):
+                    result = subprocess.run(
+                        [sys.executable, str(MODULE_PATH), "--fail-on", threshold],
+                        input=cases[finding_type],
+                        text=True,
+                        encoding="utf-8",
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        check=False,
+                    )
+                    self.assertEqual(returncode, result.returncode, result.stderr)
 
 
 if __name__ == "__main__":

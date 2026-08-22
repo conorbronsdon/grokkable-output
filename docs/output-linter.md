@@ -28,7 +28,11 @@ python scripts/lint_output.py --fail-on warning reply.md
 
 The CLI reads and writes UTF-8 explicitly, including redirected stdin/stdout on
 Windows. Passing a file path avoids differences between PowerShell versions'
-native-pipeline encodings.
+native-pipeline encodings. Markdown code spans, fenced and indented code, HTML
+`code`/`pre` blocks, and link destinations are excluded from prose findings.
+Already-structured list, heading, blockquote, and table blocks are not treated
+as oversized prose paragraphs. Observed durations are kept distinct from
+prospective effort estimates.
 
 Run the tests:
 

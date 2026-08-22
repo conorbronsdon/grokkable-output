@@ -20,7 +20,9 @@ from pathlib import Path
 WORD_RE = re.compile(r"\b[\w'-]+\b")
 SENTENCE_RE = re.compile(r"(?<=[.!?])(?:[\"')\]]+)?\s+")
 ARROW_RE = re.compile(
-    r"(?:->|→|⇒)(?:(?![.!?](?:[\"')\]]+)?\s+)[^\n])*(?:->|→|⇒)"
+    r"(?:->|→|⇒)"
+    r"(?:(?![.!?](?:[\"')\]]+)?\s+|,\s+(?:while|whereas)\b)[^;|\n])*"
+    r"(?:->|→|⇒)"
 )
 HEADING_RE = re.compile(
     r"(?m)^[ \t]{0,3}(?:#{1,6}\s+|\*\*[^*\n]{1,80}\*\*(?=\s|$))"
@@ -42,6 +44,32 @@ ESTIMATE_RE = re.compile(
 )
 TRAILING_RECAP_RE = re.compile(
     r"(?im)^\s*(?:#{1,6}\s+|\*\*)?(?:tl;?dr|summary|bottom line|in short|recap|proposed plan)\b"
+)
+FENCE_RE = re.compile(
+    r"^(?:[ \t]{0,3}>[ \t]?)*[ \t]{0,3}(`{3,}|~{3,})"
+)
+STRUCTURED_LINE_RE = re.compile(
+    r"^(?:"
+    r"[ \t]{0,3}(?:#{1,6}\s+|(?:[-+*]|\d+[.)])\s+|>\s?).*"
+    r"|[ \t]*\|.*\|[ \t]*"
+    r")$"
+)
+HTML_CODE_RE = re.compile(
+    r"(?is)<(?P<tag>pre|code)\b[^>]*>.*?</(?P=tag)\s*>"
+)
+AUTOLINK_RE = re.compile(r"(?i)<(?:https?://|mailto:)[^>\n]+>")
+RAW_URL_RE = re.compile(r"(?i)\bhttps?://[^\s<>()]+")
+REFERENCE_URL_RE = re.compile(
+    r"(?m)^[ \t]{0,3}\[[^\]\n]+\]:[ \t]*(?P<url><?[^\s>]+>?)"
+)
+OBSERVED_DURATION_RE = re.compile(
+    r"(?:"
+    r"\b(?:completed|finished|took|lasted)\b.{0,60}(?:\b(?:in|for)\s*)?"
+    r"|\b(?:ran|held|stayed|remained|monitored|observed|measured)\b.{0,60}"
+    r"\b(?:for|over|across)\s*"
+    r"|\b(?:(?:is|are|was|were)\s+)?(?:retained|supported)\s+for\s*"
+    r")$",
+    re.IGNORECASE,
 )
 
 
@@ -67,27 +95,41 @@ def excerpt(text: str, limit: int = 140) -> str:
 
 
 def paragraphs(text: str) -> list[tuple[int, str]]:
-    return [
-        (match.start(1), match.group(1).strip())
-        for match in re.finditer(r"(?ms)(?:^|\n\s*\n)(.*?)(?=\n\s*\n|\Z)", text)
-        if match.group(1).strip()
-    ]
+    blocks: list[tuple[int, str]] = []
+    for match in re.finditer(r"(?ms)(?:^|\n\s*\n)(.*?)(?=\n\s*\n|\Z)", text):
+        block = match.group(1).strip()
+        if not block:
+            continue
+        lines = [line for line in block.splitlines() if line.strip()]
+        if lines and all(STRUCTURED_LINE_RE.match(line) for line in lines):
+            continue
+        blocks.append((match.start(1), block))
+    return blocks
 
 
-def mask_fenced_code(text: str) -> str:
-    """Replace fenced code with spaces while preserving offsets and line breaks."""
-    output: list[str] = []
+def mask_range(output: list[str], text: str, start: int, end: int) -> None:
+    """Mask one source range without changing offsets or line endings."""
+    for index in range(start, end):
+        if text[index] not in "\r\n":
+            output[index] = " "
+
+
+def mask_nonprose_markdown(text: str) -> str:
+    """Mask Markdown code and link destinations while preserving source offsets."""
+    output = list(text)
     fence_character: str | None = None
     fence_length = 0
+    offset = 0
     for line in text.splitlines(keepends=True):
-        marker = re.match(r"^[ \t]{0,3}(`{3,}|~{3,})", line)
+        marker = FENCE_RE.match(line)
         if fence_character is None and marker:
             fence_character = marker.group(1)[0]
             fence_length = len(marker.group(1))
-            output.append("".join(char if char in "\r\n" else " " for char in line))
+            mask_range(output, text, offset, offset + len(line))
+            offset += len(line)
             continue
         if fence_character is not None:
-            output.append("".join(char if char in "\r\n" else " " for char in line))
+            mask_range(output, text, offset, offset + len(line))
             if (
                 marker
                 and marker.group(1)[0] == fence_character
@@ -96,9 +138,66 @@ def mask_fenced_code(text: str) -> str:
             ):
                 fence_character = None
                 fence_length = 0
+            offset += len(line)
             continue
-        output.append(line)
+        if re.match(r"^(?: {4}|\t)", line):
+            mask_range(output, text, offset, offset + len(line))
+        offset += len(line)
+
+    # Markdown code spans pair delimiter runs of the same length. Pairing is
+    # linear in the number of runs and covers multi-backtick spans without a
+    # backtracking-heavy regular expression.
+    pending_ticks: dict[int, tuple[int, int]] = {}
+    for marker in re.finditer(r"`+", text):
+        length = len(marker.group())
+        opening = pending_ticks.pop(length, None)
+        if opening is None:
+            pending_ticks[length] = (marker.start(), marker.end())
+        else:
+            mask_range(output, text, opening[0], marker.end())
+
+    for match in HTML_CODE_RE.finditer(text):
+        mask_range(output, text, match.start(), match.end())
+    for match in AUTOLINK_RE.finditer(text):
+        mask_range(output, text, match.start(), match.end())
+    for match in RAW_URL_RE.finditer(text):
+        mask_range(output, text, match.start(), match.end())
+    for match in REFERENCE_URL_RE.finditer(text):
+        mask_range(output, text, match.start("url"), match.end("url"))
+
+    # Mask inline-link destinations, including balanced parentheses in URLs.
+    cursor = 0
+    while True:
+        start = text.find("](", cursor)
+        if start < 0:
+            break
+        index = start + 2
+        depth = 1
+        escaped = False
+        while index < len(text) and depth:
+            char = text[index]
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == "(":
+                depth += 1
+            elif char == ")":
+                depth -= 1
+            index += 1
+        if depth == 0:
+            mask_range(output, text, start + 2, index - 1)
+            cursor = index
+        else:
+            break
+
     return "".join(output)
+
+
+def is_observed_duration(text: str, start: int) -> bool:
+    """Return whether the matched duration sits in an observed-result clause."""
+    sentence_start = max(text.rfind(".", 0, start), text.rfind("\n", 0, start)) + 1
+    return bool(OBSERVED_DURATION_RE.search(text[sentence_start:start]))
 
 
 def configure_standard_streams() -> None:
@@ -111,7 +210,7 @@ def configure_standard_streams() -> None:
 
 def lint(text: str) -> list[Finding]:
     findings: list[Finding] = []
-    prose = mask_fenced_code(text)
+    prose = mask_nonprose_markdown(text)
 
     for match in ARROW_RE.finditer(prose):
         findings.append(Finding(
@@ -148,6 +247,8 @@ def lint(text: str) -> list[Finding]:
         ))
 
     for match in ESTIMATE_RE.finditer(prose):
+        if is_observed_duration(prose, match.start()):
+            continue
         findings.append(Finding(
             "effort-estimate", "review", line_number(text, match.start()),
             "Confirm that this effort estimate is attributed to observed evidence or an identified owner.",

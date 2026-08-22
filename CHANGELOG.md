@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added an experimental post-hoc output linter with structured CLI output,
+  severity thresholds, positive/complement controls, and Python 3.11/3.13 CI.
+  The validated `SKILL.md` remains unchanged at v0.3.1 pending fresh evals.
+
 ## 0.3.1 — 2026-08-06
 
 - Scoped verdict-first explicitly to presentation order, not thinking order —
