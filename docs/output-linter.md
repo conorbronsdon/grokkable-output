@@ -23,8 +23,12 @@ Run it on a file or stdin:
 ```bash
 python scripts/lint_output.py reply.md
 python scripts/lint_output.py --json reply.md
-Get-Content reply.md | python scripts/lint_output.py --fail-on warning
+python scripts/lint_output.py --fail-on warning reply.md
 ```
+
+The CLI reads and writes UTF-8 explicitly, including redirected stdin/stdout on
+Windows. Passing a file path avoids differences between PowerShell versions'
+native-pipeline encodings.
 
 Run the tests:
 

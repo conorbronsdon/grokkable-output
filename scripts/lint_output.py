@@ -19,8 +19,10 @@ from pathlib import Path
 
 WORD_RE = re.compile(r"\b[\w'-]+\b")
 SENTENCE_RE = re.compile(r"(?<=[.!?])(?:[\"')\]]+)?\s+")
-ARROW_RE = re.compile(r"(?:\s(?:->|→|⇒)\s.*){2,}")
-HEADING_RE = re.compile(r"(?m)^\s{0,3}(?:#{1,6}\s+|\*\*[^*\n]{1,80}\*\*\s*$)")
+ARROW_RE = re.compile(r"(?:->|→|⇒)[^\n]*(?:->|→|⇒)")
+HEADING_RE = re.compile(
+    r"(?m)^\s{0,3}(?:#{1,6}\s+|\*\*[^*\n]{1,80}\*\*(?=\s|$))"
+)
 DEPTH_OFFER_RE = re.compile(
     r"\b(?:want|would you like|let me know if you(?:'d| would) like|happy to send|"
     r"i can (?:send|provide|share))\b.{0,80}\b(?:breakdown|details?|full list|more)\b",
@@ -28,7 +30,7 @@ DEPTH_OFFER_RE = re.compile(
 )
 ESTIMATE_RE = re.compile(
     r"\b(?:"
-    r"(?:about|around|roughly|approximately|under|over|less than|more than|up to)\s+"
+    r"(?:about|around|roughly|approximately|under|less than|more than|up to)\s+"
     r"(?:an?|one|two|three|four|five|six|seven|eight|nine|ten|\d+(?:\.\d+)?)"
     r"|\d+(?:\.\d+)?\s*[-–]\s*\d+(?:\.\d+)?"
     r")\s*(?:minutes?|hours?|days?|weeks?)\b",
@@ -62,10 +64,18 @@ def excerpt(text: str, limit: int = 140) -> str:
 
 def paragraphs(text: str) -> list[tuple[int, str]]:
     return [
-        (match.start(), match.group().strip())
+        (match.start(1), match.group(1).strip())
         for match in re.finditer(r"(?ms)(?:^|\n\s*\n)(.*?)(?=\n\s*\n|\Z)", text)
-        if match.group().strip()
+        if match.group(1).strip()
     ]
+
+
+def configure_standard_streams() -> None:
+    """Keep CLI input/output deterministic on Windows and redirected streams."""
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure:
+            reconfigure(encoding="utf-8", errors="strict")
 
 
 def lint(text: str) -> list[Finding]:
@@ -121,6 +131,7 @@ def lint(text: str) -> list[Finding]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    configure_standard_streams()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("path", nargs="?", help="Markdown/text file; reads stdin when omitted")
     parser.add_argument("--json", action="store_true", dest="as_json")
