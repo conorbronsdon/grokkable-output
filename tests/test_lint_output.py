@@ -64,6 +64,12 @@ class LintOutputTests(unittest.TestCase):
         self.assertEqual(1, len(findings))
         self.assertEqual(1, findings[0].line)
 
+    def test_unclosed_blockquote_fence_ends_with_container(self) -> None:
+        text = "> ```text\n> code -> value -> value\nOutside host -> retries -> timeout."
+        findings = [item for item in LINTER.lint(text) if item.rule == "arrow-chain"]
+        self.assertEqual(1, len(findings))
+        self.assertEqual(3, findings[0].line)
+
     def test_prose_around_nonprose_markdown_still_fires(self) -> None:
         text = "Use `A -> B -> C` as an example. The host -> retries -> timeout."
         findings = [item for item in LINTER.lint(text) if item.rule == "arrow-chain"]
@@ -81,6 +87,10 @@ class LintOutputTests(unittest.TestCase):
             with self.subTest(text=text):
                 findings = [item for item in LINTER.lint(text) if item.rule == "arrow-chain"]
                 self.assertEqual(1, len(findings))
+
+    def test_malformed_link_destination_does_not_hide_prose(self) -> None:
+        text = "See [broken](https://x.test/a_(b Outside host -> retries -> timeout.))"
+        self.assertIn("arrow-chain", self.rules(text))
 
     def test_independent_same_line_mappings_do_not_form_a_chain(self) -> None:
         for text in (
@@ -135,6 +145,8 @@ class LintOutputTests(unittest.TestCase):
             "Planning completed; migration will take about two days.",
             "The dry run took one hour; production will take about two days.",
             "The dry run took one hour and production will take about two days.",
+            "Planning completed and migration is expected to take about two days.",
+            "Planning completed and migration takes about two days.",
         )
         for text in cases:
             with self.subTest(text=text):
@@ -158,6 +170,12 @@ class LintOutputTests(unittest.TestCase):
     def test_oversized_list_item_still_fires(self) -> None:
         text = "- " + "Sentence with enough words to be prose. " * 16
         self.assertIn("oversized-block", self.rules(text))
+
+    def test_oversized_nested_list_item_still_fires(self) -> None:
+        text = "- Parent.\n    - " + "Sentence with enough words to be prose. " * 16
+        findings = [item for item in LINTER.lint(text) if item.rule == "oversized-block"]
+        self.assertEqual(1, len(findings))
+        self.assertEqual(2, findings[0].line)
 
     def test_blockquoted_indented_code_does_not_fire(self) -> None:
         text = ">     def f(x: A) -> B -> C"

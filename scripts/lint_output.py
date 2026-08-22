@@ -52,19 +52,24 @@ TRAILING_RECAP_RE = re.compile(
     r"(?im)^\s*(?:#{1,6}\s+|\*\*)?(?:tl;?dr|summary|bottom line|in short|recap|proposed plan)\b"
 )
 FENCE_RE = re.compile(
-    r"^(?:[ \t]{0,3}>[ \t]?)*[ \t]{0,3}(`{3,}|~{3,})"
+    r"^(?P<container>(?:[ \t]{0,3}>[ \t]?)*)(?:[ \t]{0,3})"
+    r"(?P<fence>`{3,}|~{3,})"
 )
 STRUCTURED_LINE_RE = re.compile(
     r"^(?:"
-    r"[ \t]{0,3}(?:#{1,6}\s+|(?:[-+*]|\d+[.)])\s+|>\s?).*"
+    r"[ \t]{0,3}(?:#{1,6}\s+|>\s?).*"
+    r"|[ \t]*(?:[-+*]|\d+[.)])\s+.*"
     r"|[ \t]*\|.*\|[ \t]*"
     r")$"
 )
 LIST_LINE_RE = re.compile(
-    r"^[ \t]{0,3}(?:[-+*]|\d+[.)])\s+(?P<content>.*)$"
+    r"^[ \t]*(?:[-+*]|\d+[.)])\s+(?P<content>.*)$"
 )
 BLOCKQUOTE_INDENTED_CODE_RE = re.compile(
     r"^(?:[ \t]{0,3}>[ \t]?)+(?: {4}|\t)"
+)
+NESTED_LIST_LINE_RE = re.compile(
+    r"^(?:[ \t]{0,3}>[ \t]?)*(?: {4}|\t)+(?:[-+*]|\d+[.)])\s+"
 )
 HTML_CODE_RE = re.compile(
     r"(?is)<(?P<tag>pre|code)\b[^>]*>.*?</(?P=tag)\s*>"
@@ -76,7 +81,8 @@ REFERENCE_URL_RE = re.compile(
 )
 OBSERVED_DURATION_RE = re.compile(
     r"(?:"
-    r"\b(?:completed|finished|took|lasted)\b.{0,60}(?:\b(?:in|for)\s*)?"
+    r"\b(?:completed|finished)\b[^.;]{0,60}\b(?:in|after|within)\s*"
+    r"|\b(?:took|lasted)\s*"
     r"|\b(?:ran|held|stayed|remained|monitored|observed|measured)\b.{0,60}"
     r"\b(?:for|over|across)\s*"
     r"|\b(?:(?:is|are|was|were)\s+)?(?:retained|supported)\s+for\s*"
@@ -140,12 +146,21 @@ def mask_nonprose_markdown(text: str) -> str:
     output = list(text)
     fence_character: str | None = None
     fence_length = 0
+    fence_quote_depth = 0
     offset = 0
     for line in text.splitlines(keepends=True):
         marker = FENCE_RE.match(line)
+        if fence_character is not None and fence_quote_depth:
+            quote_prefix = re.match(r"^(?:[ \t]{0,3}>[ \t]?)*", line)
+            current_depth = quote_prefix.group().count(">") if quote_prefix else 0
+            if current_depth < fence_quote_depth:
+                fence_character = None
+                fence_length = 0
+                fence_quote_depth = 0
         if fence_character is None and marker:
-            fence_character = marker.group(1)[0]
-            fence_length = len(marker.group(1))
+            fence_character = marker.group("fence")[0]
+            fence_length = len(marker.group("fence"))
+            fence_quote_depth = marker.group("container").count(">")
             mask_range(output, text, offset, offset + len(line))
             offset += len(line)
             continue
@@ -153,15 +168,19 @@ def mask_nonprose_markdown(text: str) -> str:
             mask_range(output, text, offset, offset + len(line))
             if (
                 marker
-                and marker.group(1)[0] == fence_character
-                and len(marker.group(1)) >= fence_length
+                and marker.group("fence")[0] == fence_character
+                and len(marker.group("fence")) >= fence_length
                 and not line[marker.end():].strip()
             ):
                 fence_character = None
                 fence_length = 0
+                fence_quote_depth = 0
             offset += len(line)
             continue
-        if re.match(r"^(?: {4}|\t)", line) or BLOCKQUOTE_INDENTED_CODE_RE.match(line):
+        if (
+            re.match(r"^(?: {4}|\t)", line)
+            or BLOCKQUOTE_INDENTED_CODE_RE.match(line)
+        ) and not NESTED_LIST_LINE_RE.match(line):
             mask_range(output, text, offset, offset + len(line))
         offset += len(line)
 
@@ -217,6 +236,8 @@ def mask_nonprose_markdown(text: str) -> str:
                 escaped = False
             elif char == "\\":
                 escaped = True
+            elif char.isspace():
+                break
             elif char == "(":
                 depth += 1
             elif char == ")":
@@ -226,7 +247,7 @@ def mask_nonprose_markdown(text: str) -> str:
             mask_range(output, text, start + 2, index - 1)
             cursor = index
         else:
-            break
+            cursor = start + 2
 
     return "".join(output)
 
