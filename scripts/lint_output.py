@@ -19,9 +19,11 @@ from pathlib import Path
 
 WORD_RE = re.compile(r"\b[\w'-]+\b")
 SENTENCE_RE = re.compile(r"(?<=[.!?])(?:[\"')\]]+)?\s+")
-ARROW_RE = re.compile(r"(?:->|→|⇒)[^\n]*(?:->|→|⇒)")
+ARROW_RE = re.compile(
+    r"(?:->|→|⇒)(?:(?![.!?](?:[\"')\]]+)?\s+)[^\n])*(?:->|→|⇒)"
+)
 HEADING_RE = re.compile(
-    r"(?m)^\s{0,3}(?:#{1,6}\s+|\*\*[^*\n]{1,80}\*\*(?=\s|$))"
+    r"(?m)^[ \t]{0,3}(?:#{1,6}\s+|\*\*[^*\n]{1,80}\*\*(?=\s|$))"
 )
 DEPTH_OFFER_RE = re.compile(
     r"\b(?:want|would you like|let me know if you(?:'d| would) like|happy to send|"
@@ -32,6 +34,8 @@ ESTIMATE_RE = re.compile(
     r"\b(?:"
     r"(?:about|around|roughly|approximately|under|less than|more than|up to)\s+"
     r"(?:an?|one|two|three|four|five|six|seven|eight|nine|ten|\d+(?:\.\d+)?)"
+    r"|(?:(?:takes?|requires?|needs?|costs?)|(?:will|would|should|could)\s+take)\s+"
+    r"over\s+(?:an?|one|two|three|four|five|six|seven|eight|nine|ten|\d+(?:\.\d+)?)"
     r"|\d+(?:\.\d+)?\s*[-–]\s*\d+(?:\.\d+)?"
     r")\s*(?:minutes?|hours?|days?|weeks?)\b",
     re.IGNORECASE,
@@ -70,6 +74,33 @@ def paragraphs(text: str) -> list[tuple[int, str]]:
     ]
 
 
+def mask_fenced_code(text: str) -> str:
+    """Replace fenced code with spaces while preserving offsets and line breaks."""
+    output: list[str] = []
+    fence_character: str | None = None
+    fence_length = 0
+    for line in text.splitlines(keepends=True):
+        marker = re.match(r"^[ \t]{0,3}(`{3,}|~{3,})", line)
+        if fence_character is None and marker:
+            fence_character = marker.group(1)[0]
+            fence_length = len(marker.group(1))
+            output.append("".join(char if char in "\r\n" else " " for char in line))
+            continue
+        if fence_character is not None:
+            output.append("".join(char if char in "\r\n" else " " for char in line))
+            if (
+                marker
+                and marker.group(1)[0] == fence_character
+                and len(marker.group(1)) >= fence_length
+                and not line[marker.end():].strip()
+            ):
+                fence_character = None
+                fence_length = 0
+            continue
+        output.append(line)
+    return "".join(output)
+
+
 def configure_standard_streams() -> None:
     """Keep CLI input/output deterministic on Windows and redirected streams."""
     for stream in (sys.stdin, sys.stdout, sys.stderr):
@@ -80,51 +111,56 @@ def configure_standard_streams() -> None:
 
 def lint(text: str) -> list[Finding]:
     findings: list[Finding] = []
+    prose = mask_fenced_code(text)
 
-    for match in ARROW_RE.finditer(text):
+    for match in ARROW_RE.finditer(prose):
         findings.append(Finding(
             "arrow-chain", "error", line_number(text, match.start()),
-            "Rewrite the causal chain as sentences.", excerpt(match.group()),
+            "Rewrite the causal chain as sentences.",
+            excerpt(text[match.start():match.end()]),
         ))
 
-    heading_matches = list(HEADING_RE.finditer(text))
-    word_count = words(text)
+    heading_matches = list(HEADING_RE.finditer(prose))
+    word_count = words(prose)
     if len(heading_matches) >= 3 and word_count <= 500:
         first = heading_matches[2]
         findings.append(Finding(
             "heading-density", "warning", line_number(text, first.start()),
             f"{len(heading_matches)} headings or pseudo-headings in {word_count} words; verify that the structure is real.",
-            excerpt(first.group()),
+            excerpt(text[first.start():first.end()]),
         ))
 
-    for offset, paragraph in paragraphs(text):
+    for offset, paragraph in paragraphs(prose):
         paragraph_words = words(paragraph)
         sentence_count = len([s for s in SENTENCE_RE.split(paragraph) if s.strip()])
         if paragraph_words > 100 or sentence_count > 5:
             findings.append(Finding(
                 "oversized-block", "warning", line_number(text, offset),
                 f"Paragraph has {paragraph_words} words and {sentence_count} sentences; split it without deleting content.",
-                excerpt(paragraph),
+                excerpt(text[offset:offset + len(paragraph)]),
             ))
 
-    for match in DEPTH_OFFER_RE.finditer(text):
+    for match in DEPTH_OFFER_RE.finditer(prose):
         findings.append(Finding(
             "depth-offer", "warning", line_number(text, match.start()),
-            "A depth offer may be replacing the reader's decision or next action.", excerpt(match.group()),
+            "A depth offer may be replacing the reader's decision or next action.",
+            excerpt(text[match.start():match.end()]),
         ))
 
-    for match in ESTIMATE_RE.finditer(text):
+    for match in ESTIMATE_RE.finditer(prose):
         findings.append(Finding(
             "effort-estimate", "review", line_number(text, match.start()),
-            "Confirm that this effort estimate is attributed to observed evidence or an identified owner.", excerpt(match.group()),
+            "Confirm that this effort estimate is attributed to observed evidence or an identified owner.",
+            excerpt(text[match.start():match.end()]),
         ))
 
-    final_quarter = max(0, len(text) * 3 // 4)
-    for match in TRAILING_RECAP_RE.finditer(text):
+    final_quarter = max(0, len(prose) * 3 // 4)
+    for match in TRAILING_RECAP_RE.finditer(prose):
         if match.start() >= final_quarter:
             findings.append(Finding(
                 "trailing-recap", "warning", line_number(text, match.start()),
-                "A trailing recap may restate a verdict that should already be at the top.", excerpt(match.group()),
+                "A trailing recap may restate a verdict that should already be at the top.",
+                excerpt(text[match.start():match.end()]),
             ))
 
     return sorted(findings, key=lambda item: (item.line, item.rule))

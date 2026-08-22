@@ -27,12 +27,20 @@ class LintOutputTests(unittest.TestCase):
     def test_known_negative_single_arrow_does_not_fire(self) -> None:
         self.assertNotIn("arrow-chain", self.rules("Before → after."))
 
+    def test_independent_arrow_mappings_do_not_form_a_chain(self) -> None:
+        text = "Before → after. Source → destination."
+        self.assertNotIn("arrow-chain", self.rules(text))
+
     def test_compact_arrow_chain_fires(self) -> None:
         findings = [
             item for item in LINTER.lint("host->429s->timeout->500")
             if item.rule == "arrow-chain"
         ]
         self.assertEqual(1, len(findings))
+
+    def test_arrow_chain_in_fenced_code_does_not_fire(self) -> None:
+        text = "Example:\n\n```python\ndef f(x: A) -> B -> C:\n    return x\n```\n"
+        self.assertNotIn("arrow-chain", self.rules(text))
 
     def test_v05_depth_offer_fires(self) -> None:
         self.assertIn("depth-offer", self.rules("Want the full breakdown?"))
@@ -45,6 +53,12 @@ class LintOutputTests(unittest.TestCase):
         findings = LINTER.lint("Setting one up is about an hour.")
         estimate = next(item for item in findings if item.rule == "effort-estimate")
         self.assertEqual("review", estimate.severity)
+
+    def test_contextual_over_estimate_fires(self) -> None:
+        self.assertIn(
+            "effort-estimate",
+            self.rules("The migration will take over two weeks."),
+        )
 
     def test_observed_duration_is_not_assumed_to_be_estimate(self) -> None:
         for text in (
@@ -71,7 +85,8 @@ class LintOutputTests(unittest.TestCase):
                 "**Next step.** Deploy the bounded change.",
             ]
         )
-        self.assertIn("heading-density", self.rules(text))
+        finding = next(item for item in LINTER.lint(text) if item.rule == "heading-density")
+        self.assertEqual(5, finding.line)
 
     def test_published_pseudo_heading_failure_is_detected(self) -> None:
         corpus_reply = ROOT / "evals" / "runs" / "iteration-1" / "eval-1-migration-status" / "without_skill" / "reply.md"
