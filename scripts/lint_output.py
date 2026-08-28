@@ -203,7 +203,8 @@ def mask_nonprose_markdown(text: str) -> str:
             quote_prefix = re.match(r"^(?:[ \t]{0,3}>[ \t]?)*", line)
             quote_depth = quote_prefix.group().count(">") if quote_prefix else 0
             content = line[quote_prefix.end():] if quote_prefix else line
-            indent = len(content) - len(content.lstrip(" \t"))
+            raw_indent = content[:len(content) - len(content.lstrip(" \t"))]
+            indent = len(raw_indent.expandtabs(4))
             if quote_depth != active_list_quote_depth or not active_list_indents:
                 active_list_indents = []
                 active_list_quote_depth = None
