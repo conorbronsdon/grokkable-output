@@ -177,6 +177,14 @@ class LintOutputTests(unittest.TestCase):
         self.assertEqual(1, len(findings))
         self.assertEqual(2, findings[0].line)
 
+    def test_top_level_indented_bullet_code_does_not_fire(self) -> None:
+        text = "    - A -> B -> C"
+        self.assertNotIn("arrow-chain", self.rules(text))
+
+    def test_top_level_indented_numbered_code_does_not_fire(self) -> None:
+        text = "    1. A -> B -> C"
+        self.assertNotIn("arrow-chain", self.rules(text))
+
     def test_blockquoted_indented_code_does_not_fire(self) -> None:
         text = ">     def f(x: A) -> B -> C"
         self.assertNotIn("arrow-chain", self.rules(text))
