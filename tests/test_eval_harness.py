@@ -137,6 +137,50 @@ class EvalHarnessTests(unittest.TestCase):
             generation["skill_sha256"], eval_harness.sha256_text(skill)
         )
 
+    def test_candidate_evidence_keeps_the_exact_skill_under_test(self) -> None:
+        cases = (
+            (
+                ROOT / "evals" / "runs" / "validation-v2-review-rewrite-v060-cycle2",
+                "review-rewrite",
+            ),
+            (
+                ROOT / "evals" / "runs" / "validation-v060-sonnet5",
+                "debug-report",
+            ),
+            (
+                ROOT
+                / "evals"
+                / "runs"
+                / "validation-v2-review-rewrite-v060-final",
+                "review-rewrite",
+            ),
+        )
+        for runs, scenario in cases:
+            with self.subTest(runs=runs.name):
+                skill = (runs / "skill.md").read_text(encoding="utf-8")
+                generation = json.loads(
+                    (
+                        runs
+                        / scenario
+                        / "with_skill"
+                        / "trial-1"
+                        / "generation.json"
+                    ).read_text(encoding="utf-8")
+                )
+                self.assertEqual(
+                    generation["skill_sha256"],
+                    eval_harness.sha256_text(skill),
+                )
+
+    def test_final_review_rewrite_suite_checks_cut_ledger(self) -> None:
+        suite = eval_harness.validate_suite(
+            ROOT / "evals" / "v2" / "review-rewrite-v060-final.json"
+        )
+        expectation_ids = {
+            item["id"] for item in suite["scenarios"][0]["expectations"]
+        }
+        self.assertIn("cut-ledger", expectation_ids)
+
     def test_summary_rejects_mutated_word_count(self) -> None:
         source = ROOT / "evals" / "runs" / "validation-v2-sonnet5"
         with tempfile.TemporaryDirectory() as directory:

@@ -26,6 +26,36 @@ The exact v0.3.1 skill used for those generations is archived at
 rather than the repository's current `SKILL.md`, so a later release cannot make
 the archived prompt hashes fail or silently reinterpret the old run.
 
+## v0.6.0 candidate repair runs
+
+The first focused repair cycle is rejected and non-evidentiary: it changed a
+five-minute interval to four minutes, and its exact experimental skill text was
+not archived. The run directory says so explicitly rather than substituting a
+later skill whose hash does not match.
+
+Focused cycle 2 and the four-scenario regression each archive the exact skill
+text used for generation as `skill.md`; both snapshots match the
+`skill_sha256` in their generation metadata. Cycle 2 reused cycle 1's unchanged
+baseline cells byte-for-byte. That saved an unnecessary regeneration, but it is
+not a fresh baseline and is not presented as one; cycle 2 is candidate-repair
+evidence, not the final release comparison.
+
+`review-rewrite-v060-final.json` closes the methodology gap exposed in review:
+it adds an explicit assertion for the advertised one-line, category-only cut
+ledger. The final run requires three fresh skilled and three fresh baseline
+generations. Do not copy baseline cells into it.
+
+The final run at `validation-v2-review-rewrite-v060-final` used six fresh
+`claude-sonnet-5` generations and archived the exact skill text. After free
+Inkling grading, `claude-sonnet-5` adjudication, and three direct-text primary
+corrections, skilled outputs passed 11/12 assertions in every trial and ranged
+from 393–431 words. Baseline outputs averaged 10.33/12 assertions and ranged
+from 443–541 words. All skilled factual and fidelity assertions passed, but the
+one-line cut-ledger assertion failed 3/3: the replies used multi-line bullets
+and sometimes repeated quotes or rationale. The proportionality repair worked;
+the stricter cut-ledger behavior did not. The candidate therefore stops after
+three repair cycles without a release claim.
+
 Run from the repository root:
 
 ```bash

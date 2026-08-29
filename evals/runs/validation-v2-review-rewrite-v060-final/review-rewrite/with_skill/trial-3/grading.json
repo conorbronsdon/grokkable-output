@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_214806_d84595",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_214806_d84595",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "627bb478de22d9383578661efcfc6c23a1db29e0aebdbc842510a8b74e55c57f",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names overclaim, dropped caveat, process narration (invented phase labels), arrow-chain shorthand, and trailing recap; quotes 'definitely the root cause', '\u2705 Production is fixed and ready', 'Phase 1/2/3', 'customer A -> ... -> checkout fails', and 'In summary...' paragraph."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Opens with 'Checkout recovered after the recommendations feature flag was disabled at 16:42 UTC...' (recovery) and 'likely cause, not yet confirmed' (unproven status); no phase/process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Uses 'likely cause, not yet confirmed' and avoids 'definitely' or '\u2705 fixed'; does not assert confirmed root cause."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves 'only traced 7 of the 312 failed requests' and 'other failure mechanisms haven't been ruled out' explicitly."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "States flag mitigation (not rollback), notes v4.8 security patch preserved, and explains rollback was avoided."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "Mentions 418 unit tests and 6 regression tests passing, plus 'full integration suite hasn't run yet'."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit 'backport ... into v4.8 now, or wait for v4.9?' with conditional recommendation 'backport tomorrow, after the integration suite passes'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Numbers 16:42, 16:47, 7, 312, 418, 6 match fixture; no invented or altered values."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Describes only the unconfirmed tenant-ID cache-key mechanism from fixture; adds no new mechanism, impact, or certainty upgrade."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Lists removed process narration, fake phases, arrow shorthand, recap, and overclaim language; does not claim any fact/caveat was removed."
+    },
+    {
+      "id": "cut-ledger",
+      "passed": true,
+      "evidence": "Each bullet is a brief category-only label (no quotation, no rationale, no preserved-fact inventory, no repeated finding)."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 393 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 0,
+    "total": 12,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 393
+  }
+}

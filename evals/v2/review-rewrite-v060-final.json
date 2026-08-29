@@ -1,0 +1,28 @@
+{
+  "schema_version": 2,
+  "suite_id": "grokkable-output-review-rewrite-v060-final",
+  "description": "Fresh n>=3 validation of v0.6.0 combined review and rewrite fidelity, proportionality, and cut-ledger behavior.",
+  "scenarios": [
+    {
+      "id": 3,
+      "name": "review-rewrite",
+      "mode": "review_rewrite",
+      "prompt": "Review the draft in the fixture using the review mode, then rewrite it using the rewrite mode. Preserve supported facts and caveats, correct overclaims without inventing evidence, and finish by stating what you cut as selection. Return three clearly labeled parts: Review, Rewrite, and Cut as selection.",
+      "fixture": "../fixtures/review-rewrite-notes.md",
+      "max_words": 500,
+      "expectations": [
+        {"id": "named-review", "text": "The review names at least three applicable grokkable-output anti-patterns and quotes the offending draft text."},
+        {"id": "rewrite-verdict", "text": "The rewrite leads with recovery and the unproven root-cause status, not process narration."},
+        {"id": "confidence-calibration", "text": "The rewrite does not repeat the draft's claim that the cache key is definitely the root cause."},
+        {"id": "scope-caveat", "text": "The rewrite preserves that only 7 of 312 failed requests were traced and other mechanisms remain possible."},
+        {"id": "mitigation-tradeoff", "text": "The flag mitigation and reason for avoiding rollback are preserved."},
+        {"id": "validation-limit", "text": "The passing unit and targeted tests are preserved alongside the fact that the full integration suite has not run."},
+        {"id": "decision", "text": "The backport-versus-v4.9 decision and conditional recommendation remain explicit."},
+        {"id": "numeric-fidelity", "text": "Every number in the review and rewrite traces to the fixture."},
+        {"id": "mechanism-fidelity", "text": "The output adds no failure mechanism, impact, or certainty absent from the fixture."},
+        {"id": "selection-report", "text": "The final part identifies process narration, fake structure, arrow shorthand, or recap as removed material without claiming facts or caveats were cut."},
+        {"id": "cut-ledger", "text": "The Cut as selection part is one short category-only line with no quotation, rationale, preserved-fact inventory, or repeated review finding."}
+      ]
+    }
+  ]
+}

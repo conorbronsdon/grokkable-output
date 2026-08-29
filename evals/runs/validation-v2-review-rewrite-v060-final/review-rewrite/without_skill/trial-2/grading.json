@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_214833_220b33",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_214833_220b33",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "ee044782da993b1e003e959f0c25ca1c98d17b919fa29847adfcdcda00a3da5c",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names narrative/structure problem, chronology/storytelling, overclaim (quoted 'definitely the root cause', 'Production is fixed and ready', closing recap); quotes offending draft text directly."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with recovery (flag disabled 16:42, baseline 16:47) and unproven root-cause section; no process chronology first."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Uses 'leading hypothesis', 'not proven', 'unproven'; never repeats 'definitely'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "States '7 of 312 failed requests that were traced' and 'other failure mechanisms have not been ruled out'."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Preserves rollback considered/rejected for v4.8 security patch and flag disable preserves patch."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "Lists 418 unit and 6 regression tests passing; states full integration suite not yet run."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit 'backport ... to v4.8, or wait for v4.9' with conditional recommendation 'after the full integration suite passes'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers (16:42, 16:47, 7, 312, 418, 6, v4.8, v4.9) match fixture; no invented figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Retains tenant-ID omission as unproven hypothesis; adds no new mechanism, impact, or certainty beyond fixture."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies removed process narration, fake structure (Phase 1/2/3), arrow shorthand, recap; does not claim any fact/caveat was removed."
+    },
+    {
+      "id": "cut-ledger",
+      "passed": false,
+      "evidence": "The 'Cut as selection' section is a multi-bullet list with quotations ('definitely', '\u2705'), rationales, and preserved-fact notes, not one short category-only line without quotation, rationale, inventory, or repeated finding."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 461 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 1,
+    "total": 12,
+    "pass_rate": 0.9166666666666666
+  },
+  "execution_metrics": {
+    "output_words": 461
+  }
+}

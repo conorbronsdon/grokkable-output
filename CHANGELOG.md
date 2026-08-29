@@ -3,12 +3,15 @@
 ## Unreleased
 
 - Candidate v0.6.0 makes combined review-and-rewrite requests share one response
-  budget with drafting headroom: reviews prioritize distinct consequential
-  defects, rewrites avoid duplicated commentary, and cut reports are
-  category-only ledgers. The change is not release-ready until fresh three-trial
-  fidelity and length validation passes.
-  Its pre-send grok test now also requires a source-fidelity pass over numbers,
-  mechanisms, consequences, certainty, derived arithmetic, and open questions.
+  budget with drafting headroom. Its pre-send grok test also adds a
+  source-fidelity pass over numbers, mechanisms, consequences, certainty,
+  derived arithmetic, and open questions.
+- Fresh final validation produced three skilled replies at 393–431 words, all
+  below both the 500-word ceiling and the 450-word drafting target; the fresh
+  baseline ranged from 443–541 words and missed the ceiling once. Every skilled
+  factual/fidelity assertion passed. The advertised one-line category-only cut
+  ledger failed in all three skilled trials, so v0.6.0 remains a candidate and
+  is not release-ready after the three-cycle repair limit.
 - Added an experimental post-hoc output linter with structured CLI output,
   severity thresholds, positive/complement controls, and Python 3.11/3.13 CI.
   The validated `SKILL.md` remains unchanged at v0.3.1 pending fresh evals.

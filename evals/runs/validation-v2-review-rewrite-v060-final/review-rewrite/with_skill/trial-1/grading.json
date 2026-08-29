@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_214734_5e2c71",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_214734_5e2c71",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "e372bb367e389b58d4855ad3d642737b52a8ecf8b6810cf4e3740477754e5dd0",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names buried lede / process narration, invented phase labels, overclaim ('definitely the root cause'), arrow chain, trailing recap; quotes 'First I pulled the error logs...', 'Phase 1 was log review...', 'customer A -> shared cache entry...', 'In summary, the incident is resolved...'"
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Opens with 'Checkout is stable: disabling...' (recovery first) and 'The leading theory, not yet confirmed' (unproven root cause), before any process detail."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite says 'not yet confirmed' and 'leading theory'; does not state the cache key is definitely the root cause."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves 'seven traces... out of 312 failed requests' and 'other failure mechanisms aren't ruled out yet'."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "States flag disabled at 16:42, rollback avoided because v4.8 carries a security patch, and disabling fixes checkout without touching the patch."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "Mentions 'all 418 existing unit tests and the 6 new regression tests... pass' and 'full integration suite hasn't run yet'."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Asks 'backport the cache-key fix to v4.8, or hold it for v4.9?' with recommendation 'I'd backport tomorrow, once the integration suite has passed'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Numbers 16:42, 16:47, 7, 312, 418, 6 all match fixture; no invented figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Only describes tenant-ID omission and shared cache entry from fixture; adds no new mechanism, impact, or certainty upgrade."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Lists process narration, invented Phase labels, arrow chain, 'production is fixed and ready' checkmark, trailing summary as removed; does not claim facts or caveats were cut."
+    },
+    {
+      "id": "cut-ledger",
+      "passed": true,
+      "evidence": "Five brief category-only bullet lines under 'Cut as selection'; no quotations, no rationale, no preserved-fact inventory, no repeated review finding."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 398 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 0,
+    "total": 12,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 398
+  }
+}

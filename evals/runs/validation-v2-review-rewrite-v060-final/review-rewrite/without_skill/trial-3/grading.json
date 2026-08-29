@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_214845_7a8de0",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_214845_7a8de0",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "3d96f36f38afb17af7a6f3f00d49c179967573a5558bc0e310a4a5b821ab5279",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names four anti-patterns and quotes offending text: 'definitely the root cause'; 'Production is fixed and ready' (with checkmark); 'First I pulled... Phase 1/2/3'; flat 'next step is a backport' smoothing away the integration-suite condition."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with 'Root cause (unconfirmed)' and 'leading lead', not process narration; status is 'mitigates the symptom, not the underlying bug'; timeline given concisely."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite says 'leading but unconfirmed cause' and 'not a confirmed root cause'; never repeats 'definitely the root cause'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves 'Based on 7 of 312 failed requests traced \u2014 other failure mechanisms haven't been ruled out'."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Rollback avoided because v4.8 contains a security patch; flag disable restored baseline by 16:47 UTC."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States 418 unit tests and 6 regression tests pass; 'full integration suite has not yet run' kept."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit 'Decision needed: backport... or wait for v4.9' and conditional recommendation 'contingent on the full integration suite passing first'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers \u2014 16:42, 16:47, 7, 312, 418, 6 \u2014 match fixture exactly; no invented numbers."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No new failure mechanism, impact, or certainty added; cache-key theory kept at same strength as fixture ('leading', 'unconfirmed')."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies removed material as process narration, fake Phase structure, '\u2705 Production is fixed and ready' framing, and unconditional closing recap; does not claim facts/caveats were removed."
+    },
+    {
+      "id": "cut-ledger",
+      "passed": false,
+      "evidence": "Not a single category-only line: four bulleted entries, each containing quoted text, brief rationale ('cut because...'), and preserved-fact inventory ('kept... replaced with...'). Fails 'no quotation, rationale, preserved-fact inventory' requirement."
+    },
+    {
+      "id": "max-words",
+      "passed": false,
+      "evidence": "Deterministic harness count: 541 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 2,
+    "total": 12,
+    "pass_rate": 0.8333333333333334
+  },
+  "execution_metrics": {
+    "output_words": 541
+  }
+}

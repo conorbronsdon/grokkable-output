@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "scenario": "review-rewrite",
+  "adjudicator_model": [
+    "claude-sonnet-5"
+  ],
+  "prompt_sha256": "f1a087b1907191c72809f85eeacbe93c518561c0b1f725f581274cc2eb725cb5",
+  "provider_result": {
+    "duration_ms": 143214,
+    "total_cost_usd": 0.27518000000000004,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 27576,
+      "cache_read_input_tokens": 79410,
+      "output_tokens": 14899,
+      "output_tokens_details": {
+        "thinking_tokens": 14419
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 27576,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 14899,
+          "cache_read_input_tokens": 79410,
+          "cache_creation_input_tokens": 27576,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 27576
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    }
+  },
+  "corrections": [
+    {
+      "config": "without_skill",
+      "trial": 3,
+      "expectation_id": "rewrite-verdict",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The rewrite's actual opening section is '**Investigation update**' followed by 'Reviewed error logs, then traces. The leading lead is a recommendations cache-key issue.' \u2014 this is process narration (describing the order of investigative steps) leading the rewrite, not recovery. Recovery status ('Disabled the recommendations flag at 16:42 UTC; error rate returned to baseline by 16:47 UTC') does not appear until the third section, '**Current status**'. The cut-ledger itself confirms this was intentional, not an oversight: 'The \"First I pulled the error logs and then looked at traces... Phase 1/Phase 2/Phase 3\" narrative \u2014 cut because it's sequence-of-effort detail... kept only the two-step summary (logs, then traces).' The raw grade's evidence ('Rewrite opens with \"Root cause (unconfirmed)\"... not process narration') misdescribes the text \u2014 'Root cause (unconfirmed)' is the second heading, not the first, and the actual first line is explicit process narration. This directly contradicts the expectation that the rewrite lead with recovery and unproven root-cause status rather than process narration."
+    }
+  ]
+}

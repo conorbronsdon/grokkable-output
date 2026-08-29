@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "suite_id": "grokkable-output-review-rewrite-v060-final",
+  "required_trials_per_cell": 3,
+  "complete": true,
+  "adjudication_models": [
+    "claude-sonnet-5"
+  ],
+  "adjudication_corrections": 1,
+  "primary_verification_corrections": 3,
+  "cells": [
+    {
+      "scenario": "review-rewrite",
+      "config": "with_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 0.9166666666666666,
+      "min_pass_rate": 0.9166666666666666,
+      "max_pass_rate": 0.9166666666666666,
+      "mean_words": 407.3333333333333,
+      "min_words": 393,
+      "max_words": 431
+    },
+    {
+      "scenario": "review-rewrite",
+      "config": "without_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 0.861111111111111,
+      "min_pass_rate": 0.75,
+      "max_pass_rate": 0.9166666666666666,
+      "mean_words": 481.6666666666667,
+      "min_words": 443,
+      "max_words": 541
+    }
+  ]
+}

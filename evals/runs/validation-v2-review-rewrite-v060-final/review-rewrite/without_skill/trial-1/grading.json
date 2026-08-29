@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_214819_70b752",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_214819_70b752",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "43729d7efbca92e0ae5db35df733bdc41489e26a733ed40c2d3a8e77a3059b23",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Review quotes 'definitely the root cause', '\u2705 Production is fixed and ready', 'First I pulled... Phase 1/2/3', and 'the incident is resolved'; names overclaim, false resolution/conflation, and process narration/filler anti-patterns \u2014 at least three with direct quotes."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with 'Checkout recovered after... disabled at 16:42 UTC' (recovery) then 'Root cause is not yet confirmed' (unproven status); no process narration lead."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Uses 'not yet confirmed' and 'strongest lead'; does not restate 'definitely the root cause'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves 'Only 7 of 312 failed requests have been traced, so other failure mechanisms haven't been ruled out'."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "States flag disabled, no rollback because v4.8 has security patch, flag disable removed failing path without losing patch."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States 'All 418 unit tests and 6 new targeted regression tests pass; the full integration suite has not yet run'."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit 'Decision needed: backport the cache-key fix to v4.8, or hold it for v4.9. Recommendation: backport tomorrow, after the full integration suite passes'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Numbers 16:42, 16:47, 7, 312, 418, 6 all match fixture; no invented figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Only mentions tenant-ID-omitting cache key and shared entry from fixture; no added failure mechanism, impact, or certainty."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies process narration ('Phase 1/2/3'), fake structure/arrow shorthand ('customer A -> shared cache entry'), and recap ('the incident is resolved') as removed; does not claim any caveat/fact was cut."
+    },
+    {
+      "id": "cut-ledger",
+      "passed": false,
+      "evidence": "The 'Cut as selection' section contains four bulleted lines with quotations, rationale ('downgraded to... since only 7 of 312'), preserved-fact inventory, and repeated review findings \u2014 not one short category-only line without quotation/rationale/inventory."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 443 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 1,
+    "total": 12,
+    "pass_rate": 0.9166666666666666
+  },
+  "execution_metrics": {
+    "output_words": 443
+  }
+}

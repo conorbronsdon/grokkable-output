@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "verifier": "primary-agent",
+  "method": "Direct inspection of each saved Cut as selection section against the literal one-line, no-quotation expectation.",
+  "corrections": [
+    {
+      "scenario": "review-rewrite",
+      "config": "with_skill",
+      "trial": 1,
+      "expectation_id": "cut-ledger",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The section contains five bullet lines rather than one line and quotes 'Phase 1/2/3', 'definitely the root cause', and 'production is fixed and ready'. This directly violates both the one-line and no-quotation requirements."
+    },
+    {
+      "scenario": "review-rewrite",
+      "config": "with_skill",
+      "trial": 2,
+      "expectation_id": "cut-ledger",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The section contains three bullet lines rather than one line and quotes 'Phase 1/2/3' and 'In summary'. This directly violates both the one-line and no-quotation requirements."
+    },
+    {
+      "scenario": "review-rewrite",
+      "config": "with_skill",
+      "trial": 3,
+      "expectation_id": "cut-ledger",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The section contains five bullet lines rather than one line, quotes 'Phase 1/2/3', 'definitely', and 'fixed and ready', and explains replacement with calibrated confidence statements. This violates the one-line, no-quotation, and no-rationale requirements."
+    }
+  ]
+}
