@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191815_1741d6",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191815_1741d6",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "f248b3de4617d17846684fa7282b698a6f1befd68629c4a4849d152e4a4230a5",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: 'Found it \u2014 checkout was 500ing because of a config mistake, not a code bug.' States root cause immediately, not method."
+    },
+    {
+      "id": "recovery-evidence",
+      "passed": true,
+      "evidence": "Mentions rollback at 15:12 UTC to v2.13.2 and gives recovery metrics: '500 rate back to baseline (0.02%) by 15:19, held stable for 30 min of monitoring.'"
+    },
+    {
+      "id": "causal-prose",
+      "passed": false,
+      "evidence": "Uses arrow-chain shorthand repeatedly: '429s \u2192 retries (2s backoff x3, up to 6s) \u2192 tax-svc latency spiked ... \u2192 blew through ... \u2192 TaxLookupTimeout \u2192 checkout-svc catches ...' Not complete causal sentences without arrows."
+    },
+    {
+      "id": "intermittency",
+      "passed": true,
+      "evidence": "Explains explicitly: 'Intermittent because it only bites when traffic is above ~10 req/s, so it cleared off-peak.'"
+    },
+    {
+      "id": "follow-up",
+      "passed": true,
+      "evidence": "Includes both follow-ups: TAX-2211 (prod Avalara host/key, ~1h) and TAX-2212 (deploy checklist config-diff review gap)."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers (137x 500s, 14:02-14:40, 8.4s, 210ms, 5s, 10 req/s, 45 req/s, 2s x3, 6s, 13:47, 15:12, 15:19, 0.02%, 30 min) match or are arithmetically entailed by fixture."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Mechanism fully fixture-supported: sandbox endpoint (`AVATAX_HOST=sandbox-rest.avatax.com`) \u2192 429 rate limit \u2192 retry backoff \u2192 latency spike \u2192 exceeds 5s timeout \u2192 TaxLookupTimeout \u2192 caught as generic Exception \u2192 500. No invented mechanisms."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Does not claim a complete audit; scope stays within the traced chain (gateway \u2192 checkout-svc \u2192 orchestrator \u2192 tax-svc \u2192 Avalara). No silent promotion to full-system audit."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": false,
+      "evidence": "Contains formulaic bold headers '**Root cause:**', '**Chain:**', '**Action taken:**', '**Follow-up filed:**' and a trailing recap, violating the no-formulaic-headers expectation."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 243 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 2,
+    "total": 10,
+    "pass_rate": 0.8
+  },
+  "execution_metrics": {
+    "output_words": 243
+  }
+}

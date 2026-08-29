@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191910_6dc755",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191910_6dc755",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "f5beca2dad6c5e5b0c0fa1c1d47bfdd609a18f7fad115e9915cc0499db4a9f8b",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: '48 of 61 route handlers are migrated to Fastify and passing tests (312 passing). 9 are blocked on a session-store incompatibility, and 4 file-upload routes haven't started yet.' \u2014 gives overall state, not a work narrative."
+    },
+    {
+      "id": "blocking-decision",
+      "passed": true,
+      "evidence": "The session-renewal question is explicitly surfaced: 'I need your call on whether renew-on-read is acceptable for the 30-minute idle logout...' and 'Need from you: is renew-on-read okay for session idle timeout? That decision unblocks 9 routes tomorrow morning.'"
+    },
+    {
+      "id": "progress",
+      "passed": true,
+      "evidence": "48 migrated + 9 blocked + 4 not started = 61, matches fixture. 312 passing tests cited. 3 of 4 session adapter tests mentioned; 2 pre-existing bugs listed."
+    },
+    {
+      "id": "surprises",
+      "passed": true,
+      "evidence": "Two pre-existing bugs (export.js await missing, stripe.js signature after parse) are explicitly called out as 'unrelated to the migration' and described with same mechanism as fixture."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers match fixture: 61 total, 48 migrated, 9 blocked, 4 unstarted, 312 passing, 3/4 adapter tests, ~2.1x benchmark, 30-min idle, >10MB truncation, 3-4h est, buffering ~1 day, streaming 2-3 days."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Session renewal mechanism described exactly as fixture (fastify renews on read, express on write), not overstated as a bug. Adapter passes '3 of 4' with failure explained as semantics difference. Stripe described as 'probably benign but sketchy' matching fixture tone. Benchmark qualified as synthetic."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Fixture leaves session-touch renewal as an open user decision; candidate does not fabricate an answer. Multipart buffering vs streaming is presented as user's choice ('unless you tell me streaming matters'), not resolved unilaterally."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "Short prose paragraphs, no formulaic TO-DO / SUMMARY / ACTION sections, no trailing recap. Ends with the specific decision needed, matching brief status format."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 244 words; ceiling: 250."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 244
+  }
+}

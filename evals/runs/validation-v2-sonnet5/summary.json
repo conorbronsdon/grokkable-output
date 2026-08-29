@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "suite_id": "grokkable-output-v2",
+  "required_trials_per_cell": 3,
+  "complete": true,
+  "adjudication_models": [
+    "claude-sonnet-5"
+  ],
+  "adjudication_corrections": 11,
+  "primary_verification_corrections": 1,
+  "cells": [
+    {
+      "scenario": "debug-report",
+      "config": "with_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 1.0,
+      "min_pass_rate": 1.0,
+      "max_pass_rate": 1.0,
+      "mean_words": 237.33333333333334,
+      "min_words": 224,
+      "max_words": 253
+    },
+    {
+      "scenario": "debug-report",
+      "config": "without_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 0.7333333333333334,
+      "min_pass_rate": 0.7,
+      "max_pass_rate": 0.8,
+      "mean_words": 235.66666666666666,
+      "min_words": 202,
+      "max_words": 262
+    },
+    {
+      "scenario": "migration-status",
+      "config": "with_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 1.0,
+      "min_pass_rate": 1.0,
+      "max_pass_rate": 1.0,
+      "mean_words": 216.0,
+      "min_words": 173,
+      "max_words": 244
+    },
+    {
+      "scenario": "migration-status",
+      "config": "without_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 0.8518518518518517,
+      "min_pass_rate": 0.7777777777777778,
+      "max_pass_rate": 0.8888888888888888,
+      "mean_words": 245.66666666666666,
+      "min_words": 233,
+      "max_words": 267
+    },
+    {
+      "scenario": "nonexpert-audit",
+      "config": "with_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 0.9666666666666667,
+      "min_pass_rate": 0.9,
+      "max_pass_rate": 1.0,
+      "mean_words": 252.0,
+      "min_words": 211,
+      "max_words": 275
+    },
+    {
+      "scenario": "nonexpert-audit",
+      "config": "without_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 0.7666666666666666,
+      "min_pass_rate": 0.7,
+      "max_pass_rate": 0.9,
+      "mean_words": 364.3333333333333,
+      "min_words": 341,
+      "max_words": 378
+    },
+    {
+      "scenario": "review-rewrite",
+      "config": "with_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 0.9090909090909091,
+      "min_pass_rate": 0.9090909090909091,
+      "max_pass_rate": 0.9090909090909091,
+      "mean_words": 645.6666666666666,
+      "min_words": 560,
+      "max_words": 715
+    },
+    {
+      "scenario": "review-rewrite",
+      "config": "without_skill",
+      "completed_trials": 3,
+      "required_trials": 3,
+      "mean_pass_rate": 0.9090909090909092,
+      "min_pass_rate": 0.8181818181818182,
+      "max_pass_rate": 1.0,
+      "mean_words": 487.0,
+      "min_words": 430,
+      "max_words": 563
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+Tax-svc's 13:47 deploy shipped with a leftover sandbox API host in config, which rate-limited at prod traffic and caused the 500s. Rolled back at 15:12; error rate's been back to baseline (0.02%) for 30+ minutes.
+
+Mechanism: the new v2.14.0 deploy added a ZIP+4 enrichment call to Avalara, but `AVATAX_HOST` was still pointed at the sandbox endpoint, which caps at 10 req/s. Prod peak traffic is ~45 req/s, so tax-svc started getting 429s, each one retried 3x with 2s backoff — up to 6s of added latency. Payment-orchestrator's downstream timeout is 5s, so those calls timed out, checkout-svc caught the resulting exception as a generic 500, and that surfaced as intermittent failures on POST /v2/checkout/complete. Intermittent because off-peak traffic drops below 10 req/s and stops tripping the rate limit — 137 500s between 14:02-14:40 UTC, all during peak.
+
+I rolled back to v2.13.2 rather than fixing the host config live, since that needs a prod Avalara key from the secrets team (~1h) and rollback was pre-approved for sev2. That's the right tradeoff for now but drops the ZIP+4 feature until the config fix ships — filed as TAX-2211. I also flagged a process gap: nothing in the deploy checklist reviews config diffs for vendor endpoints, which is how a sandbox host reached prod. Proposed adding that check in TAX-2212.
+
+Nothing needed from you right now — just flagging in case you want eyes on TAX-2211 before it reintroduces the ZIP+4 call.

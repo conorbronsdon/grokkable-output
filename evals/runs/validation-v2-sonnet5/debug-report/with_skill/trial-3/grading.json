@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191807_cce2f7",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191807_cce2f7",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "d97f3a2d802c9871be8bc68ee4a450efd59161a49afc54f558bcbfd8f446b312",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: 'A misconfigured vendor endpoint in the tax service caused the checkout 500s, and it's already fixed.' \u2014 states root cause/recovered status, not investigation method."
+    },
+    {
+      "id": "recovery-evidence",
+      "passed": true,
+      "evidence": "States rollback to v2.13.2 at 15:12 UTC and gives recovery evidence: '500 rate is back to baseline (0.02%) and stable through 30 minutes of monitoring as of 15:19 UTC.' Matches fixture exactly."
+    },
+    {
+      "id": "causal-prose",
+      "passed": true,
+      "evidence": "Explains mechanism in complete causal sentences: sandbox host \u2192 rate limit \u2192 429s \u2192 retries with backoff \u2192 latency exceeds timeout \u2192 checkout 500. No arrow-chain shorthand."
+    },
+    {
+      "id": "intermittency",
+      "passed": true,
+      "evidence": "Explicit: 'intermittent because traffic only exceeded 10 req/s during peak; off-peak requests sailed through with no 429s.' Directly supported by fixture."
+    },
+    {
+      "id": "follow-up",
+      "passed": true,
+      "evidence": "Includes TAX-2211 (config fix, prod API key) and TAX-2212 (deploy checklist gap: config-diff review for vendor endpoints). Also notes rollback's feature loss and asks on secrets handoff."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers match fixture or are entailed: v2.14.0 at 13:47, 5s timeout, 10 req/s sandbox limit, ~45 req/s peak, 2s backoff x3 \u2192 up to 6s, rollback 15:12, baseline 0.02%, stable by 15:19, 30 min monitored. No invented estimates."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Every mechanism supported: AVATAX_HOST=sandbox-rest.avatax.com, 429s trigger retries (2s backoff x3 = up to 6s), timeout exceeds 5s \u2192 checkout-svc catches generic Exception \u2192 500. No invented smooth reason; gap explicitly identified."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Unverified scope (prod API key needed from secrets team, ~1h work) is explicitly limited to TAX-2211 and the checklist gap (TAX-2212). Not promoted to a complete audit; asks user about handoff rather than declaring everything resolved."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No formulaic headers (no 'Summary / Root Cause / Action' sections). Ends with a direct question, not a trailing recap. Proportional structure matching reply content."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 235 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 235
+  }
+}

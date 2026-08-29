@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191754_455a91",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191754_455a91",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "306838f3d933d141f6c911d40075c7d35cb63a6860a27d0af970e74211377777",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence states root cause: 'Tax-svc's 13:47 deploy shipped with a leftover sandbox API host in config, which rate-limited at prod traffic and caused the 500s.'"
+    },
+    {
+      "id": "recovery-evidence",
+      "passed": true,
+      "evidence": "Rollback at 15:12 cited; recovery evidence: 'error rate's been back to baseline (0.02%) for 30+ minutes.' Matches fixture (0.02% by 15:19 UTC, monitored 30 min)."
+    },
+    {
+      "id": "causal-prose",
+      "passed": true,
+      "evidence": "Mechanism written in full causal sentences ('so tax-svc started getting 429s, each one retried 3x with 2s backoff \u2014 up to 6s of added latency. Payment-orchestrator's downstream timeout is 5s, so those calls timed out...') with no arrow-chain shorthand."
+    },
+    {
+      "id": "intermittency",
+      "passed": true,
+      "evidence": "Explains intermittency explicitly: 'Intermittent because off-peak traffic drops below 10 req/s and stops tripping the rate limit' with 137 500s during 14:02-14:40 UTC during peak."
+    },
+    {
+      "id": "follow-up",
+      "passed": true,
+      "evidence": "TAX-2211 (config fix filed) and TAX-2212 (deploy checklist gap proposed) both present; rollback tradeoff noted."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers match or are entailed: 13:47 deploy, 15:12 rollback, 0.02% baseline, 30+ min stable, 10 req/s cap, ~45 req/s peak, 429 retries 3x with 2s backoff = up to 6s, 5s timeout, 137 500s 14:02-14:40 UTC, v2.14.0/v2.13.2."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Sandbox host (`AVATAX_HOST=sandbox-rest.avatax.com`), rate limit \u2192 429 \u2192 retry backoff \u2192 latency > 5s timeout \u2192 TaxLookupTimeout \u2192 generic Exception \u2192 500, fully supported by fixture; no invented mechanism."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Does not claim complete audit; explicitly flags TAX-2211 as pending before ZIP+4 reintroduced, and notes checklist gap as proposed (TAX-2212), not completed."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No formulaic headers (e.g. no 'Root Cause:', 'Evidence:', 'Next Steps:' sections) and no trailing recap paragraph; direct prose throughout."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 253 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 253
+  }
+}

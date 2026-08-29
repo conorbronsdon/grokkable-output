@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192056_841c0e",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192056_841c0e",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "1775f745866d063bde1d2f8f6232ac944381b28b8c3a62163ce6eb79c7387ef0",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Review names 'discovery-order dump' (with quoted 'Phase 1/Phase 2/Phase 3'), 'arrow chain' (quoted 'customer A -> shared cache entry -> customer B...'), 'checkmark overclaim' (quoted '\u2705 Production is fixed and ready'), and 'process narration' (quoted 'First I pulled the error logs...'); at least three anti-patterns quoted."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with 'Checkout is stable. The recommendations feature flag was disabled at 16:42 UTC...' (recovery), then 'The likely cause, not yet confirmed...' (unproven status); no process narration precedes the verdict."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite says 'likely cause, not yet confirmed' and 'other failure mechanisms haven't been ruled out'; never states 'definitely the root cause'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Rewrite keeps '7 of the 312 failed requests' and 'other failure mechanisms haven't been ruled out'; exactly the fixture's scope limits."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Rewrite states the flag was disabled, rollback avoided because 'v4.8, also contains a security patch'; preserves both mitigation and reason."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "Rewrite states 'All 418 existing unit tests and 6 new regression tests... pass, but the full integration suite hasn't run yet'; both limits preserved."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Rewrite includes explicit 'Decision needed: backport... or hold it for v4.9' and conditional 'Recommendation: backport tomorrow, after the integration suite passes'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers in review/rewrite \u2014 16:42, 16:47, 312, 7, 418, 6 \u2014 appear exactly as in fixture; no invented values."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No new failure mechanism, impact, or certainty added; only fixture's tenant-ID omission, shared entry, checkout failure mentioned."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Cut section lists removed process narration, arrow shorthand, and trailing recap; explicitly says 'None of these were softened or omitted', so no false claim that facts/caveats were removed."
+    },
+    {
+      "id": "max-words",
+      "passed": false,
+      "evidence": "Deterministic harness count: 560 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 1,
+    "total": 11,
+    "pass_rate": 0.9090909090909091
+  },
+  "execution_metrics": {
+    "output_words": 560
+  }
+}

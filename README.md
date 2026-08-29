@@ -73,6 +73,18 @@ Three modes: `write` (default — compose replies this way), `review` (audit an 
 
 ## Testing
 
+Fresh A/B validation on `claude-sonnet-5` used four scenarios, with and without
+the skill, across three independent runs per cell (24 replies total). An
+independent free model graded each semantic expectation; fresh Sonnet sessions
+adjudicated disputed grades; deterministic word ceilings were computed by the
+harness. The skill scored 107/108 semantic expectations versus 90/108 baseline.
+Across the three `write` scenarios, all nine skilled replies met their length
+ceilings. In the combined `review` + `rewrite` scenario, fidelity held but all
+three skilled replies missed the 500-word ceiling (560-715 words), so the result
+does not support proportionality in that mode.
+
+Historical corpus:
+
 Tested A/B on Opus subagents: three scenarios (a production debug report, a mid-migration "quick status?", a dependency audit explained to a non-engineer), identical input notes, with and without the skill, graded against per-scenario assertion sets by an independent model instance — including a fidelity pass checking every number and mechanism against the input notes.
 
 Final round: 21/22 assertions with the skill vs 15/19 baseline on the original set. Every baseline failure was structural: arrow-chain causality, bold section headers on chat-length replies, a trailing recap restating the message. One known limitation is documented honestly: in one scenario the with-skill reply invented an effort estimate the notes didn't contain; the skill's trace-every-number rule narrowed but has not fully closed that failure class. The before/after pairs in [`examples/`](examples/) are unedited outputs from these runs, chosen from the scenarios that passed the fidelity check.
@@ -82,7 +94,8 @@ The whole corpus is public in [`evals/`](evals/): fixtures, assertion sets, per-
 The next experiment is architectural rather than another rule stack: a conservative
 [post-hoc output linter](docs/output-linter.md) detects mechanical failures such as
 arrow chains, oversized blocks, depth offers, and estimates that need source review.
-It is a prototype; `SKILL.md` remains at the validated v0.3.1.
+It is a prototype; `SKILL.md` remains at v0.3.1 while the review/rewrite
+proportionality failure is investigated.
 
 ## Installation
 

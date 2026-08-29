@@ -1,4 +1,43 @@
-# grokkable-output — eval results (iterations 1-5, 2026-08-06)
+# grokkable-output — eval results
+
+## Fresh v2 validation (2026-08-28)
+
+The versioned v2 suite ran 24 fresh replies: four scenarios, with and without
+the skill, across three independent `claude-sonnet-5` sessions per cell. Raw
+grades came from `thinkingmachines/inkling:free` through Hermes; separate fresh
+`claude-sonnet-5` sessions adjudicated demonstrable grader errors, and a primary
+verification pass corrected one additional miss directly proved by the reply
+text and deterministic linter. Scores below include each scenario's mechanical
+length ceiling.
+
+| Scenario | With skill | Baseline | With-skill words | Baseline words |
+|---|---:|---:|---:|---:|
+| Debug report | 30/30 | 22/30 | mean 237 (224-253) | mean 236 (202-262) |
+| Migration status | 27/27 | 23/27 | mean 216 (173-244) | mean 246 (233-267) |
+| Non-expert audit | 29/30 | 23/30 | mean 252 (211-275) | mean 364 (341-378) |
+| Review + rewrite | 30/33 | 30/33 | mean 646 (560-715) | mean 487 (430-563) |
+| **Total** | **116/120** | **98/120** | | |
+
+Semantic expectations were 107/108 with the skill and 90/108 without it.
+Across the three `write` scenarios, the skill improved semantic passes from
+62/78 to 77/78 and kept all nine replies within their length ceilings. The one
+semantic miss was a non-expert reply ending with a redundant "Bottom line"
+recap, which the deterministic linter also flagged.
+
+The `review` + `rewrite` result is mixed. All three skilled replies preserved
+the source facts and caveats, scoring 30/30 semantic expectations, but every one
+missed the 500-word ceiling at 560-715 words. The baseline met that ceiling in
+two of three trials but scored 28/30 semantically: one reply invented a
+triggering change and another buried the recovery status.
+
+This run supports using v0.3.1 for the tested write tasks on Sonnet. It does not
+support the skill's proportionality in the combined review/rewrite task, and
+n=3 on one generator does not establish cross-model generality. Reproduction
+commands and exact provenance are in [`v2/README.md`](v2/README.md); raw replies,
+grades, corrections, and the computed summary are in
+[`runs/validation-v2-sonnet5/`](runs/validation-v2-sonnet5/).
+
+## Historical iterations (2026-08-06)
 
 All runs on Opus subagents given the same fixture notes (`fixtures/`) and user
 question. Full replies and per-assertion grading with verbatim evidence quotes in

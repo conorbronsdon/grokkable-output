@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "scenario": "review-rewrite",
+  "adjudicator_model": [
+    "claude-sonnet-5"
+  ],
+  "prompt_sha256": "07befc485ee06e752d76c58bf16504c0fd02c64620465241607cd291274ba60e",
+  "provider_result": {
+    "duration_ms": 132458,
+    "total_cost_usd": 0.27113200000000004,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 28829,
+      "cache_read_input_tokens": 79410,
+      "output_tokens": 13993,
+      "output_tokens_details": {
+        "thinking_tokens": 13246
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 28829,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 13993,
+          "cache_read_input_tokens": 79410,
+          "cache_creation_input_tokens": 28829,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 28829
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    }
+  },
+  "corrections": [
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "rewrite-verdict",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The rewrite's actual lead is: '**Investigation update**\n\nCheckout errors began after a change shipped in the recommendations feature; investigation combined log review and trace inspection.' This is neither a recovery statement nor the unproven root-cause status \u2014 it is process/trigger narration (echoing the very 'investigation combined log review and trace inspection' pattern the review criticizes in the draft). The actual recovery facts (flag disabled 16:42 UTC, baseline by 16:47 UTC) do not appear until the third section, '**Resolution**', after the '**Root cause**' section. The raw grade's evidence ('Leads with recovery condition (\"Root cause is not yet proven\")') mischaracterizes 'Root cause is not yet proven' as a recovery statement, which it is not, and ignores that it is the second section, not the first. The expectation that the rewrite 'leads with recovery and the unproven root-cause status, not process narration' is directly disproven by the actual ordering of the text."
+    },
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "mechanism-fidelity",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The rewrite's opening sentence states as fact: 'Checkout errors began after a change shipped in the recommendations feature.' No such triggering 'change shipped' is described anywhere in the fixture \u2014 the source notes only state that the flag was disabled and recovery occurred, and that the cache-key theory is unproven. Asserting a shipped change as the origin of the errors is an invented causal claim/mechanism not present in the fixture, contradicting the expectation that 'the output adds no failure mechanism, impact, or certainty absent from the fixture.' The raw grade's evidence ('Only mechanism described is the fixture's cache-key-omits-tenant-ID hypothesis... no extra mechanism... added') overlooks this sentence entirely."
+    }
+  ]
+}

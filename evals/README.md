@@ -6,6 +6,13 @@ model replies with per-assertion grading (`runs/`), the independent review that
 rejected v0.2.0 (`independent-review-v0.2.md`), and the analyst summary
 (`RESULTS.md`).
 
+The versioned `v2/` suite and `runs/validation-v2-sonnet5/` are a fresh
+validation lane rather than another historical skill iteration. They archive
+three independent runs per cell, exact prompt/skill/suite hashes, canonical
+generator model metadata, raw Hermes grades with exact session IDs, separate
+Claude adjudication, and the one primary-verification override. Raw replies and
+raw grades remain verbatim; corrections are overlays consumed by the summary.
+
 Ground rules for reading it:
 
 - **Everything under `runs/` is verbatim output** — model replies and grader
@@ -26,3 +33,6 @@ Ground rules for reading it:
   one sentence that pointed at a private development branch was reworded.
   The replies were produced by Opus-class subagents; iterations 2 onward were
   graded by model instances independent of the skill author.
+- **v2 corrections never rewrite model evidence.** `grading.json` remains the
+  exact accepted Hermes grade. `adjudication/*.json` records contradictory
+  evidence and verified overrides separately; `summary.json` applies them.

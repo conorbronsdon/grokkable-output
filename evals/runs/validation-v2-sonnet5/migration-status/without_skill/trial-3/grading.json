@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191942_2f35af",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191942_2f35af",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "fe691b449d220c00657ab56334dac608cfa559bfb8392b89a371c911254cf5c0",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: '48 of 61 migrated and passing (312 tests green).' States migration state directly without narrating work performed."
+    },
+    {
+      "id": "blocking-decision",
+      "passed": true,
+      "evidence": "The session-renewal question ('is renewal-on-read acceptable, or do we need to match the old behavior?') is surfaced as the question requiring user input, with the proxy option noted."
+    },
+    {
+      "id": "progress",
+      "passed": true,
+      "evidence": "48 migrated + 9 blocked + 4 not started = 61, matching fixture; 312 passing tests cited; counts reconcile exactly."
+    },
+    {
+      "id": "surprises",
+      "passed": true,
+      "evidence": "Both pre-existing bugs explicitly listed: admin/export.js (silent truncation >10MB) and webhooks/stripe.js (signature after JSON parse), with clear 'unrelated to the migration' framing."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers present: 48/61, 312, 9, 4, 40 lines, 3/4, 30-min, 3-4h, 2.1x, 10MB, 1 day, 2-3 days \u2014 all match fixture; estimates (1 day / 2-3 days) reproduced."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Session mechanism correctly described as read vs write renewal difference (not overstated as bug); perf noted as synthetic; stripe validation described as 'likely benign but sketchy' matching fixture; no stronger confidence claims made."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Fixture's tomorrow question ('is 30-min idle logout renewal-on-read acceptable?') remains a question; multipart buffering vs streaming remains open; no fabricated answers."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "Short prose with section headers; no formulaic sections (no RACI, no table, no checklist); brief closing plan without trailing recap of everything above."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 237 words; ceiling: 250."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 237
+  }
+}
