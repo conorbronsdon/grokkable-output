@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192042_906b21",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192042_906b21",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "27005ebd291674e717142e09f984c1389a2711c363ee4653923a06b226e7c23f",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence is 'not as bad as \"23 vulnerabilities\" sounds' \u2014 calibrated nontechnical verdict before any scanner headline."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "Distinguishes '20 of them don't matter much' (dev/noise) from the 2 real + 1 cosmetic subset immediately after introducing the 23 figure."
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "Translates 'jsonwebtoken' to 'auth library... checks is this person really logged in'; 'axios SSRF' to 'make our server fetch an internal URL'; avoids unexplained jargon."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Order: auth today, avatar this week, rest maintenance \u2014 matches fixture (jsonwebtoken \u2192 axios \u2192 maintenance bump)."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": false,
+      "evidence": "Axios estimate stated as 'Half a day' (~4h); fixture specifies 2-3h. Auth 'few hours' loosely covers 1-2h; axios overstates beyond fixture entitlement."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Exploit conditions match fixture: auth requires 'something we don't currently expose'; avatar 'user controls the URL'; no invented paths or strengthened impact."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "23 total \u2212 20 noise = 3 action items (auth, axios, lodash); explicitly reconciled; 20 = 4 dev-only high + 11 moderate + 5 low + 1 build-only critical."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Mentions missing dependency-update automation but gives no time/effort estimate for it; remains unstated/unknown as required."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No advisory dump, no formulaic section headers (only brief bold labels), closes with a single-sentence 'Net'; avoids trailing recap."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 341 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  },
+  "execution_metrics": {
+    "output_words": 341
+  }
+}

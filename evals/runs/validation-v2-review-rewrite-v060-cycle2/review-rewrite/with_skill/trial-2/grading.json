@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_205539_5950e9",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_205539_5950e9",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "66d8245b415295ca4763b77bb5ab09d44b5dbb586fe174c28608bbc59f1d626f",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names 'Checkmark overclaim', 'Overclaim beyond the evidence', 'Process narration + invented codenames', 'Arrow chain', 'Trailing recap' \u2014 at least three anti-patterns with quoted offending text (e.g., '\u2705 Production is fixed and ready', 'Phase 1 was log review', 'customer A -> shared cache entry -> customer B')."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with 'Checkout is recovered' and 'The root cause isn't proven yet' before any process narration; recovery and unproven status lead, not workflow."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite says 'The root cause isn't proven yet' and 'leading suspect', never repeats 'definitely the root cause'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves 'only traced 7 of the 312 failed requests, so other failure mechanisms haven't been ruled out'."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Preserves rollback avoided because v4.8 has security patch and flag removal avoids removing the patch."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States 'All 418 existing unit tests and the six new regression tests... pass, but I haven't run the full integration suite yet'."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit 'backport the cache-key fix into v4.8, or hold it for v4.9?' with conditional recommendation 'backporting tomorrow, once the integration suite passes'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers trace to fixture: 16:42, 16:47, 7/312, 418, 6 regression tests \u2014 no invented numbers."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No new mechanism added; describes same cache-key omission and checkout mismatch without expanding impact or certainty."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies process narration, '\u2705 production is fixed and ready' framing, arrow-chain mechanism, and trailing 'In summary' recap as removed; notes corrected overclaim and preserved facts/caveats without inventing cut facts."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 445 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 445
+  }
+}

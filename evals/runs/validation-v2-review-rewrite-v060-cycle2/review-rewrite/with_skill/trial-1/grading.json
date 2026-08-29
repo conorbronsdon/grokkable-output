@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_205519_a14f5d",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_205519_a14f5d",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "c33df2c0a15c60b7125c12a05afb37388d378fcfad24dc4e493d9b51be1a73da",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names 'checkmark/hedge-stack violations' (with quoted '\u2705 Production is fixed and ready'), invented-label process narration (quoted 'Phase 1 was log review, Phase 2 was trace inspection, Phase 3 was mitigation'), and arrow-chain shorthand (quoted 'customer A -> shared cache entry -> customer B...'); also cites the 'definitely the root cause' overclaim. Three named patterns with direct quotes."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with 'Checkout recovered after we disabled the recommendations feature flag at 16:42 UTC; the error rate was back to baseline by 16:47 UTC' (recovery) then 'The root cause isn't confirmed yet' (unproven status), not the draft's process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite states 'The root cause isn't confirmed yet. The strongest lead is a cache key...' \u2014 it never asserts the cache key is definitely the root cause, correcting the draft's claim."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Explicitly preserves '7 of the 312 failed requests we've traced so far, so other failure mechanisms haven't been ruled out.'"
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "States the flag was disabled, rollback avoided because 'v4.8 also carries a security patch', and the flag removal 'removed the failing recommendations path without removing that patch.'"
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "Preserves 'All 418 unit tests and 6 new regression tests... passing, but the full integration suite hasn't run yet.'"
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit: 'Decision needed: backport... into v4.8, or hold it for v4.9. My recommendation is to backport tomorrow, once the integration suite passes \u2014 do you want to go that route, or wait for v4.9?'"
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Only fixture numbers appear: 16:42/16:47 UTC, 7/312 traces, 418 unit tests, 6 regression tests; no invented figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Mechanism described as shared cached entry due to missing tenant ID causing wrong recommendation then checkout failure \u2014 matches fixture; no new failure mode or added certainty."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies removed process narration ('phase-by-phase investigation narration'), fake structure/invented labels, arrow shorthand ('arrow-chain mechanism'), and the recap ('In summary'); notes the overclaim was softened rather than a fact removed; does not claim any caveat was cut."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 424 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 424
+  }
+}

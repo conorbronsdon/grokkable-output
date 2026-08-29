@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "suite_id": "grokkable-output-v2",
+  "suite_sha256": "e77f6e5dc38c65733c4ef8f787ef7ab34c762ed3603a6319db4271ee2f33bcff",
+  "skill_sha256": "99d5e75b9e210305e7ef44d73ae0600609cbb989655c7c36cf789a075689ae92",
+  "scenario_id": 2,
+  "scenario": "nonexpert-audit",
+  "mode": "write",
+  "config": "with_skill",
+  "trial": 1,
+  "prompt_sha256": "384ab81dfd1fd9e89ff66c1f6f1ba780e1a2a37c042a3a4f7ce19a1198c8b72e",
+  "requested_model": "sonnet",
+  "canonical_models": [
+    "claude-sonnet-5"
+  ],
+  "provider_result": {
+    "duration_ms": 9021,
+    "total_cost_usd": 0.093752,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 18214,
+      "cache_read_input_tokens": 79410,
+      "output_tokens": 501,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 18214,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 501,
+          "cache_read_input_tokens": 79410,
+          "cache_creation_input_tokens": 18214,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 18214
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "stop_reason": "end_turn"
+  }
+}

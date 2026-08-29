@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210518_47791a",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210518_47791a",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "21caebf1a06b71bebad98539c31bf951d996407720f3b86bd9255377780cf721",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: 'Not bad \u2014 one real risk, and it's fixable today.' Calibrated nontechnical verdict, no scanner headline lead."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "Mentions '23 flagged issues' then immediately says 'only 3 actually matter' with explanation of dev-tool noise; distinguishes actionable subset."
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "No untranslated security jargon; explains 'prototype pollution' implicitly via 'flaw', 'SSRF' translated as 'aim our server at internal or unintended addresses', auth and avatar contexts are concrete."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Order: jsonwebtoken today \u2192 axios this week \u2192 lodash hygiene \u2192 maintenance/automation gap \u2014 matches fixture's recommended order."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "23 total, 3 matter; jsonwebtoken 1-2h; axios 2-3h; lodash 5 min; 30 days logs; 5-minute fix. All present and match fixture."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "JSONWebToken: 'forge a session under specific conditions' + 'don't expose key material' (not strengthened); axios SSRF: user-supplied URL + internal addresses; lodash: build script, not request path; no active exploitation claim; no invented exploits."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "23 flagged \u2192 3 real (jsonwebtoken, axios, lodash) + rest noise reconciles; 2 critical accounted for (jsonwebtoken real, lodash hygiene); 4 dev-only high + 1 real high = 5 high accounted for."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "The missing dependency-update effort estimate (no dependabot/renovate) is mentioned as a process gap but no time/effort estimate is stated or claimed; remains unstated."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No advisory dump, no formulaic section headers (e.g. no 'Summary / Details / Recommendations'), no trailing recap paragraph; concise direct reply ending with ask."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 273 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 273
+  }
+}

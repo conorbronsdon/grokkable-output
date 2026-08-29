@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Candidate v0.6.0 makes combined review-and-rewrite requests share one response
+  budget with drafting headroom: reviews prioritize distinct consequential
+  defects, rewrites avoid duplicated commentary, and cut reports are
+  category-only ledgers. The change is not release-ready until fresh three-trial
+  fidelity and length validation passes.
+  Its pre-send grok test now also requires a source-fidelity pass over numbers,
+  mechanisms, consequences, certainty, derived arithmetic, and open questions.
 - Added an experimental post-hoc output linter with structured CLI output,
   severity thresholds, positive/complement controls, and Python 3.11/3.13 CI.
   The validated `SKILL.md` remains unchanged at v0.3.1 pending fresh evals.

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210400_e3f9ed",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210400_e3f9ed",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "db69da2b723a89dac0e1e9faa7331254aaf1e387bf65804580014b07176ceda1",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: 'A leftover sandbox config in today's tax-svc deploy caused the 500s \u2014 it's fixed, checkout is back to normal.' States root cause and recovered status, not method."
+    },
+    {
+      "id": "recovery-evidence",
+      "passed": true,
+      "evidence": "States rollback to v2.13.2 at 15:12 UTC and recovery evidence: '500 rate returned to baseline (0.02%) by 15:19 UTC and stayed stable over 30 minutes of monitoring.' Matches fixture notes."
+    },
+    {
+      "id": "causal-prose",
+      "passed": true,
+      "evidence": "Mechanism written in full causal sentences ('tax-svc v2.14.0 ... added ... but ... pointed at ... The sandbox rate-limits ... so ... retrying ... That blew past ... which raised ... turned into ...') with no arrow-chain shorthand."
+    },
+    {
+      "id": "intermittency",
+      "passed": true,
+      "evidence": "Explicit: 'It was intermittent because traffic only exceeded 10 req/s at peak \u2014 off-peak there were no 429s and no failures.', matching fixture explanation."
+    },
+    {
+      "id": "follow-up",
+      "passed": true,
+      "evidence": "Mentions TAX-2211 (config fix/re-ship ZIP+4, needs prod API key ~1h) and TAX-2212 (deploy checklist gap for vendor endpoint config-diff review). Both present."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers (13:47 UTC deploy; 10 vs 45 req/s; up to 6s latency; 5s timeout; rollback 15:12 UTC; 0.02% baseline by 15:19 UTC; 30 min monitoring; ~1h estimate) are directly in or arithmetically entailed by the fixture."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Every causal step (sandbox endpoint in config \u2192 429 rate limits \u2192 retries with 2s backoff x3 \u2192 latency exceeds timeout \u2192 TaxLookupTimeout \u2192 checkout-svc catches generic Exception \u2192 500) is supported by fixture; no invented mechanism."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Ends with an open, limited scope question ('Want me to pick up TAX-2211 or leave it for whoever owns the Avalara integration?') rather than silently promoting to a complete audit; TAX-2211 explicitly notes dependency on secrets team."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No formulaic headers (e.g., 'Root Cause:', 'Recovery:', 'Next Steps:') and no trailing recap; reply is continuous prose paragraphs only."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 223 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 223
+  }
+}

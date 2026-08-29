@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210500_5d96e3",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210500_5d96e3",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "1d9c2a906b746cc655c1bbdffcb7427a1ff0d7b8ffd60162c29cf6c8f3914a0e",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence is 'Not bad, and nothing's actively being exploited \u2014 but two things need fixing this week.' \u2014 a calibrated nontechnical verdict, not the scanner headline."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "Explicitly says 'The scanner flagged 23 issues, but 20 of those are noise' and 'Only three things actually matter', distinguishing subset from noise immediately."
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "Explains auth-layer token forgery, 'fetch internal resources it shouldn't', and low-risk build-script usage in plain terms; no untranslated security jargon."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Order: jsonwebtoken today, axios this week, lodash low-stakes hygiene \u2014 exactly the fixture's recommended order."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "23 total, 20 noise, 3 real; 1-2h (jwt), 2-3h (axios), 5 min (lodash); 30 days of logs; 3 call sites \u2014 all present or entailed."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Auth flaw described as potential session-token forgery (not invented escalation); axios described as malicious URL fetching internal resources (matches SSRF); no active exploitation claimed beyond 'nothing' in logs."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "23 total - 3 actionable = 20 noise stated; 2 critical + 5 high + 11 moderate + 5 low = 23; 4 dev-only high + real high + 2 critical = 7 non-transitive, leaving 16 transitive; reply groups 20 as noise which reconciles."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Asks to set up automated dependency updates but provides no time estimate for that work; the missing dependency-update estimate remains unstated."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No advisory dump table, no formulaic section headers (just bold labels for priority), and no trailing recap paragraph; concise narrative ending with an offer, not a summary."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 260 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 260
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210347_e3f9c3",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210347_e3f9c3",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "12649e69b452d52e99223a1da2c6a2589466c05f8b09b1144be9366ac8042ff8",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence states the root cause directly: 'A config error left over from a deploy: tax-svc's v2.14.0 release (13:47 UTC) pointed at Avalara's sandbox endpoint instead of prod.' No mention of logs or tracing first."
+    },
+    {
+      "id": "recovery-evidence",
+      "passed": true,
+      "evidence": "Says rollback to v2.13.2 at 15:12 UTC; gives recovery evidence: '500 rate was back to baseline (0.02%) by 15:19 UTC and held stable over 30 minutes of monitoring.' Matches fixture exactly."
+    },
+    {
+      "id": "causal-prose",
+      "passed": true,
+      "evidence": "Failure mechanism is written in complete sentences ('The sandbox rate-limits at ... retry ... pushed latency past ... which checkout-svc turned into a 500'), no arrow shorthand or chain notation."
+    },
+    {
+      "id": "intermittency",
+      "passed": true,
+      "evidence": "Explains intermittency: 'It was intermittent because traffic only crossed 10 req/s at peak; off-peak, no 429s, no problem.' Supported by fixture."
+    },
+    {
+      "id": "follow-up",
+      "passed": true,
+      "evidence": "Outstanding fix: filed TAX-2211 to fix endpoint config/re-deploy. Checklist follow-up: TAX-2212 proposing a config-diff review step for vendor endpoints, noting the gap that let sandbox URL reach prod."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers match fixture or are entailed: v2.14.0, 13:47 UTC, 10 req/s, ~45 req/s, 429s, 2s backoff, x3, 5s timeout, rollback 15:12 UTC, 0.02% baseline by 15:19 UTC, 30 min monitoring. No invented estimates."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Every mechanism is fixture-backed: sandbox host config error (AVATAX_HOST=sandbox...), rate limiting at 10 req/s, 429 responses, retries with 2s backoff x3, latency exceeding 5s timeout, checkout-svc catching generic Exception and rethrowing 500. No smooth-sounding invention."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Unverified scope remains explicitly limited: reply only claims rollback to v2.13.2, 500 rate back to baseline, and filed tickets. It does not silently promote anything to a complete audit or claim all vendor endpoints verified."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No formulaic headers (e.g., 'Root Cause:'/'Recovery:') and no trailing recap. Structure is a brief causal paragraph, a recovery sentence, and a follow-up paragraph \u2014 proportionate to content."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 165 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 165
+  }
+}

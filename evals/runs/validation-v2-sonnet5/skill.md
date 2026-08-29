@@ -1,7 +1,7 @@
 ---
 name: grokkable-output
 description: Make agent output efficiently grokkable — replies, reports, status updates, and summaries a human can parse in one pass. Use this skill whenever writing a user-facing report of work done (debugging findings, migration status, audit results, investigation summaries, task completions), whenever asked "what did you find," "quick status," "what did you do," "just give me the TLDR," or "explain this to me," and whenever reviewing or rewriting agent output that readers find hard to follow. Trigger even when the user doesn't mention readability — any final message reporting nontrivial work is in scope. Pairs with avoid-ai-writing, which covers AI tells in published content; this skill covers working communication from agent to human.
-version: 0.6.0
+version: 0.3.1
 license: MIT
 compatibility: Any AI coding assistant that supports agentskills.io SKILL.md format (Claude Code, Cursor, VS Code Copilot, etc.). No external tools or APIs required.
 metadata:
@@ -92,12 +92,11 @@ Named failure modes, with the fix inline. Scan your draft for these before sendi
 
 ## The grok test
 
-Before sending, reread your draft as the reader — someone who stepped away, doesn't share your working memory, and will read it once. Four checks:
+Before sending, reread your draft as the reader — someone who stepped away, doesn't share your working memory, and will read it once. Three checks:
 
 1. **The three-sentence test.** From the first three sentences alone, can the reader answer: what happened, how sure are you, what's next? If not, restructure.
 2. **The reread test.** Any sentence you'd have to read twice cold? Any term you invented? Any referent that lives only in your head? Fix each.
 3. **The action test.** If the reader needs to decide something, is the decision stated as an answerable question — not buried as an implication?
-4. **The source test.** For a report or rewrite based on source material, compare every number, mechanism, consequence, and certainty in the draft with that source. Recalculate derived arithmetic. Do not make a source phrase more vivid by strengthening its impact, and keep unanswered questions open.
 
 If a draft fails a check, fix the structure, don't append clarification. A clarifying paragraph bolted onto an inscrutable message is two messages to parse instead of one.
 
@@ -105,11 +104,9 @@ If a draft fails a check, fix the structure, don't append clarification. A clari
 
 **`write`** (default) — Apply everything above while composing a reply, report, or summary.
 
-**`review`** — Audit an existing piece of agent output. Prioritize the distinct defects that most change what the reader believes or does; do not inventory every repeated symptom. Name each anti-pattern and quote one short example. Give the grok-test verdict once, in one sentence. Don't rewrite unless asked or expand into an exhaustive audit unless requested.
+**`review`** — Audit an existing piece of agent output. Flag each anti-pattern by name with the offending text quoted, and run the grok test. Don't rewrite unless asked.
 
-**`rewrite`** — Rewrite the output to pass the grok test, preserving every fact, claim, and caveat. Return the rewrite alone unless the reader asks for commentary. If they ask what changed, report the removed categories briefly so the author can veto; do not repeat the review evidence or list every preserved fact. Never add facts, confidence, or stakes the original didn't contain.
-
-**Combined `review` + `rewrite`.** A requested word ceiling is the budget for the whole response, not for each part. Draft to at most 90% of that ceiling so revision variance cannot push the final answer over it. Review only the highest-impact distinct defects and rewrite once. If a cut report is requested, make it a category-only ledger: one short line, with no quotes, rationale, preserved-fact inventory, or replay of review findings.
+**`rewrite`** — Rewrite the output to pass the grok test, preserving every fact, claim, and caveat. Report what you cut as selection (dead ends, unneeded detail) so the author can veto. Never add facts, confidence, or stakes the original didn't contain.
 
 ## Sources
 

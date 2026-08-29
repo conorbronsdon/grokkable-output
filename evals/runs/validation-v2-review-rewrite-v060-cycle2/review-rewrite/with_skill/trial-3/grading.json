@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_205551_734d72",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_205551_734d72",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "71319dc7b6c81831ce523655aaa67943d0f1a9c7162de61f8ac135c297a3a985",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names anti-patterns with quotes: process narration (\"First I pulled... Phase 1/2/3\"), arrow chain (\"customer A -> shared cache entry...\"), overclaims (\"definitely the root cause\", \"fixed and ready\"), trailing recap (\"In summary...\"). At least three quoted."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Opens with \"Checkout has recovered, but the root cause isn't confirmed yet\" \u2014 recovery + unproven status first, no process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Says \"leading theory\" and \"isn't confirmed yet\"; does not state cache key is definitely the root cause."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves \"only 7 of the 312 failed requests were traced\" and \"Other failure mechanisms haven't been ruled out.\""
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Flag disabled at 16:42 UTC, rollback avoided because v4.8 has security patch, and disabling avoided that tradeoff \u2014 preserved."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "Mentions 418 unit tests and 6 new regression tests pass; explicitly states full integration suite hasn't run yet."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Backport vs v4.9 decision stated with conditional recommendation: \"backport tomorrow, after the integration suite passes \u2014 do you want to go with that, or hold for v4.9?\""
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers trace: 16:42, 16:47, 7/312, 418, 6, v4.8, v4.9 \u2014 no fabricated figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No new mechanism added; uses same cache-key-omits-tenant-ID theory with same checkout-failure impact; no extra certainty."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies process narration, arrow-chain mechanism, \"definitely\" claim, \"fixed and ready\" claim, trailing recap as removed; states caveat (7/312) was restored; does not claim caveats/facts were cut."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 462 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 462
+  }
+}

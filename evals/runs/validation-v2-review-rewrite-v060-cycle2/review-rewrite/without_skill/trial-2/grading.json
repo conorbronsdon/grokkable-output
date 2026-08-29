@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_204850_457522",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_204850_457522",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "d91b2218f6535ac8642feed10665a63b6ce242872c25fea3e7dc767b42e503fe",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Review quotes three anti-patterns with draft text: 'Phase 1 log review, Phase 2 trace inspection' (invented process), 'definitely the root cause' (overclaim), and 'Production is fixed and ready' / \u2705 plus closing 'the incident is resolved' (false resolution claim)."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with 'Trace sampling turned up a likely cause' (recovery/status) and immediately notes 'Only 7 of the 312 failed requests were traced, and other failure mechanisms haven't been ruled out' (unproven root cause), not process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite uses 'likely cause', 'leading hypothesis', 'unconfirmed root cause', and 'not yet confirmed as the sole or complete cause' \u2014 never repeats 'definitely'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Rewrite states exactly: 'Only 7 of the 312 failed requests were traced, and other failure mechanisms haven't been ruled out.'"
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Rewrite preserves 'The recommendations feature flag was disabled at 16:42 UTC' and 'A rollback was considered but not performed, since release v4.8 also contains a security patch \u2014 disabling the flag removed the failing path without removing that patch.'"
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "Rewrite includes 'All 418 unit tests and the 6 new targeted regression tests pass; the full integration suite has not yet run.'"
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Rewrite states: 'Open decision: backport the cache-key fix to v4.8, or wait for v4.9. Recommendation: backport tomorrow, once the full integration suite passes.'"
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Every number traces to fixture: 7/312, 418 unit, 6 regression, 16:42 UTC, 16:47 UTC. No extra estimates or invented counts."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Rewrite describes only the fixture's mechanism (cache key omits tenant ID \u2192 shared entry) without adding new failure paths, impact expansions, or certainty claims; no unverified mechanisms introduced."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "The 'Cut as selection' section lists removed material (Phase 1/2/3 narration, 'definitely', \u2705/resolved recap, first-person tone) and explicitly notes the missing caveat was restored ('with the missing caveat ... restored'), not that facts/caveats were removed."
+    },
+    {
+      "id": "max-words",
+      "passed": false,
+      "evidence": "Deterministic harness count: 527 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 1,
+    "total": 11,
+    "pass_rate": 0.9090909090909091
+  },
+  "execution_metrics": {
+    "output_words": 527
+  }
+}

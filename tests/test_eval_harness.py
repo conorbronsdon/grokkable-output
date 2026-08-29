@@ -25,7 +25,7 @@ class EvalHarnessTests(unittest.TestCase):
         return argparse.Namespace(
             suite=ROOT / "evals" / "v2" / "evals.json",
             runs=runs,
-            skill=ROOT / "SKILL.md",
+            skill=runs / "skill.md",
             trials=3,
             output=None,
             require_adjudication=True,
@@ -120,6 +120,22 @@ class EvalHarnessTests(unittest.TestCase):
             and cell["config"] == "with_skill"
         )
         self.assertAlmostEqual(29 / 30, nonexpert["mean_pass_rate"])
+
+    def test_archived_run_keeps_the_exact_skill_under_test(self) -> None:
+        runs = ROOT / "evals" / "runs" / "validation-v2-sonnet5"
+        skill = (runs / "skill.md").read_text(encoding="utf-8")
+        generation = json.loads(
+            (
+                runs
+                / "debug-report"
+                / "with_skill"
+                / "trial-1"
+                / "generation.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            generation["skill_sha256"], eval_harness.sha256_text(skill)
+        )
 
     def test_summary_rejects_mutated_word_count(self) -> None:
         source = ROOT / "evals" / "runs" / "validation-v2-sonnet5"

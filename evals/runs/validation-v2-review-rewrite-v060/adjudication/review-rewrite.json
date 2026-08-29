@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "scenario": "review-rewrite",
+  "adjudicator_model": [
+    "claude-sonnet-5"
+  ],
+  "prompt_sha256": "6a8abd8ec1e340f3cbce796adb0aed86fcab70d6718f5078359b5ae0c8ef5bf0",
+  "provider_result": {
+    "duration_ms": 147223,
+    "total_cost_usd": 0.286318,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 27428,
+      "cache_read_input_tokens": 79410,
+      "output_tokens": 16072,
+      "output_tokens_details": {
+        "thinking_tokens": 15426
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 27428,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 16072,
+          "cache_read_input_tokens": 79410,
+          "cache_creation_input_tokens": 27428,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 27428
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    }
+  },
+  "corrections": [
+    {
+      "config": "with_skill",
+      "trial": 3,
+      "expectation_id": "numeric-fidelity",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "Rewrite states: 'Checkout recovered by 16:47 UTC, four minutes after we disabled the recommendations feature flag at 16:42 UTC.' The fixture only gives the two timestamps (16:42 UTC and 16:47 UTC) and never states an elapsed duration; the actual difference between 16:42 and 16:47 is five minutes, not four. This derived number is both absent from the fixture and arithmetically wrong, so it does not trace to the fixture as required."
+    },
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "rewrite-verdict",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The rewrite's first section reads: '**Investigation update**\n\nTrace sampling turned up a likely cause: a cache key that omits the tenant ID. Only 7 of the 312 failed requests were traced, and other failure mechanisms haven't been ruled out.' This opens with the unproven root-cause investigation, not recovery. The recovery facts (flag disabled at 16:42 UTC, error rate back to baseline by 16:47 UTC) do not appear until the third section, '**Resolution status: mitigated, not fixed**', two sections later. The rewrite therefore does not lead with recovery as the expectation requires, unlike every other trial's rewrite (e.g., 'Checkout is stable...', 'Checkout recovered by 16:47 UTC...', 'Checkout errors were traced...Disabling it...returned the error rate to baseline...', 'Checkout errors stopped after the recommendations feature flag was disabled...')."
+    }
+  ]
+}

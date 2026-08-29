@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210540_dd5ced",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210540_dd5ced",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "9fb9c337b96cd283831335dc7fdfc817502e4fff6d823f3dbf62d57f8926edc3",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: 'Not great, but manageable \u2014 and only two of the 23 issues actually matter.' \u2014 calibrated nontechnical verdict, no scanner headline first."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "Immediately after mentioning 23: 'most are in developer tools that never touch our live site, so they carry no real risk' and 'only two... actually matter'; separates actionable subset from noise."
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "No jargon like 'prototype pollution', 'algorithm confusion', 'SSRF', 'CVE'; translates to 'login system... verifies session tokens', 'redirect it to internal systems', 'library doing that fetch' \u2014 consequences explained plainly."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Order: jsonwebtoken (today) \u2192 axios avatar (this week) \u2192 lodash hygiene (same time, 5 min) \u2192 remaining 20 in maintenance; matches fixture order."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "23 total, 'two' real, '20 minor'; 1-2h (jsonwebtoken), 2-3h (axios), 5 min (lodash); all present in fixture. Dev-only 4 high + 11 moderate + 5 low = 20 remaining reconciles."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No invented exploit paths; notes attacker-controlled key not exposed, requires URL allowlist for axios, no claim of active exploitation; matches fixture exactly."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "2 critical (jwt, lodash) + 1 real high (axios) = 3 matters; 4 dev high + 11 moderate + 5 low + remaining = 20; 23 total reconciles."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Dependency-update estimate never stated; gap mentioned as process absence ('no automated dependency-update checks') without inventing effort/time to set up dependabot/renovate."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No formulaic headers (no 'Summary / Details / Action Items'), no trailing recap bullet, no advisory dump; flows as verdict \u2192 real picture \u2192 two issues \u2192 hygiene \u2192 logs \u2192 plan \u2192 gap question."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 293 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 293
+  }
+}

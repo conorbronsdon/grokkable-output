@@ -21,6 +21,11 @@ were 108/108 with the skill and 101/108 without it, compared with adjusted
 scores of 107/108 and 90/108. This asymmetry is part of the result, not hidden
 by the summary.
 
+The exact v0.3.1 skill used for those generations is archived at
+`evals/runs/validation-v2-sonnet5/skill.md`. Re-summarization reads that snapshot
+rather than the repository's current `SKILL.md`, so a later release cannot make
+the archived prompt hashes fail or silently reinterpret the old run.
+
 Run from the repository root:
 
 ```bash

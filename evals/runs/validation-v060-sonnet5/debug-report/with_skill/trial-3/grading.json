@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210412_ddaa61",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210412_ddaa61",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "926361dae4195d5abc2bf37f94bab8f2a59e9cc61f8930a6d387c3e24932ba82",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: 'A config error in tax-svc, now rolled back and stable.' \u2014 states root cause and recovered status, not method."
+    },
+    {
+      "id": "recovery-evidence",
+      "passed": true,
+      "evidence": "States rollback to v2.13.2 at 15:12 UTC and gives evidence: '500 rate returned to baseline (0.02%) by 15:19 UTC and has held stable for 30 minutes of monitoring since.' Matches fixture."
+    },
+    {
+      "id": "causal-prose",
+      "passed": true,
+      "evidence": "Uses complete sentences: 'tax-svc started getting 429s... added up to 6 seconds of latency. The payment-orchestrator's downstream timeout is 5 seconds, so those slow calls timed out...' No arrow-chain shorthand."
+    },
+    {
+      "id": "intermittency",
+      "passed": true,
+      "evidence": "Explicit: 'It only showed up intermittently because traffic dips below the 10 req/s threshold off-peak, where no rate limiting occurred.' Matches fixture reason."
+    },
+    {
+      "id": "follow-up",
+      "passed": true,
+      "evidence": "Mentions TAX-2211 (config fix) and TAX-2212 (checklist gap for vendor endpoint config-diff review). Present."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "13:47, ~45 req/s, 10 req/s, 6s, 5s, 15:12, 0.02%, 15:19, 30 min \u2014 all present in fixture; arithmetic (backoff up to 6s) entailed by fixture."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Sandbox host (`sandbox-rest.avatax.com`) \u2192 rate limits \u2192 429s \u2192 retry backoff \u2192 latency > timeout \u2192 500; intermittent due to traffic dips. All from fixture, no invented mechanism."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Flags rollback lost ZIP+4 and asks to check downstream dependency 'before TAX-2211 lands'; does not silently promote scope to full audit."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No formulaic headers (e.g. no 'Root Cause:', 'Status:', 'Next Steps:'); no trailing recap paragraph; clean prose flow only."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 205 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 205
+  }
+}

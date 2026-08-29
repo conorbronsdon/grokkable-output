@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210604_9cc427",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210604_9cc427",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "567222c399ecb5e0a140cdac1c38a901ea635cadfe3b5ab905051d6a4b2324d6",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names process narration (quotes Phase 1/2/3 text), overclaim (quotes 'definitely the root cause'), arrow chain (quotes A -> ... -> B), checkmark overclaim (quotes '\u2705 Production is fixed and ready'), trailing recap (quotes 'In summary...') \u2014 at least three applicable anti-patterns with quoted draft text."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with 'Checkout is back to normal: disabling... at 16:42 UTC... by 16:47 UTC' then 'The root cause isn't confirmed yet' \u2014 recovery first, then unproven status, before any process detail."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Uses 'The root cause isn't confirmed yet' and 'The strongest lead is a cache key'; never repeats 'definitely' or asserts the cache as proven root cause."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "States 'based on 7 of the 312 failed requests we traced; other failure mechanisms haven't been ruled out' \u2014 preserves both the 7/312 sample and open possibility of other mechanisms."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Notes flag disabled at 16:42 / baseline 16:47 and explicitly preserves rollback avoidance reason: 'v4.8 ... also carries a security patch that disabling the flag didn't touch'."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States 'All 418 existing unit tests and 6 new regression tests ... pass, but the full integration suite hasn't run yet' \u2014 preserves all three elements."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Ends with the explicit conditional: 'Decision needed: backport the cache-key fix into v4.8, or wait for v4.9? Recommendation: backport tomorrow, once the integration suite passes.'"
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers (16:42, 16:47, 7, 312, 418, 6) trace directly to fixture; no unsupported estimates or invented figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Mechanism described as cached recommendation served to different customer causing checkout failure \u2014 same as fixture's 'shared cached recommendation entry'; no added failure modes or impacts."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies process narration, arrow-chain notation, 'definitely', '\u2705 fixed and ready', and trailing summary as removed; frames cuts as style/process material, not as removing facts or caveats."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 401 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 401
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_204839_0a3b6d",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_204839_0a3b6d",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "338f5eb1b2c834d003fbb9358bd8effcfecb915d2eec4115e601ee3a4660af7f",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Quotes 'definitely the root cause', 'Production is fixed and ready' (with \u2705), and 'First I pulled... Phase 1/2/3' narrative \u2014 at least three anti-patterns with quoted draft text."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Opens with flag-disabled recovery at 16:42\u219216:47 and unconfirmed root-cause header; no process-phase narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Uses 'leading hypothesis' and 'unconfirmed'; never repeats 'definitely the root cause'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Explicitly states '7 of 312 failed requests that were traced; the remaining failures haven't been examined, so other causes aren't ruled out.'"
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Preserves flag-disabled mitigation and rollback avoidance reason ('v4.8 also contains a security patch')."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States 'All 418 unit tests and 6 new targeted regression tests pass. The full integration suite has not yet run.'"
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Keeps 'backport the cache-key fix to v4.8 or wait for v4.9' and conditional 'backport tomorrow, after the full integration suite passes.'"
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All figures \u2014 7/312, 418, 6, 16:42, 16:47, v4.8, v4.9 \u2014 match fixture directly."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No new failure mechanism, impact, or certainty introduced; only the fixture's unconfirmed cache-key hypothesis appears."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Final section lists removed process narration, Phase 1/2/3 structure, arrow/check shorthand ('\u2705 Production is fixed'), and closing recap; frames removals as narration/overclaim fixes, not fact/caveat removal."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 389 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 389
+  }
+}

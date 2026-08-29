@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192035_10286c",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192035_10286c",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "7d5afc4e1bc596092149be70c4fa67eaab5dbcfa5fdd94783c4a53d426cac847",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence ('it's not as scary as \"23 vulnerabilities\" sounds, but two things need real attention this week') gives a calibrated nontechnical verdict before any scanner headline."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "Reply introduces '23 issues' and in the next paragraph immediately distinguishes '~18 don't matter much' from the 2 real ones, explicitly calling the 23 'mostly dev tooling noise'."
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "Jargon translated: 'prototype pollution' not mentioned; 'auth layer' explained as 'part that checks whether a logged-in user's session is legit'; SSRF explained as 'trick our server into fetching internal/unintended URLs'; no unexplained security acronyms."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Order matches fixture: jsonwebtoken first ('Today/tomorrow'), then axios ('This week'), then rest in maintenance batch \u2014 same as fixture's 'jsonwebtoken today, axios this week, everything else normal maintenance'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Counts present and match fixture: 23 total (2 critical, 5 high, 16 lower); 2 real; 18 low-priority; 1-2h for jsonwebtoken; 2-3h for axios; 30 days logs mentioned; arithmetic consistent (18 + 2 = ~20 of 23, rest covered in '16 lower-severity')."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No invented exploit path: jsonwebtoken 'realistic attack path is narrow (needs conditions we don't expose)' matches fixture; axios SSRF described as user-controlled URL fetching internal URLs, matching fixture's 'user controls the URL'; no claim of active exploitation; impact not strengthened."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "23 total = ~18 (dev/transitive/noise) + 2 real + remaining low/moderate; 'roughly a day' \u2248 1-2h + 2-3h; subsets reconcile without contradiction."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "The fixture's missing dependency-update estimate is not stated as a number; reply calls it 'a one-time setup, not ongoing work' without inventing an hour figure, leaving the estimate unstated/implicitly unknown."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No advisory dump, no formulaic section headers beyond the brief 'How bad is it / The two that matter / What we do', and no trailing recap paragraph \u2014 ends directly with bottom line."
+    },
+    {
+      "id": "max-words",
+      "passed": false,
+      "evidence": "Deterministic harness count: 374 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  },
+  "execution_metrics": {
+    "output_words": 374
+  }
+}

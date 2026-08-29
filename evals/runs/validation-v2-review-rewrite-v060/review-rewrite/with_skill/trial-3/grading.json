@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_204830_9307a1",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_204830_9307a1",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "076be430a60395089971f24a59036269948ab045ae932eb6e611c4167815d14c",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names overclaim (false certainty), checkmark overclaim 'Production is fixed and ready', discovery-order process narration 'Phase 1... Phase 2... Phase 3', arrow chain 'A -> shared cache entry -> B', trailing recap \u2014 at least three anti-patterns quoted/quoted-paraphrase."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with 'Checkout recovered by 16:47 UTC...' (recovery) and 'The leading theory... This isn't confirmed' (unproven status) before any process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite says 'leading theory' and 'isn't confirmed'; never repeats 'definitely the root cause'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves 'based on 7 of the 312 failed requests we sampled, and we haven't ruled out other failure mechanisms'."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Preserves flag disabled at 16:42, no rollback because v4.8 has security patch, failing path removed without losing patch."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States 'All 418 existing unit tests and 6 new regression tests... pass; the full integration suite hasn't run yet'."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit 'backport... into v4.8, or hold it for v4.9? I recommend backporting tomorrow, once the integration suite has passed'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "7/312, 418 tests, 6 regression, 16:42/16:47 UTC, v4.8/v4.9 all trace to fixture; no invented numbers."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Only mechanism is unproven cache-key/tenant-ID omission; no added failure modes, impacts, or certainty."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Cut section names process narration, 'definitely' claim/checkmark, arrow-chain, and trailing recap as removed; does not claim facts or caveats were removed."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 427 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 427
+  }
+}

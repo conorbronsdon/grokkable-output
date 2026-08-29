@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210552_054752",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210552_054752",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "4a7d6d4b533e3400316c76145b2bd542d30536415073d18754bae1f6abe755a8",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names 'checkmark overclaim', 'process narration with invented codenames', 'arrow chain', 'caveat cut by selection pressure', 'In summary recap' \u2014 quotes 'definitely the root cause', '\u2705 Production is fixed and ready', 'Phase 1 was log review... Phase 2... Phase 3', 'customer A -> shared cache entry -> customer B gets the wrong recommendation -> checkout fails', and notes the 305 unexplained requests caveat."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Leads with 'Checkout recovered after disabling... the error rate was back to baseline' (recovery), then 'That fixed the symptom \u2014 the root cause isn't confirmed yet' (unproven status), with no process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Uses 'leading suspect', 'isn't confirmed yet', 'I haven't traced... can't rule out' \u2014 never repeats 'definitely the root cause'."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves 'In the 7 traces I was able to sample out of 312 failed requests' and 'I haven't traced the other 305 failed requests, so I can't rule out a second failure mode'."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Preserves flag disable ('disabling the feature flag removed the failing path') and avoids rollback ('didn't roll back release v4.8, because it also contains a security patch')."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States 'all 418 existing unit tests pass, plus the 6 new regression tests' and 'The full integration suite hasn't run yet'."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit: 'backport the cache-key fix to v4.8, or wait for v4.9? I'd backport tomorrow, once the integration suite passes' \u2014 conditional recommendation kept."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers (16:42, 16:47, 7, 312, 305, 418, 6, v4.8, v4.9) trace to fixture; no invented figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No new mechanism added; only the fixture's cache-key/tenant-ID mechanism stated as leading suspect, with no added impact or certainty."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies removed process narration ('Phase 1/2/3'), fake structure, arrow shorthand, recap; frames removal as selection pressure on padding/overclaim, not as removing facts or caveats."
+    },
+    {
+      "id": "max-words",
+      "passed": false,
+      "evidence": "Deterministic harness count: 532 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 1,
+    "total": 11,
+    "pass_rate": 0.9090909090909091
+  },
+  "execution_metrics": {
+    "output_words": 532
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "scenario": "review-rewrite",
+  "adjudicator_model": [
+    "claude-sonnet-5"
+  ],
+  "prompt_sha256": "6baa920263967a08eddf99fbedb5f10c3f0b75f62b6debc28cace8c3bd51e236",
+  "provider_result": {
+    "duration_ms": 140758,
+    "total_cost_usd": 0.279372,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 28014,
+      "cache_read_input_tokens": 79410,
+      "output_tokens": 15143,
+      "output_tokens_details": {
+        "thinking_tokens": 14735
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 28014,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 15143,
+          "cache_read_input_tokens": 79410,
+          "cache_creation_input_tokens": 28014,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 28014
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    }
+  },
+  "corrections": [
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "rewrite-verdict",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The rewrite's actual lead is the root-cause hypothesis, not recovery: it opens with '**Investigation update** / Trace sampling turned up a likely cause: a cache key that omits the tenant ID. Only 7 of the 312 failed requests were traced, and other failure mechanisms haven't been ruled out.' The recovery fact (flag disabled at 16:42 UTC, error rate back to baseline by 16:47 UTC) does not appear until the third section, '**Resolution status: mitigated, not fixed**'. This inverts the required order \u2014 the rewrite leads with the unproven root-cause material and delays recovery, rather than leading with 'recovery and the unproven root-cause status' as the expectation requires. The raw grade's evidence mislabels 'Trace sampling turned up a likely cause' as '(recovery/status)', which is inaccurate since that sentence states a root-cause hypothesis, not the checkout recovery event."
+    }
+  ]
+}

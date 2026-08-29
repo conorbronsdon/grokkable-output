@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_210424_623089",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_210424_623089",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "ab55204dea888dbd07f0810406c7ede03cbf2300747fb09750230e2de04be51e",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence states overall migration state ('48 of 61 routes are migrated... 9 blocked... 4 not started') without narrating work performed."
+    },
+    {
+      "id": "blocking-decision",
+      "passed": true,
+      "evidence": "The session-renewal decision ('I need your call on whether that's acceptable') is surfaced as the explicit user-input question."
+    },
+    {
+      "id": "progress",
+      "passed": true,
+      "evidence": "48 migrated + 9 blocked + 4 not started = 61 total; counts reconcile with fixture."
+    },
+    {
+      "id": "surprises",
+      "passed": true,
+      "evidence": "Both pre-existing bugs (export.js silent truncation, stripe.js signature-after-parse) are explicitly mentioned and marked as pre-existing/unrelated."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers (48, 61, 9, 4, 312, 3 of 4, 30-min mentioned implicitly, >10MB, ~2.1x omitted but not needed) match or are entailed by fixture; no invented estimates."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Session renewal described as 'Fastify's session plugin renews on read, Express renewed on write' matching fixture; confidence on stripe bug kept at 'possible'/'probably benign'/'haven't confirmed exploitable'; no stronger claim than fixture."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Session-renewal question ('is 30-min idle logout renewal-on-read acceptable?') remains a question asking for user input; multipart buffering vs streaming presented as open choice."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "Short prose, no formulaic sections (no headers like 'Status / Risks / Next'), no trailing recap; ends with tomorrow plan."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 216 words; ceiling: 250."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 216
+  }
+}
