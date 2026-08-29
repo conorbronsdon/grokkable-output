@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192123_1b9f1f",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192123_1b9f1f",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "0fa4a954f1501a69e52fbc130a0e89301eaf580608fb31fe461413cb4ec007d6",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names overclaim/certainty (quotes 'definitely the root cause' and 'root cause was the cache key'), false-closure framing (quotes 'Production is fixed and ready' with \u2705), missing caveat, irrelevant narrative filler (quotes 'First I pulled...' and Phase 1/2/3 labels), and recap compounding ('In summary' line) \u2014 at least three anti-patterns with quoted text."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with recovery timeline 'Checkout errors returned to baseline... 16:42\u201316:47 UTC' followed immediately by 'Root cause is not yet confirmed' \u2014 recovery first, no process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite uses 'Root cause is not yet confirmed', 'leading hypothesis', 'still unconfirmed', and 'if it's the cache key' \u2014 never asserts the cache key is definitely the root cause."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Explicitly states 'based on 7 of 312 failed requests that were traced \u2014 a small sample, and other failure mechanisms haven't been ruled out' \u2014 both elements preserved."
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "States flag disabled 'restored baseline error rates, but this is a mitigation' and explains rollback avoided 'because it also contains a security patch we want to keep' \u2014 both preserved."
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States 'all 418 unit tests and 6 new targeted regression tests pass. The full integration suite has not run yet.' \u2014 both passing tests and unrun suite present."
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit two-option framing 'backport the cache-key fix to v4.8, or wait for v4.9' and conditional recommendation 'backport tomorrow, after the full integration suite passes and confirms the fix' remain intact."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers match fixture: 16:42, 16:47, 5 minutes (difference), 7, 312, 418, 6; no invented or altered figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Only mechanism described is the fixture's cache-key-omits-tenant-ID hypothesis with same impact (wrong recommendation from shared entry); no extra mechanism, impact, or certainty added."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Cut-section names 'definitely', the \u2705 framing, the recap line, and Phase 1/2/3 process narration as removed; explicitly notes the caveat was added back, not cut, and does not claim facts or caveats were removed."
+    },
+    {
+      "id": "max-words",
+      "passed": false,
+      "evidence": "Deterministic harness count: 563 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 1,
+    "total": 11,
+    "pass_rate": 0.9090909090909091
+  },
+  "execution_metrics": {
+    "output_words": 563
+  }
+}

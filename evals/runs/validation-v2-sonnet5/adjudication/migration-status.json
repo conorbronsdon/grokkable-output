@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "scenario": "migration-status",
+  "adjudicator_model": [
+    "claude-sonnet-5"
+  ],
+  "prompt_sha256": "84e2eb3c377340d21263ed7f73b62b1feeef84444e64f363192f92ce099aca52",
+  "provider_result": {
+    "duration_ms": 81949,
+    "total_cost_usd": 0.195814,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 22782,
+      "cache_read_input_tokens": 79410,
+      "output_tokens": 8880,
+      "output_tokens_details": {
+        "thinking_tokens": 7956
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 22782,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 8880,
+          "cache_read_input_tokens": 79410,
+          "cache_creation_input_tokens": 22782,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 22782
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    }
+  },
+  "corrections": [
+    {
+      "config": "without_skill",
+      "trial": 1,
+      "expectation_id": "proportionate-structure",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The reply is organized into five bolded section headers (\"**48 of 61 routes migrated and passing**\", \"**9 blocked**\", \"**4 not started**\", \"**Also found 2 pre-existing bugs**\" with sub-bullets, \"**The one decision I need from you:**\"), which is exactly the 'formulaic sections' structure the expectation prohibits (a 'quick status' should be short prose). The mechanical linter itself flagged this: '5 headings or pseudo-headings in 267 words; verify that the structure is real.' The grader's evidence ('brief bold headings; no formulaic section structure') contradicts the reply's own formatting."
+    },
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "proportionate-structure",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The reply uses four bolded section headers (\"**48/61 route handlers migrated and passing**\", \"**9 blocked**\", \"**4 not started**\", \"**Also found 2 pre-existing bugs, unrelated to the migration**\") plus a final labeled section \"**Timeline read:** on track if session question resolves quickly and multer stays in buffering mode. Streaming mode would put us past the week mark.\" This closing labeled section is a trailing recap restating the deadline risk already covered, and the header structure is formulaic \u2014 both directly contradicted by the expectation ('short prose without formulaic sections or a trailing recap'). The linter flagged '4 headings or pseudo-headings in 225 words.'"
+    },
+    {
+      "config": "without_skill",
+      "trial": 3,
+      "expectation_id": "proportionate-structure",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The reply is structured with bolded section headers (\"**9 blocked on session middleware**\", \"**4 not started**\", \"**Also found, unrelated to the migration:**\") and closes with \"Plan for tomorrow: get your answer on session renewal, then start the multer routes. If we go with streaming mode there, the week deadline gets tight \u2014 worth deciding buffering vs. streaming soon either way,\" which restates points already made (session decision, streaming/deadline risk) \u2014 a trailing recap. The linter flagged '3 headings or pseudo-headings in 231 words.' This contradicts the expectation of 'short prose without formulaic sections or a trailing recap.'"
+    }
+  ]
+}

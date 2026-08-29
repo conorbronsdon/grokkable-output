@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191828_a5b1a3",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191828_a5b1a3",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "8cbbdb336228b8dffc906e6b3e6184eff1c324e2a456ac1bb2f0e7ed74f6d97d",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: 'Found it \u2014 root cause, fix, and status:' states root cause/recovered status, not investigation method."
+    },
+    {
+      "id": "recovery-evidence",
+      "passed": true,
+      "evidence": "'Rolled back tax-svc to v2.13.2 at 15:12 UTC' and '500 rate back to baseline (0.02%) by 15:19 UTC, monitored 30 min stable' \u2014 rollback + recovery metrics from notes."
+    },
+    {
+      "id": "causal-prose",
+      "passed": true,
+      "evidence": "Full causal sentences throughout: 'Sandbox rate-limits at 10 req/s; we run ~45 req/s at peak, so tax-svc started getting 429s, retried 3x with 2s backoff (up to +6s latency), blew past payment-orchestrator's 5s downstream timeout...' No arrow-chain shorthand."
+    },
+    {
+      "id": "intermittency",
+      "passed": true,
+      "evidence": "Explicit: 'why it was intermittent \u2014 traffic dips below 10 req/s off-peak, so no 429s and no timeouts then.'"
+    },
+    {
+      "id": "follow-up",
+      "passed": true,
+      "evidence": "Both follow-ups present: 'TAX-2211 \u2014 hotfix the Avalara host...' and 'TAX-2212 \u2014 add a config-diff review step...'"
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All quoted numbers match fixture: 137 500s, POST /v2/checkout/complete, 14:02\u201314:40, 8.4s, 210ms, 13:47 UTC, 5s, 10 req/s, ~45 req/s, 2s backoff x3 / +6s, 15:12 UTC, 0.02%, 15:19 UTC, 30 min. Arithmetically consistent (3x2s = up to 6s)."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Every causal step supported: v2.14.0 deploy, AVATAX_HOST=sandbox-rest.avatax.com, 10 req/s sandbox limit, 429 responses, retry 3x/2s backoff, >5s timeout, TaxLookupTimeout, generic Exception catch \u2192 500."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Scope explicitly limited: 'Didn't touch the orchestrator's 5s timeout \u2014 raising it would've masked the real problem' rather than promoting to full audit; checklist gap noted as proposal (TAX-2212) not completed."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": false,
+      "evidence": "Contains formulaic bold headers: '**Root cause:**', '**Chain confirmed via trace:**', '**Action taken:**', '**Follow-up filed:**' \u2014 violates 'no formulaic headers'."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 262 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  },
+  "execution_metrics": {
+    "output_words": 262
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191950_c1746d",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191950_c1746d",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "bfe6ac3935cde3e7cde7f8ea0e2ebca43912d472fd6fae69b7377e0c27bbc76d",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: 'Not great, but fixable, and only two things actually matter.' \u2014 calibrated, nontechnical verdict before any scanner number."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "States 'The scary number is 23 vulnerabilities, but 20 of those are noise' immediately after introducing the total, separating actionable subset (2 real + 1 hygiene) from noise."
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "No raw CVE IDs or terms like 'prototype pollution'/'SSRF'; explains auth flaw as 'how it verifies who's logged in' and axios issue as 'URL isn't being checked carefully enough \u2014 could probe internal systems'."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Order is jsonwebtoken today, axios this week, lodash hygiene (low/no rush), everything else maintenance \u2014 matches fixture exactly."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Uses fixture counts: 23 total, 20 noise, 1-2h (jsonwebtoken), 2-3h (axios), 5 min (lodash), 30 days logs checked. All present and arithmetic-consistent."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Does not invent active exploitation (says 'no sign anyone has exploited'); does not claim direct exposure for jsonwebtoken ('not directly exposed today'); describes axios URL control without inventing a new exploit mechanism beyond fixture's 'exploit shape'."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "23 = 20 noise + 2 real (jsonwebtoken, axios) + 1 hygiene (lodash); explicitly reconciled."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Notes the dependency-update gap ('don't have automated dependency update checks') but offers no time/estimate for setting up Dependabot/renovate \u2014 left unstated, consistent with fixture lacking that number."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No advisory dump of 23 items, no formulaic headers ('Summary', 'Details'), no trailing recap paragraph; ends with a direct decision ask rather than a restatement of findings."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 275 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 275
+  }
+}

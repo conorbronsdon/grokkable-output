@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192002_309329",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192002_309329",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "31406fb4b1714bf9ed7adcd34c47bb7fc9badcd1543db32e4214ebf9bbaf6af4",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence 'Not bad, and nothing's been exploited.' gives a calibrated nontechnical verdict before any scanner number."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "Mentions '23 vulnerabilities' and immediately says it's 'mostly that low-risk noise'; 'Three things actually matter; the other 20 are noise.'"
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "Translates 'jsonwebtoken' to 'Our login system ... verifies who's logged in'; 'axios SSRF' to avatar-import feature with user-controlled URL; no unexplained jargon."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Order: jsonwebtoken today (#1), axios this week (#2), rest in normal maintenance (#3), plus process gap \u2014 matches fixture exactly."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "1-2h (jsonwebtoken), 2-3h (axios), 5 min (lodash hygiene), 3 real / 20 noise / 23 total \u2014 all present and match fixture."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Does not invent new exploit paths; notes practical exploitability requires attacker-controlled key material (matches fixture: 'we don't expose'); avatar import calls user-controlled URL; no active exploitation claim matches 30-day log check."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "3 actionable + 20 noise = 23 total; subsets reconcile with 2 critical (1 real auth + 1 hygiene) + 1 real high + 4 dev-only high + 11 moderate + 5 low."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Mentions setting up automated dependency alerts but gives no time/cost estimate for that process gap; does not invent one."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "Brief 'What's real' and 'What we're doing' sections only; no formulaic header hierarchy; closes with one-line status note rather than a full recap dump."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 211 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 211
+  }
+}

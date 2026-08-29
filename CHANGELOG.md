@@ -5,6 +5,14 @@
 - Added an experimental post-hoc output linter with structured CLI output,
   severity thresholds, positive/complement controls, and Python 3.11/3.13 CI.
   The validated `SKILL.md` remains unchanged at v0.3.1 pending fresh evals.
+- Added the versioned v2 evaluation suite and reproducible Claude/Hermes
+  harness: four scenarios cover write, review, and rewrite modes; fidelity is
+  split into independently graded properties; length ceilings are deterministic;
+  and fresh cells require three trials per configuration.
+- Archived the first v2 run: 24 fresh Sonnet replies, raw Inkling grades with
+  exact session IDs, separate Claude adjudication, and primary verification.
+  Write-mode semantic passes improved from 62/78 to 77/78, but all three
+  with-skill review/rewrite replies exceeded the 500-word ceiling.
 
 ## 0.3.1 — 2026-08-06
 

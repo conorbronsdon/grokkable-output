@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191901_cae528",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191901_cae528",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "01853ef6066a748bed4d971648251383973312d080233713892e8ba1fc7fc326",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence: '48 of 61 route handlers are migrated and passing (312 tests green). 9 are blocked... 4 haven't been started, and the week deadline is at risk...' \u2014 gives migration state (48/61, risks) before any process narration."
+    },
+    {
+      "id": "blocking-decision",
+      "passed": true,
+      "evidence": "Explicit user question: 'I need your call on whether renew-on-read is acceptable before I can close these out.' Surfaces session-renewal as the decision requiring input."
+    },
+    {
+      "id": "progress",
+      "passed": true,
+      "evidence": "48 migrated, 9 blocked, 4 not started = 61; 312 tests green for migrated; 3/4 adapter tests pass with 1 failing; 2 pre-existing bugs noted. Reconciles with fixture exactly."
+    },
+    {
+      "id": "surprises",
+      "passed": true,
+      "evidence": "Pre-existing bugs (admin/export.js missing await/truncation >10MB; stripe webhook signature-after-parse) explicitly disclosed and labeled 'unrelated to the migration'."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "48, 61, 312, 9, 4, 3/4, 40 lines, 10MB, 2.1x, 3-4h, 1 day, 2-3 days all present in fixture; no invented numbers."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Session renewal mechanism described as 'Fastify's plugin renews on read, Express renews on write' matching fixture; adapter status 'passes 3 of 4' not overstated; perf noted '~2.1x' as synthetic; multipart risk qualified with conditional 'if we need streaming'."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Session-touch renewal decision left as a user question ('I need your call...'); pre-existing bugs offered as separate file/fix choice rather than answered; multipart streaming vs buffering left open pending decision tomorrow. Fixture contains no answers."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "Short prose paragraphs without formulaic headers (e.g., no 'Status / Blockers / Next Steps' sections); ends with a direct offer on bugs rather than a trailing recap of counts already given in opening."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 231 words; ceiling: 250."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 231
+  }
+}

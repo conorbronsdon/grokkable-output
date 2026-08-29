@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192134_d6b6bb",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192134_d6b6bb",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "b867d4537a9e92f9d674568e54b52d9a41ef41cdfb7f2142482e6ebc6b67ebfb",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Names at least three anti-patterns with quotes: (1) \"definitely the root cause\" (certainty overclaim); (2) \"\u2705 Production is fixed and ready\" (fake-resolution checkmark); (3) \"First I pulled... Phase 1... Phase 2... Phase 3\" (narrative process framing); also notes buried recommendation and overclaim recap."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Leads with recovery condition (\"Root cause is not yet proven\"); unproven status comes before any mechanism discussion, not buried after process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrites \"strongest evidence points to...\" and \"not yet proven\" / \"not yet certain\"; never repeats \"definitely the root cause.\""
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Preserves \"only 7 of 312 failed requests were traced\" and \"Other failure mechanisms have not been ruled out.\""
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "Preserves flag disable at 16:42 \u2192 baseline 16:47; rollback avoided because v4.8 has security patch; \"removes the failing path without removing the patch.\""
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "States \"All 418 unit tests and six new targeted regression tests pass\" and \"full integration suite has not yet run.\""
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "Explicit \"backport the cache-key fix to v4.8, or wait for v4.9\" and \"backport tomorrow, after the full integration suite passes.\""
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All numbers match fixture: 16:42, 16:47, 7/312, 418, six regression tests; no invented numbers."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Adds no new mechanism, impact, or certainty; only reports the unproven cache-key hypothesis and other mechanisms not ruled out, exactly as fixture states."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Identifies removed process narration, Phase framing, checkmark, \"definitely\" claim, recap restatement, and personal-opinion phrasing \u2014 without asserting any new facts or removed caveats; no false claim that caveats were cut."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 430 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 430
+  }
+}

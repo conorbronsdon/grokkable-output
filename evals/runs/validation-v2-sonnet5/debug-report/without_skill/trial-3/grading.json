@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_191840_1b3ca7",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_191840_1b3ca7",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "b7ba615c020bc140c75156d9548e3de24c02cb245a04c3b16df0e8eba01b64a9",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": false,
+      "evidence": "First sentence states the symptom ('Checkout flow was 500ing... 137 errors') and investigation location, not the root cause (sandbox endpoint misconfig) or recovered status (rolled back)."
+    },
+    {
+      "id": "recovery-evidence",
+      "passed": true,
+      "evidence": "States rollback to v2.13.2 at 15:12 UTC, 500 rate back to baseline 0.02% by 15:19 UTC, and 30 min stable monitoring \u2014 all directly from fixture."
+    },
+    {
+      "id": "causal-prose",
+      "passed": false,
+      "evidence": "Uses arrow-chain shorthand ('429s \u2192 retries... \u2192 blew past... \u2192 TaxLookupTimeout \u2192 ... turned it into a 500') instead of complete causal sentences."
+    },
+    {
+      "id": "intermittency",
+      "passed": true,
+      "evidence": "Explicitly explains intermittency: only fails above the 10 req/s sandbox threshold, clean off-peak, matching fixture."
+    },
+    {
+      "id": "follow-up",
+      "passed": true,
+      "evidence": "Includes both JIRA follow-ups: TAX-2211 (prod host/config fix) and TAX-2212 (deploy checklist gap for vendor endpoints)."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "All quoted numbers (137, 14:02-14:40, 13:47, 10 req/s, ~45 req/s, 2s x3, 6s, 5s, v2.14.0/v2.13.2, 15:12, 0.02%, 15:19, 30 min) are present in the fixture; 6s added = 2s backoff x3 as stated."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "Full causal chain (sandbox host \u2192 rate limit 429s \u2192 retries \u2192 latency > timeout \u2192 exception handler \u2192 500) is exactly the fixture's mechanism; no invented cause."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Limits scope to checkout/ZIP+4 feature: 'We lost the ZIP+4 enrichment feature for now' \u2014 does not silently claim a full audit of all vendor endpoints or other services."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": false,
+      "evidence": "Contains formulaic bold headers (**Root cause:**, **Fix:**, **Follow-up:**) and a trailing recap paragraph ('We lost... checkout's healthy. Let me know...'), violating no-formulaic-headers / no-trailing-recap."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 202 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 3,
+    "total": 10,
+    "pass_rate": 0.7
+  },
+  "execution_metrics": {
+    "output_words": 202
+  }
+}

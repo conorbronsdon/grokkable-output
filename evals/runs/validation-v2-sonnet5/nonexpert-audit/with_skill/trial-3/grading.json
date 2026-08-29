@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192015_0dcdbe",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192015_0dcdbe",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "7372f93339714ce7c586330bed764398879f5813b29b8fe977fed0f1e12715dc",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "Opening sentence is 'Not great, but manageable, and only two things actually need fixing this week.' \u2014 calibrated nontechnical verdict before any scanner number appears."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "'Of the 23 flagged issues, 20 are noise...' immediately separates the actionable subset (2 real + 1 hygiene) from the 23 headline."
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "Uses 'library that verifies user sessions', 'point our server at internal systems instead of an image'; no untranslated jargon (SSRF, prototype pollution, algorithm confusion absent or replaced with consequences)."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Sequence: jsonwebtoken today \u2192 axios this week \u2192 everything else maintenance \u2192 dependency-update gap. Matches fixture order (auth layer first, real exploit shape second, rest routine)."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "23 total, 20 noise, 3 remaining; estimates 1-2h and 2-3h directly from fixture; 2 critical / 5 high / 11 moderate / 5 low implied via subset description without contradiction."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "For jsonwebtoken: 'We don't see a working attack path' matches fixture (requires attacker-controlled key material not exposed); for axios, links user-controlled URL to internal-server risk exactly as fixture describes; no invented exploitation claim or strengthened impact."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "20 noise (4 dev-only high + 11 moderate + 5 low = 20) + 2 real + 1 hygiene = 23; subsets and total reconcile exactly."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Mentions missing automated dependency updates but provides no time/effort estimate; states 'not urgent on its own', leaving the estimate unstated/explicitly unknown."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "No advisory dump, no formulaic sections (no 'Summary/Details/Recommendations' headers); brief bold labels for priority actions; ends with a one-line bottom line, not a full recap of points."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 270 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 270
+  }
+}

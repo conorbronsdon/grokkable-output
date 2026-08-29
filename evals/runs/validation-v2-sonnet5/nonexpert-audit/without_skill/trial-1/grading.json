@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192026_043fd9",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192026_043fd9",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "b2d143c24233523fee6a336c7a67a04255a6cf5582769c16a11b488d9474c3e3",
+  "expectations": [
+    {
+      "id": "verdict-first",
+      "passed": true,
+      "evidence": "First sentence is a calibrated nontechnical verdict: 'it's not as bad as \"23 vulnerabilities\" sounds, but there are two real ones we should fix fast, and one process gap worth closing.' Scanner headline deferred to next paragraph."
+    },
+    {
+      "id": "headline-defused",
+      "passed": true,
+      "evidence": "Mentions '23 issues (2 critical, 5 high, 11 moderate, 5 low)' but immediately defuses: 'most of it is noise \u2014 17 of the 23 are in dev/build tooling...'; actionable subset (3 things) separated."
+    },
+    {
+      "id": "plain-language",
+      "passed": true,
+      "evidence": "SSRF explained as 'someone could hand us a malicious URL'; auth layer as 'verifies session tokens on every login'; no unexplained security jargon."
+    },
+    {
+      "id": "priority-order",
+      "passed": true,
+      "evidence": "Order: 1) jsonwebtoken (today), 2) axios (this week), 3) lodash hygiene, then others/maintenance \u2014 exactly fixture recommendation."
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Counts: 2 critical, 5 high, 11 moderate, 5 low, 23 total. Estimates: 1-2h (jsonwebtoken), 2-3h (axios), 5 min (lodash). All present and match fixture."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "jsonwebtoken: 'exploiting it would require conditions we don't currently expose' (fixture); axios: 'fetches a user-submitted URL for avatar imports'; lodash: 'only used in a script that generates our sitemap, not in anything a user request touches'. No invented paths or confidence upgrades."
+    },
+    {
+      "id": "arithmetic",
+      "passed": true,
+      "evidence": "17 of 23 noise + 3 real + 4 dev-only high (implied in 'other 4 of the 5 high ones') reconciles with 23 total; '11 moderate and 5 low' accounted for in non-urgent bucket."
+    },
+    {
+      "id": "open-questions",
+      "passed": true,
+      "evidence": "Process gap (no Dependabot/Renovate) is mentioned but no time/effort estimate is given for setting it up; remains unstated/explicitly unknown."
+    },
+    {
+      "id": "proportionate-structure",
+      "passed": true,
+      "evidence": "Short opening, then 3 numbered bullets, brief exploitation check, one gap line, one-line net close. No advisory dump, no formulaic section headers, no trailing recap."
+    },
+    {
+      "id": "max-words",
+      "passed": false,
+      "evidence": "Deterministic harness count: 378 words; ceiling: 350."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  },
+  "execution_metrics": {
+    "output_words": 378
+  }
+}

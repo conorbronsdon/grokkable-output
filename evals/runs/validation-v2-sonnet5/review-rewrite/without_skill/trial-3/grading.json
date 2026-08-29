@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "grader_model": "thinkingmachines/inkling:free",
+  "grader_session_id": "20260828_192142_1ab718",
+  "grader_attempts": [
+    {
+      "attempt": 1,
+      "session_id": "20260828_192142_1ab718",
+      "status": "accepted"
+    }
+  ],
+  "grader_prompt_sha256": "a94cde011dd5eef8e0cadf712018aba2dae21512bc699b02d5b90592b315eb6c",
+  "expectations": [
+    {
+      "id": "named-review",
+      "passed": true,
+      "evidence": "Quotes three patterns with offending text: 'definitely the root cause' (overclaim), '\u2705 Production is fixed and ready' (fake-ready framing), 'Phase 1/2/3' (process narration padding). Each is tied to the draft."
+    },
+    {
+      "id": "rewrite-verdict",
+      "passed": true,
+      "evidence": "Rewrite opens with recovery (flag disabled at 16:42 UTC, baseline by 16:47 UTC) and immediately states 'Root cause is not confirmed,' not process narration."
+    },
+    {
+      "id": "confidence-calibration",
+      "passed": true,
+      "evidence": "Rewrite says 'Root cause is not confirmed' and 'leading hypothesis,' removing the draft's 'definitely the root cause' claim entirely."
+    },
+    {
+      "id": "scope-caveat",
+      "passed": true,
+      "evidence": "Explicitly preserves '7 of 312 failed requests that were traced; other failure mechanisms haven't been ruled out given the small sample.'"
+    },
+    {
+      "id": "mitigation-tradeoff",
+      "passed": true,
+      "evidence": "States flag disable removed the failing path without rollback, because 'v4.8 also carries a security patch we want to keep.'"
+    },
+    {
+      "id": "validation-limit",
+      "passed": true,
+      "evidence": "Keeps 'All 418 unit tests and 6 new targeted regression tests pass' alongside 'the full integration suite has not yet run.'"
+    },
+    {
+      "id": "decision",
+      "passed": true,
+      "evidence": "States 'Decision needed: backport the cache-key fix to v4.8, or hold it for v4.9' and 'Recommendation: backport tomorrow, contingent on the full integration suite passing first.'"
+    },
+    {
+      "id": "numeric-fidelity",
+      "passed": true,
+      "evidence": "Every number matches fixture: 16:42 UTC, 16:47 UTC, 7 of 312, 418 unit, 6 targeted; no invented figures."
+    },
+    {
+      "id": "mechanism-fidelity",
+      "passed": true,
+      "evidence": "No new failure mechanism, impact, or certainty is introduced; the customer A\u2192B mechanism is retained only as a conditional 'can let' hypothesis, not a proven chain."
+    },
+    {
+      "id": "selection-report",
+      "passed": true,
+      "evidence": "Lists removed material (Phase narrative, \u2705/ready framing, 'definitely' claim, closing recap, bare 'I think') and notes replacements; does not claim any caveat or number was cut."
+    },
+    {
+      "id": "max-words",
+      "passed": true,
+      "evidence": "Deterministic harness count: 468 words; ceiling: 500."
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_words": 468
+  }
+}

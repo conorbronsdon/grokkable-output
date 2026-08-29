@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "verifier": "primary-agent",
+  "method": "Direct reply inspection corroborated by scripts/lint_output.py --json --fail-on never.",
+  "corrections": [
+    {
+      "scenario": "nonexpert-audit",
+      "config": "with_skill",
+      "trial": 3,
+      "expectation_id": "proportionate-structure",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The reply closes with 'Bottom line: budget half a day of engineering time this week for the two real fixes, then treat the rest as routine.' That restates the opening verdict ('Two fixes matter this week; the other 20 findings are mostly noise') instead of adding a decision or limitation. The repository's conservative linter independently flags this exact line as trailing-recap, and the scenario expectation explicitly prohibits a trailing recap."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "scenario": "debug-report",
+  "adjudicator_model": [
+    "claude-sonnet-5"
+  ],
+  "prompt_sha256": "d1f1cf726c98b21ff1bd1b20cfc447b6167623ab24de8244bb3b169e002e8b1b",
+  "provider_result": {
+    "duration_ms": 82923,
+    "total_cost_usd": 0.20472,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 25381,
+      "cache_read_input_tokens": 79410,
+      "output_tokens": 8731,
+      "output_tokens_details": {
+        "thinking_tokens": 8091
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 25381,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 8731,
+          "cache_read_input_tokens": 79410,
+          "cache_creation_input_tokens": 25381,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 25381
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    }
+  },
+  "corrections": [
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "verdict-first",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The first sentence is 'Found it \u2014 root cause, fix, and status:' \u2014 this is a table-of-contents-style preamble that only labels the categories to follow ('root cause, fix, and status') without actually stating what the root cause is or what the recovered status is. The actual root cause ('tax-svc v2.14.0 ... shipped with its new ZIP+4 enrichment call pointed at the Avalara sandbox endpoint...') doesn't appear until the second sentence. This fails the expectation that the first sentence itself states the root cause or recovered status."
+    },
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "causal-prose",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The mechanism explanation itself ends with arrow-chain shorthand: '...orchestrator threw `TaxLookupTimeout`, and checkout-svc caught that as a generic Exception \u2192 500.' Additionally, the reply contains a second arrow-chain paragraph describing the failure path: '**Chain confirmed via trace:** api-gateway (137 500s, all `POST /v2/checkout/complete`, 14:02\u201314:40) \u2192 checkout-svc \u2192 payment-orchestrator \u2192 tax-svc, with tax-svc p99 spiking to 8.4s...' (flagged by the linter as an arrow-chain error). Sibling trials (without_skill/trial-1 and without_skill/trial-3) were correctly failed on this same expectation for comparable or lesser arrow usage, so passing trial-2 is inconsistent with directly quotable arrow-chain shorthand in the text."
+    }
+  ]
+}

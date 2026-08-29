@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "scenario": "nonexpert-audit",
+  "adjudicator_model": [
+    "claude-sonnet-5"
+  ],
+  "prompt_sha256": "5e388514afc3801efb9e47ca6b1015863c2438d4358088a0bd794274dc7119c1",
+  "provider_result": {
+    "duration_ms": 163909,
+    "total_cost_usd": 0.28590200000000004,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 25239,
+      "cache_read_input_tokens": 79410,
+      "output_tokens": 16906,
+      "output_tokens_details": {
+        "thinking_tokens": 15935
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 25239,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 16906,
+          "cache_read_input_tokens": 79410,
+          "cache_creation_input_tokens": 25239,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 25239
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    }
+  },
+  "corrections": [
+    {
+      "config": "without_skill",
+      "trial": 1,
+      "expectation_id": "numeric-fidelity",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The reply first claims 'most of it is noise \u2014 17 of the 23 are in dev/build tooling... or in transitive packages,' but later states 'the other 11 moderate and 5 low items, plus 4 of the 5 \"high\" ones \u2014 are dev tooling or transitive dependencies with no path to production,' which sums to 11+5+4=20, not 17. The fixture entails a noise count of 20 (4 dev-only high + 11 moderate + 5 low), not 17. The '17' figure is neither present in the fixture nor arithmetically entailed by it."
+    },
+    {
+      "config": "without_skill",
+      "trial": 1,
+      "expectation_id": "arithmetic",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "Within the same reply, the noise subset is stated as '17 of the 23' early on and then implicitly restated as 20 ('the other 11 moderate and 5 low items, plus 4 of the 5 \"high\" ones') later. 17 \u2260 20, so the mentioned subsets do not reconcile arithmetically with each other or with the fixture-derived total of 23 (3 actionable + 20 noise)."
+    },
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "numeric-fidelity",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "The reply states '~18 of the 23 don't matter much right now' and '2 things are real,' but never mentions the lodash critical finding at all (fixture: 'critical #1: lodash... Fix: bump to 4.17.21... 5 min' and 'overall: 3 things actually matter (jsonwebtoken, axios SSRF, then lodash for hygiene)'). 18 (noise) + 2 (real) = 20, not 23 \u2014 the fixture-entailed noise count is 20 (4 dev-only high + 11 moderate + 5 low), and the second critical item is dropped from the accounting entirely, so '18' is not a count present in or entailed by the fixture."
+    },
+    {
+      "config": "without_skill",
+      "trial": 2,
+      "expectation_id": "arithmetic",
+      "original_passed": true,
+      "corrected_passed": false,
+      "evidence": "'2 critical, 5 high, 16 lower-severity' (=23) is stated, then '~18 of the 23 don't matter' and '2 things are real' are given, but 18+2=20, leaving 3 unaccounted for (including the omitted lodash critical). The subsets mentioned in the reply do not reconcile to the stated 23 total."
+    }
+  ]
+}
