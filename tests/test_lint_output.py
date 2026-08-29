@@ -177,6 +177,24 @@ class LintOutputTests(unittest.TestCase):
         self.assertEqual(1, len(findings))
         self.assertEqual(2, findings[0].line)
 
+    def test_tabbed_list_continuation_preserves_nested_item_state(self) -> None:
+        text = (
+            "   - Parent.\n"
+            "\t Continued parent text.\n"
+            "\t    - " + "Sentence with enough words to be prose. " * 16
+        )
+        findings = [item for item in LINTER.lint(text) if item.rule == "oversized-block"]
+        self.assertEqual(1, len(findings))
+        self.assertEqual(3, findings[0].line)
+
+    def test_top_level_indented_bullet_code_does_not_fire(self) -> None:
+        text = "    - A -> B -> C"
+        self.assertNotIn("arrow-chain", self.rules(text))
+
+    def test_top_level_indented_numbered_code_does_not_fire(self) -> None:
+        text = "    1. A -> B -> C"
+        self.assertNotIn("arrow-chain", self.rules(text))
+
     def test_blockquoted_indented_code_does_not_fire(self) -> None:
         text = ">     def f(x: A) -> B -> C"
         self.assertNotIn("arrow-chain", self.rules(text))

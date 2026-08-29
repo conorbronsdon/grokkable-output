@@ -68,8 +68,9 @@ LIST_LINE_RE = re.compile(
 BLOCKQUOTE_INDENTED_CODE_RE = re.compile(
     r"^(?:[ \t]{0,3}>[ \t]?)+(?: {4}|\t)"
 )
-NESTED_LIST_LINE_RE = re.compile(
-    r"^(?:[ \t]{0,3}>[ \t]?)*(?: {4}|\t)+(?:[-+*]|\d+[.)])\s+"
+LIST_MARKER_RE = re.compile(
+    r"^(?P<container>(?:[ \t]{0,3}>[ \t]?)*)(?P<indent>[ \t]*)"
+    r"(?:[-+*]|\d+[.)])\s+"
 )
 HTML_CODE_RE = re.compile(
     r"(?is)<(?P<tag>pre|code)\b[^>]*>.*?</(?P=tag)\s*>"
@@ -147,6 +148,8 @@ def mask_nonprose_markdown(text: str) -> str:
     fence_character: str | None = None
     fence_length = 0
     fence_quote_depth = 0
+    active_list_indents: list[int] = []
+    active_list_quote_depth: int | None = None
     offset = 0
     for line in text.splitlines(keepends=True):
         marker = FENCE_RE.match(line)
@@ -177,10 +180,42 @@ def mask_nonprose_markdown(text: str) -> str:
                 fence_quote_depth = 0
             offset += len(line)
             continue
+        list_marker = LIST_MARKER_RE.match(line)
+        nested_list_item = False
+        if list_marker:
+            quote_depth = list_marker.group("container").count(">")
+            indent = len(list_marker.group("indent").expandtabs(4))
+            if quote_depth != active_list_quote_depth:
+                active_list_indents = []
+            if indent <= 3:
+                active_list_indents = [indent]
+                active_list_quote_depth = quote_depth
+            else:
+                parents = [item for item in active_list_indents if item < indent]
+                nested_list_item = bool(parents)
+                if nested_list_item:
+                    active_list_indents = [*parents, indent]
+                    active_list_quote_depth = quote_depth
+        elif not line.strip():
+            active_list_indents = []
+            active_list_quote_depth = None
+        else:
+            quote_prefix = re.match(r"^(?:[ \t]{0,3}>[ \t]?)*", line)
+            quote_depth = quote_prefix.group().count(">") if quote_prefix else 0
+            content = line[quote_prefix.end():] if quote_prefix else line
+            raw_indent = content[:len(content) - len(content.lstrip(" \t"))]
+            indent = len(raw_indent.expandtabs(4))
+            if quote_depth != active_list_quote_depth or not active_list_indents:
+                active_list_indents = []
+                active_list_quote_depth = None
+            elif indent <= active_list_indents[0]:
+                active_list_indents = []
+                active_list_quote_depth = None
+
         if (
             re.match(r"^(?: {4}|\t)", line)
             or BLOCKQUOTE_INDENTED_CODE_RE.match(line)
-        ) and not NESTED_LIST_LINE_RE.match(line):
+        ) and not nested_list_item:
             mask_range(output, text, offset, offset + len(line))
         offset += len(line)
 
