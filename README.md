@@ -77,7 +77,12 @@ Fresh A/B validation on `claude-sonnet-5` used four scenarios, with and without
 the skill, across three independent runs per cell (24 replies total). An
 independent free model graded each semantic expectation; fresh Sonnet sessions
 adjudicated disputed grades; deterministic word ceilings were computed by the
-harness. The skill scored 107/108 semantic expectations versus 90/108 baseline.
+harness. Raw grader scores were 108/108 semantic expectations with the skill
+versus 101/108 baseline; after archived evidence-backed corrections, they were
+107/108 versus 90/108. All 11 model-adjudication corrections reduced baseline
+scores, while the primary verifier reduced one skilled score, so both raw and
+adjusted results matter.
+
 Across the three `write` scenarios, all nine skilled replies met their length
 ceilings. In the combined `review` + `rewrite` scenario, fidelity held but all
 three skilled replies missed the 500-word ceiling (560-715 words), so the result
@@ -89,7 +94,12 @@ Tested A/B on Opus subagents: three scenarios (a production debug report, a mid-
 
 Final round: 21/22 assertions with the skill vs 15/19 baseline on the original set. Every baseline failure was structural: arrow-chain causality, bold section headers on chat-length replies, a trailing recap restating the message. One known limitation is documented honestly: in one scenario the with-skill reply invented an effort estimate the notes didn't contain; the skill's trace-every-number rule narrowed but has not fully closed that failure class. The before/after pairs in [`examples/`](examples/) are unedited outputs from these runs, chosen from the scenarios that passed the fidelity check.
 
-The whole corpus is public in [`evals/`](evals/): fixtures, assertion sets, per-assertion grading with verbatim evidence quotes, and the graded outputs of two later versions (v0.4.0, v0.5.0) that failed independent validation and never shipped. [`evals/RESULTS.md`](evals/RESULTS.md) is the summary, including what each rejected round taught.
+The whole corpus is public in [`evals/`](evals/): fixtures, assertion sets,
+per-assertion grading with verbatim evidence quotes, the fresh 24-reply v2 run,
+and the graded outputs of two later versions (v0.4.0, v0.5.0) that failed
+independent validation and never shipped. [`evals/RESULTS.md`](evals/RESULTS.md)
+is the summary, including the new limitation and what each rejected round
+taught.
 
 The next experiment is architectural rather than another rule stack: a conservative
 [post-hoc output linter](docs/output-linter.md) detects mechanical failures such as

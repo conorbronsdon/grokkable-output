@@ -12,6 +12,8 @@ three independent runs per cell, exact prompt/skill/suite hashes, canonical
 generator model metadata, raw Hermes grades with exact session IDs, separate
 Claude adjudication, and the one primary-verification override. Raw replies and
 raw grades remain verbatim; corrections are overlays consumed by the summary.
+The correction direction is deliberately visible: all 11 Claude corrections
+reduce baseline grades, while primary verification reduces one skilled grade.
 
 Ground rules for reading it:
 

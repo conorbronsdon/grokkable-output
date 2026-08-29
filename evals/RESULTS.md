@@ -18,17 +18,24 @@ length ceiling.
 | Review + rewrite | 30/33 | 30/33 | mean 646 (560-715) | mean 487 (430-563) |
 | **Total** | **116/120** | **98/120** | | |
 
-Semantic expectations were 107/108 with the skill and 90/108 without it.
-Across the three `write` scenarios, the skill improved semantic passes from
-62/78 to 77/78 and kept all nine replies within their length ceilings. The one
-semantic miss was a non-expert reply ending with a redundant "Bottom line"
-recap, which the deterministic linter also flagged.
+Raw Hermes grades gave 108/108 semantic passes with the skill and 101/108
+without it. After evidence-backed corrections, semantic expectations were
+107/108 with the skill and 90/108 without it. All 11 Claude corrections changed
+baseline passes to failures; the primary verifier changed one skilled pass to a
+failure. The adjusted comparison therefore depends materially on same-family
+adjudication, even though each correction is archived with direct evidence and
+raw grades remain unchanged.
+
+Across the three `write` scenarios, the adjusted semantic passes improved from
+62/78 to 77/78 and all nine skilled replies stayed within their length ceilings.
+The one skilled semantic miss was a non-expert reply ending with a redundant
+"Bottom line" recap, which the deterministic linter also flagged.
 
 The `review` + `rewrite` result is mixed. All three skilled replies preserved
 the source facts and caveats, scoring 30/30 semantic expectations, but every one
 missed the 500-word ceiling at 560-715 words. The baseline met that ceiling in
-two of three trials but scored 28/30 semantically: one reply invented a
-triggering change and another buried the recovery status.
+two of three trials but scored 28/30 semantically: one reply both invented a
+triggering change and buried the recovery status.
 
 This run supports using v0.3.1 for the tested write tasks on Sonnet. It does not
 support the skill's proportionality in the combined review/rewrite task, and

@@ -15,6 +15,11 @@ generations (four scenarios × two configurations × three trials),
 fresh `claude-sonnet-5` sessions to adjudicate demonstrable grader errors. A
 primary verifier applied one additional correction where the repository's
 deterministic linter and the reply text directly proved a missed trailing recap.
+All 11 Claude corrections changed baseline passes to failures; the primary
+correction changed one skilled pass to a failure. Raw Hermes semantic scores
+were 108/108 with the skill and 101/108 without it, compared with adjusted
+scores of 107/108 and 90/108. This asymmetry is part of the result, not hidden
+by the summary.
 
 Run from the repository root:
 
@@ -48,6 +53,12 @@ The harness is resumable and fails closed on partial cells, malformed provider
 JSON, missing or reordered expectation IDs, unverified adjudication overrides,
 and incomplete trial counts. Provider credentials remain in their CLIs; no key
 or token is written to the corpus.
+
+`--overwrite` is stage-local. After regenerating replies, rerun grading and
+adjudication with `--overwrite`; otherwise summarization rejects the stale prompt
+hashes rather than silently combining old grades with new replies. Provider
+timeouts abort the current command so an ambiguous response is not retried as a
+valid cell.
 
 The run measures variance for one generator and two reviewing roles. It does
 not establish cross-model generality. Inkling's free endpoint logs prompts and
