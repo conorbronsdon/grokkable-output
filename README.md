@@ -2,6 +2,8 @@
 
 # grokkable-output
 
+> **Maintenance mode.** This project is stable and receives security fixes. New features aren't planned, but issues and pull requests are still welcome.
+
 **Make your agent's replies parseable in one pass — verdict first, no decoding required.**
 
 [![GitHub stars](https://img.shields.io/github/stars/conorbronsdon/grokkable-output?style=social)](https://github.com/conorbronsdon/grokkable-output/stargazers)
