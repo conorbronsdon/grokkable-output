@@ -2,9 +2,18 @@
 
 ## Unreleased
 
+## 0.3.2 — 2026-11-16
+
+Tooling and evidence release. `SKILL.md` is byte-identical to v0.3.1 and keeps
+`version: 0.3.1`: the archived v2 run pins its SHA-256, and the harness tests
+fail if it changes. Numbered 0.3.2 rather than 0.4.0 because v0.4.0 and v0.5.0
+are the rejected skill rounds archived in `evals/runs/`.
+
 - Added an experimental post-hoc output linter with structured CLI output,
   severity thresholds, positive/complement controls, and Python 3.11/3.13 CI.
   The validated `SKILL.md` remains unchanged at v0.3.1 pending fresh evals.
+- Fixed the linter treating indented continuation lines inside nested
+  (including tab-indented) list items as indented code blocks.
 - Added the versioned v2 evaluation suite and reproducible Claude/Hermes
   harness: four scenarios cover write, review, and rewrite modes; fidelity is
   split into independently graded properties; length ceilings are deterministic;
@@ -13,6 +22,10 @@
   exact session IDs, separate Claude adjudication, and primary verification.
   Write-mode semantic passes improved from 62/78 to 77/78, but all three
   with-skill review/rewrite replies exceeded the 500-word ceiling.
+- Published the eval corpus: fixtures, assertion sets, and per-assertion
+  graded runs, including the rejected v0.4.0/v0.5.0 rounds.
+- README: fixed the Chain of Thought footer link and the UTM link format, and
+  marked the project as in maintenance mode.
 
 ## 0.3.1 — 2026-08-06
 
