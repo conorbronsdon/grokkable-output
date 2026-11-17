@@ -62,6 +62,9 @@ STRUCTURED_LINE_RE = re.compile(
     r"|[ \t]*\|.*\|[ \t]*"
     r")$"
 )
+TABLE_DELIMITER_RE = re.compile(
+    r"^[ \t]{0,3}(?=[^|\n]*\|)\|?[ \t]*:?-+:?[ \t]*(?:\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$"
+)
 LIST_LINE_RE = re.compile(
     r"^[ \t]*(?:[-+*]|\d+[.)])\s+(?P<content>.*)$"
 )
@@ -118,6 +121,14 @@ def paragraphs(text: str) -> list[tuple[int, str]]:
         if not block:
             continue
         lines = [line for line in block.splitlines() if line.strip()]
+        if (
+            len(lines) >= 2
+            and "|" in lines[0]
+            and TABLE_DELIMITER_RE.match(lines[1])
+        ):
+            # GFM tables need no leading or trailing pipes; the delimiter row
+            # under a header row marks the whole block as a table.
+            continue
         if lines and all(STRUCTURED_LINE_RE.match(line) for line in lines):
             line_offset = match.start(1) + leading
             for line in block.splitlines(keepends=True):
