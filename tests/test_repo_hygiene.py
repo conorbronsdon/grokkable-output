@@ -10,8 +10,9 @@ USES = re.compile(r"""^\s*(?:-\s+)?uses:\s*["']?([^\s"'#]+)""")
 FULL_SHA = re.compile(r"@[0-9a-f]{40}$")
 
 
-def unpinned_uses(yaml_text: str) -> list[str]:
-    bad = []
+def action_refs(yaml_text: str) -> list[str]:
+    """Every remote action ref in a workflow (local ./ and docker:// skipped)."""
+    refs = []
     for line in yaml_text.splitlines():
         match = USES.match(line)
         if not match:
@@ -19,9 +20,12 @@ def unpinned_uses(yaml_text: str) -> list[str]:
         ref = match.group(1)
         if ref.startswith("./") or ref.startswith("docker://"):
             continue
-        if not FULL_SHA.search(ref):
-            bad.append(ref)
-    return bad
+        refs.append(ref)
+    return refs
+
+
+def unpinned_uses(yaml_text: str) -> list[str]:
+    return [ref for ref in action_refs(yaml_text) if not FULL_SHA.search(ref)]
 
 
 class UnpinnedUsesTests(unittest.TestCase):
@@ -49,11 +53,21 @@ class RepoWorkflowTests(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in WORKFLOWS.glob("*.y*ml")), ["ci.yml"])
 
     def test_every_workflow_action_is_sha_pinned(self) -> None:
+        # Name every action ref so a matcher that stops matching fails here
+        # instead of passing with nothing checked.
+        text = (WORKFLOWS / "ci.yml").read_text(encoding="utf-8")
+        self.assertEqual(
+            [ref.split("@")[0] for ref in action_refs(text)],
+            ["actions/checkout", "actions/setup-python"],
+        )
+        self.assertEqual(unpinned_uses(text), [])
+
+    def test_uses_line_count_matches_parsed_refs(self) -> None:
         for path in WORKFLOWS.glob("*.y*ml"):
             text = path.read_text(encoding="utf-8")
+            raw = [l for l in text.splitlines() if re.search(r"\buses\s*:", l)]
             with self.subTest(workflow=path.name):
-                self.assertIn("uses:", text)
-                self.assertEqual(unpinned_uses(text), [])
+                self.assertEqual(len(action_refs(text)), len(raw))
 
     def test_dependabot_watches_github_actions(self) -> None:
         text = (ROOT / ".github" / "dependabot.yml").read_text(encoding="utf-8")
@@ -61,7 +75,8 @@ class RepoWorkflowTests(unittest.TestCase):
 
     def test_security_policy_names_a_private_channel(self) -> None:
         text = (ROOT / "SECURITY.md").read_text(encoding="utf-8")
-        self.assertIn("Report a vulnerability", text)
+        self.assertIn("**Report a vulnerability**", text)
+        self.assertIn("Do not open a public issue", text)
 
 
 if __name__ == "__main__":
