@@ -117,7 +117,7 @@ proportionality failure is investigated.
 git clone https://github.com/conorbronsdon/grokkable-output ~/.claude/skills/grokkable-output
 ```
 
-Or download just [`SKILL.md`](SKILL.md) and reference it from your `CLAUDE.md`. To invoke on demand, add a slash command at `~/.claude/commands/grokkable.md` that points at the skill file.
+Claude Code loads it automatically when a reply is in scope, and you can invoke it on demand as `/grokkable-output`; no separate command file is needed. Or download just [`SKILL.md`](SKILL.md) and reference it from your `CLAUDE.md`.
 
 **skills.sh:**
 
