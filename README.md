@@ -125,6 +125,8 @@ Claude Code loads it automatically when a reply is in scope, and you can invoke 
 npx skills add https://github.com/conorbronsdon/grokkable-output --skill grokkable-output
 ```
 
+By default this installs into the current project: the skill lands in `./.agents/skills/grokkable-output`, agents that read another directory get a symlink (for Claude Code, `./.claude/skills/grokkable-output`), and the CLI writes `skills-lock.json`. Add `-g` to install it under `~/.agents/skills/` and `~/.claude/skills/` for use across projects.
+
 **OpenClaw** — clone to `~/.openclaw/skills/grokkable-output`.
 
 **OpenAI Codex** — place at `.agents/skills/grokkable-output/SKILL.md` (project) or `~/.agents/skills/` (global).
