@@ -1,7 +1,9 @@
 # Maintenance mode: version-update PRs are off (limit 0). Security updates still
 # arrive through Dependabot security updates, enabled in repository settings.
-# The repo has no package dependencies; the only pinned third-party code is the
-# GitHub Actions in .github/workflows/, pinned to full commit SHAs.
+# The repo has no package-manager dependencies. The only third-party code pinned
+# in-repo is the GitHub Actions in .github/workflows/ (full commit SHAs). The
+# eval harness's `run` and `grade` modes invoke external `claude` and `hermes` CLIs,
+# which are not pinned here.
 version: 2
 updates:
   - package-ecosystem: github-actions

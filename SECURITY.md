@@ -1,11 +1,13 @@
 # Security
 
 This repo ships a prompt-only skill (`SKILL.md`): it runs no code and handles no
-credentials. The supporting Python scripts use only the standard library.
+credentials. The supporting Python scripts import only the standard library.
 `scripts/lint_output.py` reads text and reports findings. `scripts/eval_harness.py`
-validates and grades eval suites; its grading mode calls an external model CLI
-(`hermes`) that you install and authenticate yourself, and it writes results to
-local files.
+validates, generates and grades eval suites, and writes results to local files.
+Two of its modes run external, third-party model CLIs that you install and
+authenticate yourself: `run` calls `claude`, and `grade` calls `hermes`. This repo
+does not vendor or pin either, so their supply chain is yours to review. CI runs
+only the `validate` mode, which calls neither.
 
 The `jsonwebtoken` strings in `evals/runs/` are the npm package name quoted in
 verbatim model output, kept as evidence. They are not credentials.
