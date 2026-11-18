@@ -18,9 +18,13 @@ Only the latest release on `main` receives fixes.
 
 ## Reporting a vulnerability
 
-Use GitHub's private vulnerability reporting: open the **Security** tab on this
-repo and click **Report a vulnerability**. Do not open a public issue for security
-problems.
+Report privately. Don't put vulnerability details in a public issue, pull request
+or discussion.
+
+1. If this repo's **Security** tab shows a **Report a vulnerability** button, use it.
+   That is GitHub's private vulnerability reporting.
+2. If the button isn't there, open a public issue titled "Security contact
+   request" with no details. I'll reply there to set up a private channel.
 
 I aim to respond within a week. Credit goes to the reporter in the fix notes
 unless you prefer otherwise.

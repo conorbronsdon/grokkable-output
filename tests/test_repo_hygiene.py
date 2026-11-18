@@ -76,7 +76,11 @@ class RepoWorkflowTests(unittest.TestCase):
     def test_security_policy_names_a_private_channel(self) -> None:
         text = (ROOT / "SECURITY.md").read_text(encoding="utf-8")
         self.assertIn("**Report a vulnerability**", text)
-        self.assertIn("Do not open a public issue", text)
+        # A fallback that works while private reporting is off, and that
+        # still keeps details out of public view.
+        flat = " ".join(text.split())
+        self.assertIn('"Security contact request" with no details', flat)
+        self.assertIn("Don't put vulnerability details in a public issue", flat)
 
 
 if __name__ == "__main__":
