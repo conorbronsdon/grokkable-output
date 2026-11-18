@@ -1,0 +1,14 @@
+# Maintenance mode: version-update PRs are off (limit 0). This file cannot turn on
+# security-update PRs: those come only from "Dependabot security updates" in the
+# repository settings (Settings > Code security), which must be enabled separately.
+# The repo has no package-manager dependencies. The only third-party code pinned
+# in-repo is the GitHub Actions in .github/workflows/ (full commit SHAs). The
+# eval harness's `run` and `grade` modes invoke external `claude` and `hermes` CLIs,
+# which are not pinned here.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
