@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.3.2 — 2026-11-16
+## 0.3.2 — 2026-11-18
 
 Tooling and evidence release. `SKILL.md` is byte-identical to v0.3.1 and keeps
 `version: 0.3.1`: the archived v2 run pins its SHA-256, and the harness tests
@@ -14,6 +14,9 @@ are the rejected skill rounds archived in `evals/runs/`.
   The validated `SKILL.md` remains unchanged at v0.3.1 pending fresh evals.
 - Fixed the linter treating indented continuation lines inside nested
   (including tab-indented) list items as indented code blocks.
+- Fixed the linter measuring a GFM table written without outer pipes as one
+  oversized prose paragraph: a block whose second line is a delimiter row
+  containing a pipe now counts as a table.
 - Added the versioned v2 evaluation suite and reproducible Claude/Hermes
   harness: four scenarios cover write, review, and rewrite modes; fidelity is
   split into independently graded properties; length ceilings are deterministic;
@@ -24,8 +27,13 @@ are the rejected skill rounds archived in `evals/runs/`.
   with-skill review/rewrite replies exceeded the 500-word ceiling.
 - Published the eval corpus: fixtures, assertion sets, and per-assertion
   graded runs, including the rejected v0.4.0/v0.5.0 rounds.
-- README: fixed the Chain of Thought footer link and the UTM link format, and
-  marked the project as in maintenance mode.
+- README: fixed the Chain of Thought footer link and the UTM link format,
+  marked the project as in maintenance mode, said skills are invocable
+  directly, and documented where the skills.sh install puts the skill.
+- CI: pinned GitHub Actions to full commit SHAs, with a test that fails on an
+  unpinned action, and added a Dependabot config for Actions (version-update
+  PRs off while in maintenance mode). Added `SECURITY.md` with a private
+  reporting channel.
 
 ## 0.3.1 — 2026-08-06
 
