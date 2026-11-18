@@ -167,6 +167,33 @@ class LintOutputTests(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertNotIn("oversized-block", self.rules(text))
 
+    def test_pipeless_gfm_table_is_not_an_oversized_paragraph(self) -> None:
+        row = "alpha beta gamma | delta epsilon zeta | eta theta iota kappa"
+        cases = (
+            "Name | Value | Notes\n--- | --- | ---\n" + "\n".join([row] * 10),
+            "| Name | Value | Notes\n|:--- | ---: | :---:\n" + "\n".join(f"| {row}" for _ in range(10)),
+        )
+        for text in cases:
+            with self.subTest(text=text):
+                self.assertEqual([], LINTER.lint(text))
+
+    def test_pipe_prose_without_table_delimiter_still_fires(self) -> None:
+        row = "alpha beta gamma | delta epsilon zeta | eta theta iota kappa"
+        text = "Name | Value | Notes\n" + "\n".join([row] * 10)
+        findings = [item for item in LINTER.lint(text) if item.rule == "oversized-block"]
+        self.assertEqual(1, len(findings))
+        self.assertEqual(1, findings[0].line)
+        self.assertEqual(
+            "Paragraph has 103 words and 1 sentences; split it without deleting content.",
+            findings[0].message,
+        )
+
+    def test_setext_underline_is_not_a_table_delimiter(self) -> None:
+        text = "Title | subtitle\n---\n" + " ".join(["The retry increased latency."] * 26)
+        findings = [item for item in LINTER.lint(text) if item.rule == "oversized-block"]
+        self.assertEqual(1, len(findings))
+        self.assertEqual(1, findings[0].line)
+
     def test_oversized_list_item_still_fires(self) -> None:
         text = "- " + "Sentence with enough words to be prose. " * 16
         self.assertIn("oversized-block", self.rules(text))

@@ -117,13 +117,15 @@ proportionality failure is investigated.
 git clone https://github.com/conorbronsdon/grokkable-output ~/.claude/skills/grokkable-output
 ```
 
-Or download just [`SKILL.md`](SKILL.md) and reference it from your `CLAUDE.md`. To invoke on demand, add a slash command at `~/.claude/commands/grokkable.md` that points at the skill file.
+Claude Code loads it automatically when a reply is in scope, and you can invoke it on demand as `/grokkable-output`; no separate command file is needed. Or download just [`SKILL.md`](SKILL.md) and reference it from your `CLAUDE.md`.
 
 **skills.sh:**
 
 ```bash
 npx skills add https://github.com/conorbronsdon/grokkable-output --skill grokkable-output
 ```
+
+By default this installs into the current project: the skill lands in `./.agents/skills/grokkable-output`, agents that read another directory get a symlink (for Claude Code, `./.claude/skills/grokkable-output`), and the CLI writes `skills-lock.json`. Add `-g` to install it under `~/.agents/skills/` and `~/.claude/skills/` for use across projects.
 
 **OpenClaw** — clone to `~/.openclaw/skills/grokkable-output`.
 
